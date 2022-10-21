@@ -1,4 +1,4 @@
-from flask import Blueprint, jasonify
+from flask import Blueprint, jsonify
 
 class Planet:
     def __init__(self, id, name, description):
@@ -26,4 +26,4 @@ def handle_planets():
 
         ))
 
-    return jasonify(results_list)
+    return jsonify(results_list)
