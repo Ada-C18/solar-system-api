@@ -9,7 +9,8 @@ class Planet:
         self.mass = mass
 
 
-list_of_planets = [
+planets = [
+    "Sol",
     Planet(1, "Mercury", "just a little guy", "small"),
     Planet(2, "Venus", "what a babe", "hot"),
     Planet(3, "Earth", "nice planet", "normal"),
@@ -30,4 +31,5 @@ def handle_planets():
 
 @planet_bp.route("/<planet_id>", methods=["GET"])
 def handle_planet(planet_id):
-    return f"Planet {planet_id}", 201
+    planet = planets[int(planet_id)]
+    return f"Planet {planet.id}, {planet.name}, {planet.description}, {planet.mass}", 201
