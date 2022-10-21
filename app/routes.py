@@ -7,7 +7,7 @@ class Planet():
         self.description = description
         self.color = color
 
-Planet = [
+PLANETS = [
     Planet(1, "Saturn", "gassy giant", "orange"),
     Planet(2, "Mercury", "small rocky", "gray"),
     Planet(3, "Pluto", "still a planet", "white")
