@@ -37,7 +37,6 @@ We will focus on creating RESTful endpoints for CRUD operations.
 - Take time to make sure you're on the same page
 
 ## Project Directions
-
 ### Part 1
 1. [Wave 01: Setup and Read](./project-directions/wave_01.md)
 1. [Wave 02: Read and 404s](./project-directions/wave_02.md)
