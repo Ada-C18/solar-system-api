@@ -14,7 +14,7 @@ planets = [
     Planet(3, "Earth", "half and half", 1)
 ]
 
-planets_bp = Blueprint("planets", __name__, url_defaults="/planets")
+planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
 @planets_bp.route("", methods=["GET"])
 def planets_endpoint():
