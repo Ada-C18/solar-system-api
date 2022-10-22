@@ -20,3 +20,17 @@ PLANETS = [
 ]
 
 
+planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planets")
+
+@planets_bp.route("", methods=["GET"])
+def get_all_planets():
+    planet_response = []
+    for planet in PLANETS:
+        planet_response.append({
+            "id" : planet.id,
+            "name" : planet.name,
+            "description" : planet.description,
+            "revolution_period" : planet.revolution_period 
+        })
+
+    return jsonify(planet_response)
