@@ -1,8 +1,10 @@
 from flask import Blueprint, jsonify, abort, make_response
 
 """
-Define a Planet class with the attributes id, name, and description, 
+1. Define a Planet class with the attributes id, name, and description, 
 and one additional attribute
+2. Create the following endpoint(s), with similar functionality presented in the
+Hello Books API.
 """
 
 
@@ -12,9 +14,6 @@ class Planet:
         self.name = name
         self.description = description
         self.moon = moon
-
-    # [Planet(1, "name"),  ]
-
 
 PLANETS = [
     Planet(1, "Mercury", "closest to the sun", 0),
@@ -32,7 +31,7 @@ planet_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
 @planet_bp.route("", methods=["GET"])
 def get_all_planets():
-    result = []
+    planets_response = []
     for planet in PLANETS:
         result.append(
             {
