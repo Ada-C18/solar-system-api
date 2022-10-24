@@ -24,6 +24,4 @@ planets_bp = Blueprint('planets_bp', __name__, url_prefix='/planets')
 
 @planets_bp.route('', methods=['GET'])
 def get_all_planets():
-    # planets_reponse = []
-    # for planet in PLANETS:
     pass
