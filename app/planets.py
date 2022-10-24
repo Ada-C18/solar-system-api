@@ -18,15 +18,16 @@ planets_bp = Blueprint('planets_bp', __name__, url_prefix='/planets')
 
 @planets_bp.route('', methods=['GET'])
 def get_all_planets():
-    planet_response = []
-    for planet in Planets_list:
-        planet_response.append({
-            "id": planet.id,
-            "name": planet.name,
-            "color": planet.color,
-            "description": planet.description
+    planet_response = [vars(planet) for planet in Planets_list]
+    # for planet in Planets_list:
+    
+        # planet_response.append({
+        #     "id": planet.id,
+        #     "name": planet.name,
+        #     "color": planet.color,
+        #     "description": planet.description
 
-            })
+        #     })
 
 
     return jsonify(planet_response)
