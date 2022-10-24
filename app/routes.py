@@ -41,18 +41,13 @@ planets = [
     Planet(8, "Neptune", "The eighth planet from the Sun and the farthest known solar planet. ", "2.793 billion")
 ]
 
-planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planets")
+bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-@planets_bp.route("", methods=["GET"])
+@bp.route("", methods=["GET"])
 def handle_planets():
     planets_response = []
     for planet in planets:
-        planets_response.append({
-            "id" : planet.id,
-            "name" : planet.name,
-            "description" : planet.description,
-            "miles from sun" : planet.miles_from_sun
-        })
+        planets_response.append(planet.to_json())
     return jsonify(planets_response)
 
 
@@ -71,7 +66,7 @@ def validate_planet(planet_id):
     abort(make_response({"message": f"planet{planet_id} not found"}, 404))
 
 #used helper function to_json
-@planets_bp.route("/<id>", methods=["GET"])
-def handle_planets(id):
+@bp.route("/<id>", methods=["GET"])
+def handle_planet(id):
     planet = validate_planet(id)
     return jsonify(planet.to_json())
