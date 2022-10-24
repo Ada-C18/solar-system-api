@@ -45,26 +45,25 @@ def get_all_planets():
     return jsonify(planets_response)
 
 
-def validate_planet_name(planet_name):
-    try:
-        planet_name = str(planet_name)
-    except:
-        abort(make_response({"message": f"planet {planet_name} invalid"}, 400))
+@planet_bp.route("/<planet_id>", methods=["GET"])
+def get_planet(planet_id):
+    planet = validate_planet(planet_id)
+    
+    return {
+        "id" : planet.id,
+        "name" : planet.name,
+        "description" : planet.description,
+        "moon" : planet.moon
+    }
 
-    for planet in PLANETS:
-        if planet.name == planet_name.capitalize():
+def validate_planet(planet_id):
+    try:
+        planet_id = int(planet_id)
+    except:
+        abort(make_response({"message":f"planet {planet_id} invalid"}, 400))
+
+    for planet in planets:
+        if planet.id == planet_id:
             return planet
 
-    abort(make_response({"message": f"planet {planet_name} not found"}, 404))
-
-
-@planet_bp.route("/<planet_name>", methods=["GET"])
-def get_one_planet(planet_name):
-    planet = validate_planet_name(planet_name)
-
-    return {
-        "id": planet.id,
-        "name": planet.name,
-        "description": planet.description,
-        "moon": planet.moon,
-    }
+    abort(make_response({"message":f"planet {planet_id} not found"}, 404))
