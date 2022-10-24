@@ -38,8 +38,9 @@ def handle_planet(planet_id):
         if planet.id == planet_id:
             return {
                 "id": planet.id,
-                "title": planet.title,
-                "description": planet.description
+                "name": planet.name,
+                "description": planet.description,
+                "color": planet.color
             }
     return {"message":f"planet {planet_id} not found"}, 404
 
