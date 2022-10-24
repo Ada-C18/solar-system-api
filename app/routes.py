@@ -27,14 +27,14 @@ def validate_planet(planet_id):
         abort(make_response({"message":f"planet {planet_id} invalid"}, 400))
 
     for planet in list_of_planets:
-        if planet.id == planet.id:
+        if planet.id == planet_id:
             return planet
 
     abort(make_response({"message":f"planet {planet_id} not found"}, 404))
 
-planets_bp = Blueprint("planets", __name__)
+planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-@planets_bp.route("/planets", methods=["GET"])
+@planets_bp.route("", methods=["GET"])
 def show_all_planets():
     planets_response = []
     for planet in list_of_planets:
@@ -46,7 +46,7 @@ def show_all_planets():
         })
     return jsonify(planets_response)
 
-@planets_bp.route("/planet_info", methods=["GET"])
+@planets_bp.route("/<planet_id>", methods=["GET"])
 def get_planet_info(planet_id):
     planet = validate_planet(planet_id)
     return {
