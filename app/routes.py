@@ -23,6 +23,7 @@ def get_planets():
     for planet in planets:
         planet_data.append(planet.retrieve_planet())
     return jsonify(planet_data)
+
 def validate_planet(id):
     try:
         planet_id = int(id)
@@ -32,6 +33,7 @@ def validate_planet(id):
         if planet_id == planet.id:
             return(planet)
     abort(make_response({"message": f"{id} not found"}, 404))
+
 @bp.route('<id>', methods=["GET"])
 def get_planet(id):
     planet=validate_planet(id)
