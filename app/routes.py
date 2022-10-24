@@ -1,4 +1,6 @@
-from flask import Blueprint, jsonify
+from crypt import methods
+from flask import Blueprint, jsonify,make_response, abort
+
 
 # Wave 01:
 
@@ -19,6 +21,14 @@ class Planet:
         self.name = name
         self.description = description
         self.miles_from_sun = miles_from_sun
+    
+    def to_json(self):
+        return dict(
+            id=self.id,
+            name=self.name,
+            description=self.description,
+            mailes_from_sun = self.miles_from_sun
+        )
 
 planets = [
     Planet(1, "Mercury", "The smallest planet in the Solar System and the closest to the Sun", "36.04 million"),
@@ -44,3 +54,24 @@ def handle_planets():
             "miles from sun" : planet.miles_from_sun
         })
     return jsonify(planets_response)
+
+
+def validate_planet(planet_id):
+    #ensure valid input planet number
+    try:
+        planet_id = int(planet_id)
+    #invalid 
+    except:
+        abort(make_response({"message":f"planet{planet_id} invalid"}, 400)) 
+    
+    for planet in planets:
+        if planet_id == planet_id:
+            return planet_id
+    #nonexistent id
+    abort(make_response({"message": f"planet{planet_id} not found"}, 404))
+
+#used helper function to_json
+@planets_bp.route("/<id>", methods=["GET"])
+def find_planet(id):
+    planet = validate_planet(id)
+    return jsonify(planet.to_json())
