@@ -1,5 +1,5 @@
 # tell flask you want to import data
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, abort, make_response
 
 class Planet:
 
@@ -21,28 +21,42 @@ PLANET_LIST = [
 
 planets_bp = Blueprint('planets_bp', __name__, url_prefix='/planets')
 
+def validate_planet(planet_id):
+    try:
+        planet_id = int(planet_id)
+    except:
+        abort(make_response({"message":f"planet {planet_id} invalid"}, 400))
+
+    for planet in PLANET_LIST:
+        if planet.id == planet_id:
+            return planet
+
+    abort(make_response({"message":f"planet {planet_id} not found"}, 404)) 
+
+@planets_bp.route("/<planet_id>", methods=["GET"])
+def return_planet(planet_id):
+    planet = validate_planet(planet_id)
+
+    return {
+        "id": planet.id,
+        "name": planet.name,
+        "description": planet.description,
+        "color": planet.color
+    }
+
+
 
 @planets_bp.route("", methods=["GET"])
 def return_planets():
     planets_list = []
     for planet in PLANET_LIST:
+
         planets_list.append(
             {
             "id": planet.id,
+            "name": planet.name,
             "description": planet.description,
             "color": planet.color
             }
         )
     return jsonify(planets_list)
-
-
-# As a client, I want to send a request...
-
-# 1. ...to get one existing `planet`, so that I can see the `id`, `name`, 
-# `description`, and other data of the `planet`.
-# 1. ... such that trying to get one non-existing `planet` responds 
-# with get a `404` response, so that I know the `planet` resource 
-# was not found.
-# 1. ... such that trying to get one `planet` with an invalid 
-# `planet_id` responds with get a `400` response, so that I know 
-# the `planet_id` was invalid.
