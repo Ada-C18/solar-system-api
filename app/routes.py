@@ -31,7 +31,7 @@ planet_bp = Blueprint("planets", __name__, url_prefix="/planets")
 @planet_bp.route("", methods=["GET"])
 def get_all_planets():
     planets_response = []
-    for planet in planets:
+    for planet in PLANETS:
         planets_response.append({
             "id" : planet.id,
             "name" : planet.name,
