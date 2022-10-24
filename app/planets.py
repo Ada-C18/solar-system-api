@@ -1,4 +1,5 @@
 from crypt import methods
+from unicodedata import name
 from flask import Blueprint, jsonify
 
 class Planet:
@@ -17,12 +18,17 @@ PLANETS = [
     Planet(7, "Uranus", "Uranus is an ice giant. Most of its mass is a hot, dense fluid of icy materials – water, methane and ammonia – above a small rocky core. Like Venus, Uranus rotates east to west. But Uranus is unique in that it rotates on its side"),
     Planet(8, "Neptune","Dark, cold, and whipped by supersonic winds, ice giant Neptune is the eighth and most distant planet in our solar system. Neptune is the only planet in our solar system not visible to the naked eye" ),
     Planet(9, "Pluto", "Pluto has a heart-shaped glacier that’s the size of Texas and Oklahoma. This fascinating world has blue skies, spinning moons, mountains as high as the Rockies, and it snows – but the snow is red"),
-
-
 ]
 planets_bp = Blueprint('planets_bp', __name__, url_prefix='/planets')
 
 @planets_bp.route('', methods=['GET'])
 def get_all_planets():
+    planets = []
     for planet in PLANETS:
-        return vars(planet)
+        planets.append({
+            'id': planet.id,
+            'name': planet.name,
+            'description': planet.description
+        })
+    
+    return jsonify(planets)
