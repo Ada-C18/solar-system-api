@@ -1,4 +1,3 @@
-# from os import abort
 from flask import Blueprint, jsonify, abort, make_response
 
 class Planet:
@@ -50,7 +49,7 @@ def  validate_planet(planet_id):
 @bp.route("/<id>", methods = ["GET"])
 def handle_planet (id):
     planet = validate_planet(id)
-    return jsonify(planet.json())
+    return jsonify(planet.to_json())
 
 
 
