@@ -33,7 +33,7 @@ planet_bp = Blueprint("planets", __name__, url_prefix="/planets")
 def get_all_planets():
     planets_response = []
     for planet in PLANETS:
-        result.append(
+        planets_response.append(
             {
                 "id": planet.id,
                 "name": planet.name,
@@ -42,7 +42,7 @@ def get_all_planets():
             }
         )
 
-    return jsonify(result)
+    return jsonify(planets_response)
 
 
 def validate_planet_name(planet_name):
