@@ -24,10 +24,10 @@ def get_all_planets():
 
 @planets_bp.route('/<id>', methods=['GET'])
 def get_one_planet(id):
-    planet_id = int(id)
-    for planet in Planets_list:
-        if planet.id == planet_id:
-            return vars(planet)
+    # planet_id = int(id)
+    # for planet in Planets_list:
+    #     if planet.id == planet_id:
+    #         return vars(planet)
     planet_id = validate_planet(id)
     return planet_id
 
