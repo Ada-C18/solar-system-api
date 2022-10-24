@@ -27,3 +27,24 @@ def handle_planets():
         ))
     return jsonify(all_planets)
 
+@bp.route("/<planet_id>", methods=["GET"])
+def handle_book(book_id):
+    planet_id = int(planet_id)
+
+    try:
+      book_id = int(book_id)
+    except:
+      return {"message":f"book {book_id} invalid"}, 400
+
+    for planet in planets:
+        if planet.id == planet_id:
+            return {
+                "id": planet.id,
+                "title": planet.title,
+                "description": planet.description
+            }
+    return {"message":f"book {book_id} not found"}, 404
+
+    
+
+
