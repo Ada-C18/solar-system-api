@@ -26,6 +26,3 @@ def all_planets():
         ) for planet in planets]
 
     return jsonify(results_list)
-    
-
-
