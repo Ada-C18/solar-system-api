@@ -44,3 +44,17 @@ def get_all_planets():
 
 #GET one planet
 
+def validate_planet(id):
+    try:
+        planet_id = int(id)
+    except ValueError:
+        return {
+            'message': 'Invalid planer id'
+        },400
+    for planet in PLANETS:
+        if planet.id == planet_id:
+            return vars(planet)
+    abort(make_response(jsonify(description = 'Resourse not found'),404))
+    # print(type(planet_response))
+    # print(type(jsonify(planet_response)))
+    
