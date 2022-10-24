@@ -31,4 +31,18 @@ def read_planets():
             "description": planet.description
         }
         planets_json.append(dict)
-    return jsonify(planets_json)    
+    return jsonify(planets_json)
+
+
+@planet_bp.route("/<planet_id>", methods=["GET"])
+def handle_planet(planet_id):
+    planet_id = int(planet_id)
+
+    for planet in list_of_planets:
+        if planet.id == planet_id:
+            return {
+                "id": planet.id,
+                "name": planet.name,
+                "description": planet.description
+            }
+        
