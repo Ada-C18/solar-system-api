@@ -41,3 +41,6 @@ planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planets")
 def get_all_planets():
     planet_response = [vars(planet) for planet in PLANETS]
     return jsonify(planet_response)
+
+#GET one planet
+
