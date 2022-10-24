@@ -1,6 +1,5 @@
 # tell flask you want to import data
-from unicodedata import name
-from flask import Blueprint
+from flask import Blueprint, jsonify
 
 class Planet:
 
@@ -21,6 +20,20 @@ PLANET_LIST = [
 ]
 
 planets_bp = Blueprint('planets_bp', __name__, url_prefix='/planets')
+
+
+@planets_bp.route("", methods=["GET"])
+def return_planets():
+    planets_list = []
+    for planet in PLANET_LIST:
+        planets_list.append(
+            {
+            "id": planet.id,
+            "description": planet.description,
+            "color": planet.color
+            }
+        )
+    return jsonify(planets_list)
 
 
 # As a client, I want to send a request...
