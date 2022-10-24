@@ -1,4 +1,4 @@
-from flask import Blueprint , jsonify 
+from flask import Blueprint, jsonify, abort, make_response
 
 #create planet class
 class Planets:
@@ -32,3 +32,44 @@ def get_planets():
         })
     return jsonify(planet_response)
 
+# @planets_bp.route("/name", methods = ["GET"])
+#validate the planet request    
+def varify_planet_exist(id):
+    try:
+        id = int(id)
+    except:
+        # return {"message": f"planet {name} invalid"}, 400
+        abort(make_response({"message":f"planet {id} is invalid, please search by planet_id."}, 400))
+
+    for planet in planets:
+        if planet.id == id:
+            return planet
+
+    abort(make_response({"message":f"planet {id} doesn't exist."}, 404))
+
+@planets_bp.route("/<id>", methods = ["GET"])
+#get ONE planet, send return if there's an error
+def get_single_planet_by_id(id):
+    planet = varify_planet_exist(id)
+
+    return {
+        "id": planet.id,
+        "name": planet.name,
+        "description": planet.description,
+        "livability": planet.livability,
+    }
+
+# SEARCH BY NAME DRAFT
+# @planets_bp.route("/<name>", methods = ["GET"])
+# #get ONE planet by name
+# def get_single_planet_by_name(name):
+#     for planet in planets:
+#         if planet.name == name:
+#             return {
+#                 "id": planet.id,
+#                 "name": planet.name,
+#                 "description": planet.description,
+#                 "livability": planet.livability,
+#                 }
+#         else:
+#             return {"message":f"planet {name} doesn't exist."}, 404
