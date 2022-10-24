@@ -7,6 +7,15 @@ class Planet:
         self.name = name
         self.description = description
         self.color = color
+
+    def to_json(self):
+        return dict(
+            id= self.id,
+            name = self.name,
+            description = self.description,
+            color = self.color)
+
+
 planets = [
     Planet(1,"Earth","big","blue/green"),
     Planet(2,"Mars","smaller","red"),
@@ -17,13 +26,7 @@ bp = Blueprint("planets", __name__, url_prefix="/planets")
 def handle_planets():
     all_planets = []
     for planet in planets:
-        all_planets.append(dict(
-            id= planet.id,
-            name = planet.name,
-            description = planet.description,
-            color = planet.color
-
-        ))
+        all_planets.append(planet.to_json())
     return jsonify(all_planets)
 
 def validate_planet(planet_id):
@@ -43,12 +46,7 @@ def validate_planet(planet_id):
 @bp.route("/<planet_id>", methods=["GET"])
 def handle_planet(planet_id):
     planet = validate_planet(planet_id)
-    return dict(
-        id = planet.id,
-        name = planet.name,
-        description = planet.description,
-        color = planet.color
-    )
+    return (planet.to_json())
 
     
 
