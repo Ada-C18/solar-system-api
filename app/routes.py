@@ -1,4 +1,6 @@
-from flask import Blueprint,jsonify
+from crypt import methods
+from os import abort
+from flask import Blueprint,jsonify,abort,make_response
 
 class Planet:
     def __init__(self,id,name,eq_diam,mass,moons,description):
@@ -21,17 +23,35 @@ planets_bp = Blueprint('planets_bp', __name__, url_prefix='/planets')
 
 @planets_bp.route('',methods=['GET'])
 def get_all_planets():
-    planet_response = []
-    for planet in PLANETS:
-        planet_response.append({
-            'id': planet.id,
-            'name': planet.name,
-            'eq_diam': planet.eq_diam,
-            'mass': planet.mass,
-            'moons': planet.moons,
-            'deskriptions': planet.description
-
-        })
-    print(type(planet_response))
-    print(type(jsonify(planet_response)))
+    planet_response = [vars(planet) for planet in PLANETS]
     return  jsonify(planet_response) 
+    # for planet in PLANETS:
+    #     planet_response.append({
+    #         'id': planet.id,
+    #         'name': planet.name,
+    #         'eq_diam': planet.eq_diam,
+    #         'mass': planet.mass,
+    #         'moons': planet.moons,
+    #         'deskriptions': planet.description
+
+    #     })
+
+@planets_bp.route('/<id>',methods=['GET'])
+def get_one_planet(id):
+    planet = validate_planet(id)
+    return planet
+
+def validate_planet(id):
+    try:
+        planet_id = int(id)
+    except ValueError:
+        return {
+            'message': 'Invalid planer id'
+        },400
+    for planet in PLANETS:
+        if planet.id == planet_id:
+            return vars(planet)
+    abort(make_response(jsonify(description = 'Resourse not found'),404))
+    # print(type(planet_response))
+    # print(type(jsonify(planet_response)))
+    
