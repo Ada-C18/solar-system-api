@@ -27,7 +27,7 @@ class Planet:
             id=self.id,
             name=self.name,
             description=self.description,
-            mailes_from_sun = self.miles_from_sun
+            miles_from_sun = self.miles_from_sun
         )
 
 planets = [
