@@ -27,6 +27,23 @@ def handle_books():
         })
     return jsonify(planets_response)
 
+@planet_bp.route("/<id>", methods=["GET"])
+def get_one_planet(id):
+    try:
+        planet_id = int(id)
+    except:
+        return {"message":f"{id} is invalid"}, 400
+
+    for planet in PLANETS:
+        if planet.id == planet_id:
+            return {
+                "id": planet.id,
+                "name": planet.name,
+                "description": planet.description,
+                "color": planet.color
+            }, 200 
+    return {"message":f"{planet_id} not found"}, 404
+
 
 
 
