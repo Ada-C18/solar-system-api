@@ -7,9 +7,11 @@ class Planet:
         self.description = description
         self.color = color
 
-PLANETS = [Planet(1, "Pluto", "no longer a planet", "light blue"),
+PLANETS = [
+            Planet(1, "Pluto", "no longer a planet", "light blue"),
             Planet(2, "Mercury", "smallest planet out of the 8", "dark gray"),
-            Planet(3, "Mars", "closest resemblance to Earth", "red")]
+            Planet(3, "Mars", "closest resemblance to Earth", "red")
+        ]
 
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
@@ -17,9 +19,11 @@ planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 def get_all_planets():
     planets_response = []
     for planet in PLANETS:
-        planets_response.append({"id": planet.id, 
+        planets_response.append({
+                                "id": planet.id, 
                                 "name": planet.name, 
                                 "description": planet.description,
-                                "color": planet.color})
+                                "color": planet.color
+                            })
 
     return jsonify(planets_response)
