@@ -39,7 +39,7 @@ def handle_planet(planet_id):
     try:
         planet_id = int(planet_id)
     except:
-        return "Message: Invalid Planet.", 400
+        return {"Message": f"Planet {planet_id} invalid."}, 400
 
     for planet in list_of_planets:
         if planet.id == planet_id:
@@ -48,5 +48,5 @@ def handle_planet(planet_id):
                 "name": planet.name,
                 "description": planet.description
             }
-    return "Message: Planet not found.", 404
+    return {"Message": f"Planet {planet_id} not found."}, 404
         
