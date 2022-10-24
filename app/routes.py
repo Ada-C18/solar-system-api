@@ -13,3 +13,5 @@ planets = [
     Planet(2, "Mars", "red planet", 2),
     Planet(3, "Pluto", "is a planet", 5)
 ]
+
+planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
