@@ -1,5 +1,3 @@
-from turtle import color
-from unicodedata import name
 from flask import Blueprint,jsonify
 
 
@@ -10,10 +8,10 @@ class Planets:
         self.color = color
         self.description = description
 
-    Planets = [
-        Planets (1, 'Dink', 'Green', 'Fluffy'), 
-        Planets (2, 'Blorp', 'Purple', 'Stinky'),
-        Planets (3, 'Florpus', 'Red', 'Shy')
+Planets_list = [
+    Planets(1, 'Dink', 'Green', 'Fluffy'), 
+    Planets(2, 'Blorp', 'Purple', 'Stinky'),
+    Planets(3, 'Florpus', 'Red', 'Shy')
     ]
 
 planets_bp = Blueprint('planets_bp', __name__, url_prefix='/planets')
