@@ -6,6 +6,13 @@ class Planet:
         self.name = name
         self.description = description
 
+    def make_a_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description
+        }
+
 solar_system = [
     Planet(1, "Mercury", "smallest planet"),
     Planet(2, "Venus", "hottest planet"),
@@ -26,24 +33,14 @@ solar_system_bp = Blueprint(
 def handle_planets():
     planets_response = []
     for planet in solar_system:
-        planets_response.append(
-            {
-                "id": planet.id,
-                "name": planet.name,
-                "description": planet.description
-            }
-        )
+        planets_response.append(planet.make_a_dict())
     return jsonify(planets_response)
 
 @solar_system_bp.route("/<planet_id>", methods=["GET"])
 def handle_planet(planet_id):
     planet = verify_planet(planet_id)
 
-    return {
-        "id": planet.id,
-        "name": planet.name,
-        "description": planet.description,
-    }
+    return jsonify(planet.make_a_dict())
 
 def verify_planet(planet_id):
     try:
