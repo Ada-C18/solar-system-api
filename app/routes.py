@@ -36,7 +36,10 @@ def read_planets():
 
 @planet_bp.route("/<planet_id>", methods=["GET"])
 def handle_planet(planet_id):
-    planet_id = int(planet_id)
+    try:
+        planet_id = int(planet_id)
+    except:
+        return "Message: Invalid Planet.", 400
 
     for planet in list_of_planets:
         if planet.id == planet_id:
@@ -45,4 +48,5 @@ def handle_planet(planet_id):
                 "name": planet.name,
                 "description": planet.description
             }
+    return "Message: Planet not found.", 404
         
