@@ -15,7 +15,7 @@ class Planet:
         self.description = description
         self.moon = moon
 
-planets = [
+PLANETS = [
     Planet(1, "Mercury", "closest to the sun", 0), 
     Planet(2, "Venus", "very high temps", 0), 
     Planet(3, "Earth", "home", 1), 
@@ -24,10 +24,9 @@ planets = [
     Planet(6, "Saturn", "famous rings", 83),
     Planet(7, "Uranus", "spins upside down", 27),
     Planet(8, "Neptune", "furthest from the sun", 14)
-
 ]
 
-planet_bp = Blueprint("planet_bp", __name__, url_prefix="/planets")
+planet_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
 @planet_bp.route("", methods=["GET"])
 def get_all_planets():
