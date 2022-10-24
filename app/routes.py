@@ -22,7 +22,7 @@ def show_all_planets():
     for planet in list_of_planets:
         planets_response.append({
             "id": planet.id,
-            "title": planet.title,
+            "name": planet.name,
             "description": planet.description,
             "number of moons": planet.moons 
         })
