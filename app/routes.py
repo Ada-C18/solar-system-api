@@ -65,13 +65,13 @@ def validate_planet(planet_id):
         abort(make_response({"message":f"planet{planet_id} invalid"}, 400)) 
     
     for planet in planets:
-        if planet_id == planet_id:
-            return planet_id
+        if planet.id == planet_id:
+            return planet
     #nonexistent id
     abort(make_response({"message": f"planet{planet_id} not found"}, 404))
 
 #used helper function to_json
 @planets_bp.route("/<id>", methods=["GET"])
-def find_planet(id):
+def handle_planets(id):
     planet = validate_planet(id)
     return jsonify(planet.to_json())
