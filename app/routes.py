@@ -20,6 +20,8 @@ PLANET_LIST = [
     planet_3
 ]
 
+planets_bp = Blueprint('planets_bp', __name__, url_prefix='/planets')
+
 
 # As a client, I want to send a request...
 
