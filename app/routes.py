@@ -1,5 +1,4 @@
-from unicodedata import name
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, abort, make_response
 
 
 class Planet:
@@ -27,22 +26,29 @@ def handle_planets():
         ))
     return jsonify(all_planets)
 
-@bp.route("/<planet_id>", methods=["GET"])
-def handle_planet(planet_id):
+def validate_planet(planet_id):
     try:
       planet_id = int(planet_id)
     except:
-      return {"message":f"planet {planet_id} invalid"}, 400
-
+      abort(make_response({"message":f"planet {planet_id} invalid"}, 400))
+    
     for planet in planets:
         if planet.id == planet_id:
-            return {
-                "id": planet.id,
-                "name": planet.name,
-                "description": planet.description,
-                "color": planet.color
-            }
-    return {"message":f"planet {planet_id} not found"}, 404
+            return planet
+
+    abort(make_response({"message":f"planet {planet_id} not found"}, 404))
+    
+
+
+@bp.route("/<planet_id>", methods=["GET"])
+def handle_planet(planet_id):
+    planet = validate_planet(planet_id)
+    return dict(
+        id = planet.id,
+        name = planet.name,
+        description = planet.description,
+        color = planet.color
+    )
 
     
 
