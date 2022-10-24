@@ -10,11 +10,11 @@ class Planets:
 
     # planet instances
 planets = [
-    Planets(1, "earth", "green", 10),
-    Planets(2, "venus", "orange", 5),
-    Planets(3, "mars", "red", 7),
-    Planets(4, "jupiter", "beige", 1),
-    Planets(5, "neptune", "blue", 3),
+    Planets(3, "earth", "green terrestrial planet", 10.0),
+    Planets(2, "venus", "orange terrestrial planet", 4.5),
+    Planets(4, "mars", "red terrestrial planet", 7.9),
+    Planets(5, "jupiter", "beige gas giant", 1.6),
+    Planets(8, "neptune", "blue ice giant", 3.4),
     ]
 
 planets_bp = Blueprint("planets", __name__, url_prefix = "/planets")
