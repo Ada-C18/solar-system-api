@@ -1,18 +1,5 @@
-from crypt import methods
+
 from flask import Blueprint, jsonify,make_response, abort
-
-
-# Wave 01:
-
-    # COMPLETE -  Create a virtual environment and activate it
-    # COMPLETE - Install the dependencies
-    # COMPLETE - Define a Planet class with the attributes id, name, and description, and one additional attribute
-    # COMPLETE - Create a list of Planet instances
-    # COMPLETE - Create the following endpoint(s), with similar functionality presented in the Hello Books API:
-
-    # As a client, I want to send a request...
-
-    #     ...to get all existing planets, so that I can see a list of planets, with their id, name, description, and other data of the planet.
 
 
 class Planet:
@@ -52,20 +39,18 @@ def handle_planets():
 
 
 def validate_planet(planet_id):
-    #ensure valid input planet number
     try:
         planet_id = int(planet_id)
-    #invalid 
+
     except:
         abort(make_response({"message":f"planet{planet_id} invalid"}, 400)) 
     
     for planet in planets:
         if planet.id == planet_id:
             return planet
-    #nonexistent id
+
     abort(make_response({"message": f"planet{planet_id} not found"}, 404))
 
-#used helper function to_json
 @bp.route("/<id>", methods=["GET"])
 def handle_planet(id):
     planet = validate_planet(id)
