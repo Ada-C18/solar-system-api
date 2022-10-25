@@ -1,5 +1,4 @@
-from flask import Blueprint, jsonify
-from sqlalchemy import desc
+from flask import Blueprint
 from .planets import *
 planet_bp = Blueprint("planet_bp", __name__, url_prefix="/planets")
 
