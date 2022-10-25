@@ -1,6 +1,6 @@
 from crypt import methods
 from unicodedata import name
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, abort, make_response
 
 class Planet:
     def __init__(self, id, name, description,):
@@ -23,12 +23,32 @@ planets_bp = Blueprint('planets_bp', __name__, url_prefix='/planets')
 
 @planets_bp.route('', methods=['GET'])
 def get_all_planets():
-    planets = []
-    for planet in PLANETS:
-        planets.append({
-            'id': planet.id,
-            'name': planet.name,
-            'description': planet.description
-        })
+    planets_response = [vars(planet) for planet in PLANETS]
     
-    return jsonify(planets)
+    return jsonify(planets_response)
+
+# Get one planet
+@planets_bp.route('/<name>', methods=['GET'])
+def get_one_planet(name):
+    # return planet as dict
+    planet = validate_planet(name)
+    return planet
+
+
+
+def validate_planet(name):
+
+    try:
+            planet_name = str(name)
+    except ValueError:
+            return {
+                    "message": "Invalid planet name"
+                }, 400
+
+
+    for planet in PLANETS:
+        if planet.name == planet_name:
+            return vars(planet)
+    
+    
+    abort(make_response(jsonify(description="Resource not found"),404)) 
