@@ -20,39 +20,42 @@ planets = [
     Planet(8, "Neptune", "The densest giant planet", 30599),
     
 ]
-solar_system_bp=Blueprint("planets", __name__,  url_prefix="/planets") 
-@solar_system_bp.route("",methods=["GET"])  
-def handle_planet():
-    result = []
-    for planet in planets:
-        result.append({
-            "id":planet.id,
-            "name":planet.name,  
-            "description":planet.description,
-            "diameter":planet.diameter
-        })  
-    return jsonify(result) 
+planets_bp = Blueprint("planets_bp", __name__,  url_prefix="/planets") 
 
 def validate_planet(planet_id):
     try:
-        planet_id= int(planet_id)
+        planet_id = int(planet_id)
     except:
         abort(make_response({"message":f"planet {planet_id} invalid"}, 400))
 
     for planet in planets:
         if planet.id == planet_id:
             return planet
-
+    
     abort(make_response({"message":f"planet {planet_id} not found"}, 404))
-    
-    
-    @solar_system_bp.route("/<planet_id>", methods=["GET"])
-    def handle_planet(planet_id):
-        book = validate_planet(planet_id)
 
-        return {
-            "id":planet.id,
-            "name":planet.name,  
-            "description":planet.description,
-            "diameter":planet.diameter
-        }
+@planets_bp.route("",methods=["GET"])  
+def handle_planets():
+    planets_response = []
+    for planet in planets:
+        planets_response.append(
+            {
+                "id":planet.id,
+                "name":planet.name,  
+                "description":planet.description,
+                "diameter":planet.diameter
+            }
+        )  
+    return jsonify(planets_response) 
+
+    
+@planets_bp.route("/<planet_id>", methods=["GET"])
+def handle_planet(planet_id):
+    planet = validate_planet(planet_id)
+
+    return {
+        "id": planet.id,
+        "name": planet.name,  
+        "description": planet.description,
+        "diameter": planet.diameter
+    }
