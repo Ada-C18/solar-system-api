@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, abort, make_response
 
 class Planet:
     def __init__(self, id, name, description):
@@ -28,3 +28,23 @@ def return_all_planets():
         }
         planets_json.append(dict)
     return jsonify(planets_json)
+
+def verify_planet(planet_id):
+    try:
+        planet_id = int(planet_id)
+    except:
+        abort(make_response ({"Message": f"Planet {planet_id} invalid."}, 400))
+
+    for planet in list_of_planets:
+        if planet.id == planet_id:
+            return {
+                "id": planet.id,
+                "name": planet.name,
+                "description": planet.description
+            }
+    abort(make_response({"Message": f"Planet {planet_id} not found."}, 404))
+
+
+    
+
+
