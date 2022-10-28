@@ -25,7 +25,6 @@ def upgrade():
     sa.Column('moon_count', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
-    op.drop_table('planets')
     # ### end Alembic commands ###
 
 
