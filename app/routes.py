@@ -45,14 +45,13 @@ def validate_planet(planet_id):
 
     abort(make_response({"message":f"planet {planet_id} not found"}, 404))
     
-    
-    @solar_system_bp.route("/<planet_id>", methods=["GET"])
-    def handle_planet(planet_id):
-        book = validate_planet(planet_id)
+@solar_system_bp.route("/<planet_id>", methods=["GET"])
+def handle_planet(planet_id):
+    planet = validate_planet(planet_id)
 
-        return {
-            "id":planet.id,
-            "name":planet.name,  
-            "description":planet.description,
-            "diameter":planet.diameter
-        }
+    return {
+    "id":planet.id,
+    "name":planet.name,  
+    "description":planet.description,
+    "diameter":planet.diameter
+    }
