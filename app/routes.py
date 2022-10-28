@@ -18,6 +18,12 @@ def create_planet():
     db.session.commit()
     return make_response(f"Planet {new_planet.name} has been created successfully", 201)
 
+@planets_bp.route("", methods=["GET"])
+def read_all_planets():
+    planets = Planet.query.all()
+    planets_response = [planet.to_dict() for planet in planets]
+    return jsonify(planets_response)
+
 # @planets_bp.route("", methods=["GET"])
 # def planets_endpoint():
 #     response = [planet.to_json() for planet in planets]
