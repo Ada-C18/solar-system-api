@@ -1,30 +1,5 @@
 from flask import Blueprint, jsonify, abort, make_response
 
-class Planet:
-    def __init__(self, id, name, description):
-        self.id = id
-        self.name = name
-        self.description = description
-
-    def make_a_dict(self):
-        return {
-            "id": self.id,
-            "name": self.name,
-            "description": self.description
-        }
-
-solar_system = [
-    Planet(1, "Mercury", "smallest planet"),
-    Planet(2, "Venus", "hottest planet"),
-    Planet(3, "Earth", "only planet known to harbor intelligent life"),
-    Planet(4, "Mars", "most likely planet to terraform"),
-    Planet(5, "Jupiter", "largest planet"),
-    Planet(6, "Saturn", "only planet with a ring system"),
-    Planet(7, "Uranus", "only planet with an almost vertical equator"),
-    Planet(8, "Neptune", "coldest planet"),
-    Planet(9, "Pluto", "only planet to be disowned fromt the Solar System")
-]
-
 solar_system_bp = Blueprint(
     "solar_system_bp", __name__, url_prefix="/solar-system"
     )
