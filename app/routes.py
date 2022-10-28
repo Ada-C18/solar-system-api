@@ -40,7 +40,7 @@ def planet_dict(planet):
 @planets_bp.route("", methods=["GET"])
 def get_all_planets():
     planets_response = []
-    
+
     for planet in PLANETS:
         planets_response.append(planet_dict(planet))
 
