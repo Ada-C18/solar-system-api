@@ -1,20 +1,6 @@
 from flask import Blueprint, jsonify, abort, make_response
 
 
-class Planet:
-    def __init__(self, id, name, description, distance):
-        self.id = id
-        self.name = name
-        self.description = description
-        self.distance = distance
-
-    def to_dict(self):
-        return dict(
-            id=self.id,
-            name=self.name,
-            description=self.description,
-            distance=self.distance,
-        )
 
 
 planet_list = [
