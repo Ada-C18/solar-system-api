@@ -13,7 +13,9 @@ planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 @planets_bp.route("", methods=["POST"])
 def create_planet():
     request_body = request.get_json()
-    new_planet = Planet(name=request_body["name"], description=request_body["description"], moons=request_body["moons"])
+    new_planet = Planet(name=request_body["name"],
+                        description=request_body["description"],
+                        moons=request_body["moons"])
     db.session.add(new_planet)
     db.session.commit()
     return make_response(f"Planet {new_planet.name} has been created successfully", 201)
