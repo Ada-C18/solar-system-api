@@ -1,4 +1,6 @@
-from flask import Blueprint, jsonify, abort, make_response
+from flask import Blueprint, jsonify, make_response, request
+from app.models.planet import Planet
+from app import db
 
 # class Planet:
 #     def __init__(self, id, name, description, color):
@@ -23,28 +25,23 @@ from flask import Blueprint, jsonify, abort, make_response
 
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
+
+
+
+def create_planet():
+    request_body=request.get_json()
+    new_planet = Planet(name = request_body["name"],
+                description = request_body["description"],
+                color = request_body["color"])
+
+    db.session.add(new_planet)
+    db.session.commit()
+
+    return make_response(f"Planet {new_planet.name} successfully created", 201)
+
 @planets_bp.route("", methods=["GET"])
+def read_all_planets():
+    planets = Planet.query.all()
+    planets_response = [planet.dict() for planet in planets]
 
-def handle_planets():
-    result = []
-    for planet in planets:
-        result.append(planet.to_planet_dict())
-    return jsonify(result)
-
-def validate_planet(planet_id):
-    try:
-        planet_id = int(planet_id)
-    except:
-        abort(make_response({"message": f"Planet {planet_id} invalid"}, 400))
-
-    for planet in planets:
-        if planet.id == planet_id:
-            return planet
-
-    abort(make_response({"message": f"Planet {planet_id} not found"}, 404))
-
-@planets_bp.route("/<planet_id>", methods=["GET"])
-
-def handle_planet(planet_id):
-    planet = validate_planet(planet_id)
-    return jsonify(planet.to_planet_dict())
+    return jsonify(planets_response)
