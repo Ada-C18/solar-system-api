@@ -6,4 +6,4 @@ class Planet(db.Model):
     color = db.Column(db.String)
     livability = db.Column(db.Integer)
     moons = db.Column(db.Integer)
-    is_dwarf = db.Column(db.Boolean)
+    # is_dwarf = db.Column(db.Boolean)
