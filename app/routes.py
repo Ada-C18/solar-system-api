@@ -2,32 +2,9 @@ from flask import Blueprint, jsonify, make_response, request
 from app.models.planet import Planet
 from app import db
 
-# class Planet:
-#     def __init__(self, id, name, description, color):
-#         self.id = id
-#         self.name = name
-#         self.description = description
-#         self.color = color
-
-#     def to_planet_dict(self):
-#         return dict(
-#             id = self.id,
-#             name = self.name,
-#             description = self.description,
-#             color = self.color
-#         )
-
-# planets = [
-#     Planet(1, "Pluto", "Small", "Blue"),
-#     Planet(2, "Mercury", "Hot, probably", "Red"),
-#     Planet(3, "Mars", "Medium", "Orange")
-# ]
-
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-
-
-
+@planets_bp.route("", methods=["POST"])
 def create_planet():
     request_body=request.get_json()
     new_planet = Planet(name = request_body["name"],
