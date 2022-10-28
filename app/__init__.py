@@ -14,10 +14,10 @@ def create_app(test_config=None):
     db.init_app(app)
     migrate.init_app(app, db)
 
-    #---Import Models---
+    #---IMPORT MODELS---
     from .models.planet import Planet
 
-    #---Register Blueprints---
+    #---REGISTER BLUEPRINTS---
     from .routes import planets_bp
     app.register_blueprint(planets_bp)
 
