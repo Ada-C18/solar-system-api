@@ -1,7 +1,25 @@
-from flask import Blueprint, jsonify, abort, make_response
+from app import db
+from app.models.planet import Planet
+from flask import Blueprint, jsonify, abort, make_response, request
 
-planets_bp = Blueprint("planets", __name__, url_prefix = "/planets")
+planet_bp = Blueprint("planet", __name__, url_prefix = "/planet")
 
+@planet_bp.route("", methods=["POST"])
+
+def handle_planets():
+    request_body = request.get_json()
+    new_planet = Planet(
+    name = request_body["name"],
+    color = request_body["color"],
+    moons = request_body["moons"],
+    livability = request_body["livability"]
+    # is_dwarf = request_body["is_dwarf"]
+    )
+
+    db.session.add(new_planet)
+    db.session.commit()
+
+    return make_response(f"Planet {new_planet.name} successfully created", 201)
 #create planet class
 # class Planets:
 #     def __init__(self, id, name, description, livability):
