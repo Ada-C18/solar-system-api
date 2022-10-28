@@ -52,14 +52,6 @@ def validate_planet_id(id):
 
 @planets_bp.route("/<id>", methods = ["GET"])
 def get_one_planet(id):
-    # try:
-    #     planet_id = int(id)
-    # except:
-    #     abort(make_response({"message":f"Planet {id} is invalid"}, 400))
-    
-    # planet = int(id)
-    # for planet in planets:
-    #     if planet.id == planet_id:
     planet = validate_planet_id(id)
     return (
         {"id": planet.id,
