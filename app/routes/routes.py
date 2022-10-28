@@ -1,25 +1,6 @@
-from flask import Blueprint, jsonify, abort, make_response
-
-class Planet:
-    def __init__(self, id, name, description, size):
-        self.id = id
-        self.name = name
-        self.description = description
-        self.size = size
-
-    def to_json(self):
-        return dict(
-            id=self.id,
-            name=self.name,
-            description=self.description,
-            size=self.size
-    )
-
-planets = [
-    Planet(1, "Saturn", "cold", "large"),
-    Planet(2, "Earth", "normal", "medium"),
-    Planet(3, "Jupiter", "sunny", "large")
-        ]
+from app import db
+from app.models.planet import Planet
+from flask import Blueprint, jsonify, make_response, abort, request
 
 bp = Blueprint("planets", __name__, url_prefix="/planets")
 
@@ -45,6 +26,20 @@ def  validate_planet(planet_id):
 def handle_planet (id):
     planet = validate_planet(id)
     return jsonify(planet.to_json())
+
+
+@bp.route("", methods = ["POST"])
+def create_planet():
+    request_body = request.get_json()
+    new_planet = Planet(
+        name=request_body["name"],
+        size=request_body["size"],
+        description=request_body["description"]
+        )
+    db.session.add(new_planet)
+    db.session.commit()
+    return make_response(f"Planet {new_planet.name} was successfully created", 201)
+
 
 
 
