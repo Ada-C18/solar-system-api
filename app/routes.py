@@ -4,22 +4,36 @@ from flask import Blueprint, jsonify, abort, make_response, request
 
 planet_bp = Blueprint("planet", __name__, url_prefix = "/planet")
 
-@planet_bp.route("", methods=["POST"])
+@planet_bp.route("", methods=["POST", "GET"])
 
 def handle_planets():
     request_body = request.get_json()
-    new_planet = Planet(
-    name = request_body["name"],
-    color = request_body["color"],
-    moons = request_body["moons"],
-    livability = request_body["livability"]
-    # is_dwarf = request_body["is_dwarf"]
-    )
+    if request.method == "GET":
+        planets = Planet.query.all()
+        planet_response = []
+        for planet in planets:
+            planet_response.append({
+                "name": planet.name,
+                "color": planet.color,
+                "livability": planet.livability,
+                "moons": planet.moons
+            })
+        return jsonify(planet_response)
+    
+    elif request.method == "POST": 
+        new_planet = Planet(
+        name = request_body["name"],
+        color = request_body["color"],
+        moons = request_body["moons"],
+        livability = request_body["livability"]
+        # is_dwarf = request_body["is_dwarf"]
+        )
 
-    db.session.add(new_planet)
-    db.session.commit()
+        db.session.add(new_planet)
+        db.session.commit()
 
-    return make_response(f"Planet {new_planet.name} successfully created", 201)
+        return make_response(f"Planet {new_planet.name} successfully created", 201)
+
 #create planet class
 # class Planets:
 #     def __init__(self, id, name, description, livability):
@@ -38,7 +52,7 @@ def handle_planets():
 #     ]
     
 # @planets_bp.route("", methods = ["GET"])
-# #get all planets, return as a lists with all attributes
+#get all planets, return as a lists with all attributes
 # def get_planets():
 #     planet_response = []
 #     for planet in planets:
