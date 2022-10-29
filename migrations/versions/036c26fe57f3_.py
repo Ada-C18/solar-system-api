@@ -1,8 +1,8 @@
-"""adds planet  model
+"""empty message
 
-Revision ID: 05d3b908f3f6
+Revision ID: 036c26fe57f3
 Revises: 
-Create Date: 2022-10-28 11:36:45.165608
+Create Date: 2022-10-28 18:47:18.909945
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '05d3b908f3f6'
+revision = '036c26fe57f3'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -24,7 +24,6 @@ def upgrade():
     sa.Column('color', sa.String(), nullable=True),
     sa.Column('livability', sa.Integer(), nullable=True),
     sa.Column('moons', sa.Integer(), nullable=True),
-    sa.Column('is_dwarf', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
