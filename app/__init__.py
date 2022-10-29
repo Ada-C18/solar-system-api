@@ -2,8 +2,6 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
-
-
 db = SQLAlchemy()
 migrate = Migrate()
 
@@ -20,7 +18,6 @@ def create_app(test_config=None):
     from .routes import bp
     app.register_blueprint(bp)
 
-    
     from app.models.planet import Planet
 
 

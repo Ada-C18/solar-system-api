@@ -23,7 +23,7 @@ from app.models.planet import Planet
 #     Planet(2,"Mars","smaller","red"),
 #     Planet(3,"Venus","a little bigger","gold")
 
-bp = Blueprint("planets", __name__, url_prefix="/planets")
+
 # @bp.route("", methods=["GET"])
 # def handle_planets():
 #     all_planets = []
@@ -51,13 +51,11 @@ bp = Blueprint("planets", __name__, url_prefix="/planets")
 #     return (planet.to_json())
 
     
-
+bp = Blueprint("planets", __name__, url_prefix="/planets")
 @bp.route("", methods=["POST"])
 def create_planet():
     request_body = request.get_json()
-    new_planet = Planet(name = request_body["name"], 
-    color = request_body["color"],
-    description = request_body["description"])
+    new_planet = Planet(name=request_body['name'], color=request_body['color'],description=request_body['description'])
 
     db.session.add(new_planet)
     db.session.commit()
