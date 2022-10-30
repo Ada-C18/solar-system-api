@@ -29,7 +29,7 @@ def read_all_planets():
                     "moons": planet.moons,
                 }
             )
-    return jsonify (planets_response)
+    return jsonify (planets_response), 200
 
 #"""""" #####learn to docstring
 # #OLD CODE BELOW
