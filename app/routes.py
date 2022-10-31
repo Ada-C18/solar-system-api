@@ -15,16 +15,29 @@ from flask import Blueprint, jsonify, abort, make_response, request
 
 planet_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-@planet_bp.route("", methods=["POST"])
-def add_planet():
-    request_body = request.get_json()
-    new_planet = Planet(
-                    name=request_body["name"],
-                    description=request_body["description"],
-                    moon=request_body["moon"])
+@planet_bp.route("", methods=["GET", "POST"])
+def handle_planets():
+    if request.method == "GET":
+        planets = Planet.query.all()
+        planet_response = []
+        for planet in planets:
+            planet_response.append({
+                "name":planet.name,
+                "description":planet.description,
+                "moon": planet.moon,
+                "id": planet.id
+            })
+        return jsonify(planet_response),200
+        
+    elif request.method == "POST":
+        request_body = request.get_json()
+        new_planet = Planet(
+                        name=request_body["name"],
+                        description=request_body["description"],
+                        moon=request_body["moon"])
 
-    db.session.add(new_planet)
-    db.session.commit()
+        db.session.add(new_planet)
+        db.session.commit()
 
-    return make_response(f"Planet {new_planet.name} successfully added", 201)
+        return make_response(f"Planet {new_planet.name} successfully added", 201)
 
