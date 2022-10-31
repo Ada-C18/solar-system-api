@@ -13,9 +13,9 @@ from flask import Blueprint, jsonify, abort, make_response, request
 #     Planet(8, "Neptune", "furthest from the sun", 14),
 # ]
 
-planet_bp = Blueprint("planets", __name__, url_prefix="/planets")
+planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-@planet_bp.route("", methods=["GET"])
+@planets_bp.route("", methods=["GET"])
 def read_all_planets():
     planets_response = []
     planets = Planet.query.all()
@@ -32,7 +32,7 @@ def read_all_planets():
     return jsonify(planets_response)
 
 
-@planet_bp.route("", methods=["POST"])        
+@planets_bp.route("", methods=["POST"])        
 def add_planet():
     request_body = request.get_json()
     new_planet = Planet(name=request_body["name"],
