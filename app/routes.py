@@ -2,10 +2,9 @@ from app import db
 from app.models.planet import Planet
 from flask import Blueprint, jsonify, abort, make_response, request
 
-planet_bp = Blueprint("planet", __name__, url_prefix = "/planet")
+planet_bp = Blueprint("planets", __name__, url_prefix = "/planets")
 
 @planet_bp.route("", methods=["POST", "GET"])
-
 def handle_planets():
     request_body = request.get_json()
     if request.method == "GET":
@@ -13,6 +12,7 @@ def handle_planets():
         planet_response = []
         for planet in planets:
             planet_response.append({
+                "id": planet.id,
                 "name": planet.name,
                 "color": planet.color,
                 "livability": planet.livability,
@@ -22,6 +22,7 @@ def handle_planets():
     
     elif request.method == "POST": 
         new_planet = Planet(
+        # id = request_body["id"],
         name = request_body["name"],
         color = request_body["color"],
         moons = request_body["moons"],
@@ -33,6 +34,58 @@ def handle_planets():
         db.session.commit()
 
         return make_response(f"Planet {new_planet.name} successfully created", 201)
+
+
+# GET ONE PLANET BASED ON ID
+def validate_planet_id(planet_id):
+    try:
+        planet_id = int(planet_id)
+    except:
+        # return {"message": f"planet {name} invalid"}, 400
+        abort(make_response({"message":f"planet #{planet_id} is invalid, please search by planet_id."}, 400))
+
+    planet = Planet.query.get(planet_id)
+
+    if not planet:
+        abort(make_response({"message":f"planet #{planet_id} doesn't exist."}, 404))
+
+    return planet
+
+@planet_bp.route("/<planet_id>", methods = ["GET"])
+def get_one_planet(planet_id):
+    planet = validate_planet_id(planet_id)
+
+    return {
+            "id": planet.id,
+            "name": planet.name,
+            "color": planet.color,
+            "livability": planet.livability,
+            "moons": planet.moons
+            }
+
+@planet_bp.route("/<planet_id>", methods = ["PUT"])
+def update_planet(planet_id):
+    planet = validate_planet_id(planet_id)
+
+    request_body = request.get_json()
+
+    # planet.name = request_body["name"],
+    # planet.color = request_body["color"],
+    # planet.moons = request_body["moons"],
+    planet.livability = request_body["livability"]
+
+    db.session.commit()
+
+    return make_response(f"Planet #{planet.id} successfully updated.")
+
+@planet_bp.route("/<planet_id>", methods = ["DELETE"])
+def delete_planet(planet_id):
+    planet = validate_planet_id(planet_id)
+
+    db.session.delete(planet)
+    db.session.commit()
+
+    return make_response(f"Planet #{planet.id} successfully deleted.")
 
 #create planet class
 # class Planets:
@@ -64,32 +117,19 @@ def handle_planets():
 #         })
 #     return jsonify(planet_response)
 
-# @planets_bp.route("/name", methods = ["GET"])
-#validate the planet request    
-# def varify_planet_exist(id):
-#     try:
-#         id = int(id)
-#     except:
-#         # return {"message": f"planet {name} invalid"}, 400
-#         abort(make_response({"message":f"planet {id} is invalid, please search by planet_id."}, 400))
-
-#     for planet in planets:
-#         if planet.id == id:
-#             return planet
-
-# #     abort(make_response({"message":f"planet {id} doesn't exist."}, 404))
-
-# @planets_bp.route("/<id>", methods = ["GET"])
-# #get ONE planet, send return if there's an error
-# def get_single_planet_by_id(id):
-#     planet = varify_planet_exist(id)
+# @planet_bp.route("/<id>", methods = ["GET"])
+#get ONE planet, send return if there's an error
+# def get_single_planet_by_id(name):
+#     planet = varify_planet_exist(name)
 
 #     return {
 #         "id": planet.id,
 #         "name": planet.name,
-#         "description": planet.description,
+#         "color": planet.color,
+#         # "description": planet.description,
 #         "livability": planet.livability,
-    # }
+#         "moons": planet.moons
+#     }
 
 # SEARCH BY NAME DRAFT
 # @planets_bp.route("/<name>", methods = ["GET"])
