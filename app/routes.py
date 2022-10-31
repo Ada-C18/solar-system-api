@@ -13,32 +13,35 @@ from flask import Blueprint, jsonify, abort, make_response, request
 #     Planet(8, "Neptune", "furthest from the sun", 14),
 # ]
 
-planet_bp = Blueprint("planets", __name__, url_prefix="/planets")
+planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-@planet_bp.route("", methods=["GET"])
-def get_planets():
-    
+@planets_bp.route("", methods=["GET"])
+def read_all_planets():
+    planets_response = []
     planets = Planet.query.all()
-    planet_response = []
     for planet in planets:
-        planet_response.append({
-            "name":planet.name,
-            "description":planet.description,
-            "moon": planet.moon,
-            "id": planet.id
-        })
-    return jsonify(planet_response),200
+        planets_response.append(dict(
+            id=planet.id,
+            name=planet.name,
+            surface_area=planet.surface_area,
+            moons=planet.moons,
+            distance_from_sun=planet.distance_from_sun,
+            namesake=planet.namesake
+        ))
+
+    return jsonify(planets_response)
+
 
 @planet_bp.route("", methods=["POST"])        
 def add_planet():
     request_body = request.get_json()
-    new_planet = Planet(
-                    name=request_body["name"],
-                    description=request_body["description"],
-                    moon=request_body["moon"])
+    new_planet = Planet(name=request_body["name"],
+                    surface_area=request_body["surface_area"], 
+                    moons=request_body["moons"],
+                    distance_from_sun=request_body["distance_from_sun"],
+                    namesake=request_body["namesake"])
 
     db.session.add(new_planet)
     db.session.commit()
 
     return make_response(f"Planet {new_planet.name} successfully added", 201)
-
