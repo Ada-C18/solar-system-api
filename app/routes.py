@@ -18,17 +18,18 @@ from app import db
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
 #---HELPER FUNCTIONS---
-def validate_planet(planet_id, planets):
+def validate_planet(planet_id):
     try:
         planet_id = int(planet_id)
     except:
         abort(make_response({"message": f"Planet {planet_id} invalid"}, 400))
 
-    for planet in planets:
-        if planet.id == planet_id:
-            return planet
+    planet = Planet.query.get(planet_id)
 
-    abort(make_response({"message": f"Planet {planet_id} not found"}, 404))
+    if not planet:
+        abort(make_response({"message": f"Planet {planet_id} not found"}, 404))
+
+    return planet
 
 def planet_dict(planet):
     return {
@@ -65,7 +66,29 @@ def get_all_planets():
 
 @planets_bp.route("/<planet_id>", methods=["GET"])
 def get_one_planet(planet_id):
-    planets = Planet.query.all()
-    planet = validate_planet(planet_id, planets)
+    planet = validate_planet(planet_id)
     
     return planet_dict(planet)
+
+@planets_bp.route("/<planet_id>", methods=["PUT"])
+def update_planet(planet_id):
+    planet = validate_planet(planet_id)
+    
+    request_body = request.get_json()
+
+    planet.name = request_body["name"]
+    planet.description = request_body["description"]
+    planet.color = request_body["color"]
+
+    db.session.commit()
+
+    return make_response(f"Planet {planet.id} successfully updated.", 200)
+
+@planets_bp.route("/<planet_id>", methods=["DELETE"])
+def delete_planet(planet_id):
+    planet = validate_planet(planet_id)
+
+    db.session.delete(planet)
+    db.session.commit()
+
+    return make_response(f"Planet {planet.id} successfully deleted.", 200)
