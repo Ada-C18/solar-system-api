@@ -29,7 +29,7 @@ def validate_planet(id):
     
     return planet
 
-@planets_bp.route("/<book_id>", methods=["GET"])
+@planets_bp.route("/<id>", methods=["GET"])
 def get_one_planet():
     
     planet = validate_planet(id)
@@ -73,3 +73,16 @@ def add_planet():
     db.session.commit()
 
     return make_response(f"Planet {new_planet.name} successfully added", 201)
+
+@planets_bp.route("/id", methods=["PUT"])
+def update_planet(id):
+    planet = validate_planet(id)
+
+    request_body = request.get_json()
+
+    planet.name = request_body["name"]
+    planet.description = request_body["description"]
+
+    db.session.commit()
+
+    return make_response(f"Planet {planet.name} successfully updated")
