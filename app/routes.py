@@ -35,3 +35,18 @@ def read_one_planet(planet_id):
     planet = verify_planet(planet_id)
     return jsonify(planet.make_a_dict())
 
+@solar_system_bp.route("/<planet_id>", methods=["PUT"])
+def update_planet(planet_id):
+    planet = verify_planet(planet_id)
+
+    request_body = request.get_json()
+
+    planet.name = request_body["name"]
+    planet.distance_from_sun = request_body["distance_from_sun"]
+    planet.description = request_body["description"]
+
+    db.session.commit()
+
+    return make_response(f"Planet #{planet.id} successfully updated")
+
+# insert DELETE method below
