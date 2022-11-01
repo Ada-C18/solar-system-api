@@ -58,15 +58,16 @@ def validate_planet(planet_id):
         planet_id = int(planet_id)
     except:
         abort(make_response({"message": f"planet {planet_id} is invalid"}, 400))
-    planets = Planet.query.all()
-    for planet in planets:
-        if planet.id == int(planet_id):
-            return planet
     
-    abort(make_response({"message": f"planet {planet_id} not found"}, 404))
+    planet = Planet.query.get(planet_id)
+    
+    if not planet:
+        abort(make_response({"message": f"planet {planet_id} not found"}, 404))
+    
+    return planet
 
 @planets_bp.route("/<planet_id>", methods=["GET"])
-def handle_planet(planet_id):
+def read_one_planet(planet_id):
     planet = validate_planet(planet_id)
 
     return {
