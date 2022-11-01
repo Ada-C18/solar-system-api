@@ -16,16 +16,16 @@ from flask import Blueprint, jsonify, abort, make_response, request
 
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-# def validate(planet_id):
-#     try:
-#         planet_id = int(planet_id)
-#     except:
-#         abort(make_response({"message": f"Invalid planet id: '{planet_id}'"}, 400))
-#     planet = Planet.query.get(planet_id)
-#     if planet:
-#         return planet
+def validate_planet(planet_id):
+    try:
+        planet_id = int(planet_id)
+    except:
+        abort(make_response({"message": f"Invalid planet id: '{planet_id}'"}, 400))
+    planet = Planet.query.get(planet_id)
+    if planet:
+        return planet
 
-#     abort(make_response({"message": f'planet id {planet_id} not found'}, 404))
+    abort(make_response({"message": f'planet id {planet_id} not found'}, 404))
 
 @planets_bp.route("", methods=["GET"])
 def read_all_planets():
@@ -55,3 +55,17 @@ def create_planet():
 
     return make_response(f"Planet {new_planet.name} created", 201)
     
+
+@planets_bp.route("/<planet_id>", methods=["PUT"])
+def update_planet(planet_id):
+    planet = validate_planet(planet_id)
+
+    request_body = request.get_json()
+
+    planet.name = request_body["name"]
+    planet.description = request_body["description"]
+    planet.size = request_body["size"]
+
+    db.session.commit()
+
+    return make_response(f"Planet #{planet.id} successfully updated")
