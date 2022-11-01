@@ -24,7 +24,40 @@ def read_all_planets():
         planets_databases.append(planet.to_dict())
     return jsonify(planets_databases)
 
+def validate_planet(id):
+    try:
+        planet_id = int(id)
+    except:
+        abort(make_response({"message": f"{id} is invalid"}, 400))
+    planet = Planet.query.get(id)
+    if not planet:
+        abort(make_response({"message": f"{id} not found"}, 404))
+    return planet
 
+
+@bp.route('/<id>', methods=['GET'])
+def read_one_planet(id):
+    planet = validate_planet(id)
+    return jsonify(planet.to_dict())
+
+@bp.route('/<id>', methods=['PUT'])
+def update_planet(id):
+    planet = validate_planet(id)
+    request_body = request.get_json()
+    planet.name = request_body['name']
+    planet.description = request_body['description']
+    planet.radius = request_body['radius']
+    db.session.commit()
+    
+    return make_response(f'planet {planet.name}: sucessfully updated', 200)
+
+
+@bp.route('/<id>', methods=['DELETE'])
+def delete_planet(id):
+    planet = validate_planet(id)
+    db.session.delete(planet)
+    db.session.commit()
+    return make_response(f'planet {planet.name}: sucessfully deleted', 200)
 
 
 # class Planet:
@@ -50,15 +83,7 @@ def read_all_planets():
 #         planet_data.append(planet.retrieve_planet())
 #     return jsonify(planet_data)
 
-# def validate_planet(id):
-#     try:
-#         planet_id = int(id)
-#     except:
-#         abort(make_response({"message": f"{id} is invalid"}, 400))
-#     for planet in planets:
-#         if planet_id == planet.id:
-#             return(planet)
-#     abort(make_response({"message": f"{id} not found"}, 404))
+
 
 # @bp.route('<id>', methods=["GET"])
 # def get_planet(id):
