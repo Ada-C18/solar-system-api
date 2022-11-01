@@ -15,6 +15,34 @@ from flask import Blueprint, jsonify, abort, make_response, request
 
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
+
+def validate_planet(id):
+    try:
+        id = int(id)
+    except:
+        abort(make_response({"message":f"Planet {id} invalid"}, 400))
+    
+    planet = Planet.query.get(id)
+
+    if not planet:
+        abort(make_response({"message":f"Planet {id} not found"}, 404))
+    
+    return planet
+
+@planets_bp.route("/<book_id>", methods=["GET"])
+def get_one_planet():
+    
+    planet = validate_planet(id)
+    
+    return { 
+        "id": planet.id,
+        "name":planet.name,
+        "surface_area":planet.surface_area,
+        "moons":planet.moons,
+        "distance_from_sun":planet.distance_from_sun,
+        "namesake":planet.namesake
+    }
+
 @planets_bp.route("", methods=["GET"])
 def read_all_planets():
     planets_response = []
