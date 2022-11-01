@@ -43,8 +43,16 @@ def handle_planet():
 
 @planets_bp.route("", methods=["GET"])
 def read_all_planets():
+
+    name_query = request.args.get("name")
+    if name_query:
+        planet = Planet.query.filter_by(name=name_query)
+    else:
+        planet = Planet.query.all()
+
+
     planet_response = []
-    planet = Planet.query.all()
+    # planet = Planet.query.all()
     for planet in planet:
         planet_response.append(planet.to_dict())
     return jsonify(planet_response)
