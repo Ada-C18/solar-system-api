@@ -96,4 +96,4 @@ def delete_planet(planet_id):
     db.session.delete(planet)
     db.session.commit()
 
-    return make_response("Book #{planet_id} successfully deleted")
+    return make_response("Planet {planet_id} successfully deleted")
