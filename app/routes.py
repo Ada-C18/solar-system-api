@@ -16,7 +16,7 @@ def validate_planet(planet_id):
         abort(make_response({"message":f"planet {planet_id} not found"}, 404))
 
     return planet
-
+    
 
 @planets_bp.route("", methods=["POST"])        
 def add_planet():
@@ -36,8 +36,11 @@ def add_planet():
 @planets_bp.route("", methods=["GET"])
 def read_all_planets():
     name_query = request.args.get("name")
+    moon_query = request.args.get("moons")
     if name_query:
         planets = Planet.query.filter_by(name=name_query)
+    if moon_query:
+        planets = Planet.query.filter_by(moon=moon_query)
     else:
         planets = Planet.query.all()
 
@@ -56,7 +59,7 @@ def read_all_planets():
 
 
 @planets_bp.route("/<planet_id>", methods=["GET"])
-def read_one_book(planet_id):
+def read_one_planet(planet_id):
     planet = validate_planet(planet_id)
     return {
             "name" : planet.name,
