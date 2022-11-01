@@ -4,22 +4,18 @@ from flask import Blueprint, jsonify, make_response, abort, request
 
 bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-# @bp.route("", methods=["GET"])
-# def all_planets():
-#     results_list = [planet.to_json() for planet in planets]
+# Helper function
+def  validate_planet(planet_id):
+    try:
+        planet_id = int(planet_id)
+    except:
+        abort(make_response({"message": f"planet {planet_id} invalid"}, 400))
 
-#     return jsonify(results_list)
+    planet = Planet.query.get(planet_id)
+    if not planet:
+        abort(make_response({"message": f"planet {planet_id} not found"}, 404))
+    return planet
 
-# def  validate_planet(planet_id):
-#     try:
-#         planet_id = int(planet_id)
-#     except:
-#         abort(make_response({"message": f"planet {planet_id} invalid"}, 400))
-
-#     for planet in planets:
-#         if planet.id == planet_id:
-#             return planet
-#     abort(make_response({"message": f"planet {planet_id} not found"}, 404))
 
 @bp.route("", methods=["GET"])
 def get_all_planets():
@@ -28,10 +24,10 @@ def get_all_planets():
     return jsonify(planets_response), 200
 
 
-# @bp.route("/<id>", methods = ["GET"])
-# def handle_planet (id):
-#     planet = validate_planet(id)
-#     return jsonify(planet.to_json())
+@bp.route("/<planet_id>", methods=["GET"])
+def handle_planet(planet_id):
+    planet = validate_planet(planet_id)
+    return planet.to_dict(), 200
 
 
 @bp.route("", methods = ["POST"])
