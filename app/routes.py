@@ -26,26 +26,41 @@ def read_all_planets():
     planets_response = [planet.to_dict() for planet in planets]
     return jsonify(planets_response)
 
-# @planets_bp.route("", methods=["GET"])
-# def planets_endpoint():
-#     response = [planet.to_json() for planet in planets]
+@planets_bp.route("/<planet_id>", methods=["GET"])
+def planet_endpoint(planet_id):
+    planet = validate_planet(planet_id)
+
+    return jsonify(planet.to_dict())
+
+@planets_bp.route("/<planet_id>", methods=["PUT"])
+def planet_update(planet_id):
+    planet = validate_planet(planet_id)
+    request_body = request.get_json()
+    planet.name = request_body["name"]
+    planet.description = request_body["description"]
+    planet.moons = request_body["moons"]
+
+    db.session.commit()
+    return make_response(f"Planet {planet.name} has been updated successfully", 200)
+
+@planets_bp.route("/<planet_id>", methods=["DELETE"])
+def planet_delete(planet_id):
+    planet = validate_planet(planet_id)
+
+    db.session.delete(planet)
+    db.session.commit()
+
+    return make_response(f"Planet {planet.name} has been deleted successfully", 200)
+
+def validate_planet(planet_id):
+    try:
+        planet_id = int(planet_id)
+    except:
+        abort(make_response({"message":f"planet {planet_id} invalid"}, 400))
     
-#     return jsonify(response)
-
-# @planets_bp.route("/<planet_id>", methods=["GET"])
-# def planet_endpoint(planet_id):
-#     planet = validate_planet(planet_id)
-
-#     return jsonify(planet.to_json())
-
-# def validate_planet(planet_id):
-#     try:
-#         planet_id = int(planet_id)
-#     except:
-#         abort(make_response({"message":f"planet {planet_id} invalid"}, 400))
+    planet = Planet.query.get(planet_id)
     
-#     for planet in planets:
-#         if planet.id == planet_id:
-#             return planet
+    if not planet:
+        abort(make_response({"message":f"planet {planet_id} not found"}, 404))
 
-#     abort(make_response({"message":f"planet {planet_id} not found"}, 404))
+    return planet
