@@ -7,15 +7,14 @@ from flask import Blueprint, jsonify, abort, make_response, request
 bp = Blueprint("planets", __name__, url_prefix="/planet")
 
 
-# @bp.route("", methods=["GET"])
-# def handle_planets():
-#     planets_list = []
-#     for planet in planet_list:
-#         planets_list.append(planet.to_dict())
-#     return jsonify(planets_list)
-
-
 def validate_planet(planet_id):
+    """
+    Helper function to check if planet_id is in 
+    database.
+
+    Returns status message to client. 
+    """
+
     try:
         planet_id = int(planet_id)
     except:
@@ -28,26 +27,33 @@ def validate_planet(planet_id):
 
     return planet
 
-# def validate_planet(planet_id):
-#     try:
-#         planet_id = int(planet_id)
-#     except:
-#         abort(make_response({"message": f"{planet_id} is not valid"}, 400))
-
-#     for planet in planet_list:
-#         if planet.id == planet_id:
-#             return jsonify(planet.to_dict())
-#     abort(make_response({"message": f"{planet_id} is not found"}, 404))
-
 
 @bp.route("/<planet_id>", methods=["GET"])
 def handle_planet(planet_id):
+    """
+    Return a single planet record to the client. 
+    Returns JSON.
+    Request body ignored. 
+
+    Route: /planet/<planet_id>
+    Method: GET
+    """
+
     result_planet = validate_planet(planet_id)
     return result_planet.to_dict()
 
 
 @bp.route("", methods=["POST"])
 def create_planet():
+    """
+    Add a new planet to the database. 
+    Returns status message to the client. 
+    Request body must be JSON. 
+
+    Route: /planet/<planet_id>
+    Method: POST
+    """
+
     request_body = request.get_json()
     new_planet = Planet(# id=request_body["id"],
                         name=request_body["name"],
@@ -56,11 +62,45 @@ def create_planet():
     db.session.add(new_planet)
     db.session.commit()
 
-    return make_response(f"Plaent {new_planet.name} successfully created", 201)
+    return make_response(f"Planet {new_planet.name} successfully created", 201)
 
 @bp.route("", methods=["GET"])
 def read_all_planets():
+    """
+    Send a JSON list of all planets to client
+    Returns JSON
+    Request body ignored 
+
+    Route: /planet
+    Method: GET
+    """
+
     planets = Planet.query.all()
     planets_response = [planet.to_dict() for planet in planets]
     
     return jsonify(planets_response)
+
+@bp.route("/<planet_id>", methods=["PUT"])
+def update_a_planet(planet_id):
+    """
+    Update a planet record in the database. 
+    Returns status message to client.
+    Request body must be JSON. 
+
+    Route: /planet/<planet_id>
+    Method: PUT
+    """
+
+    this_p = validate_planet(planet_id)
+
+    request_body = request.get_json()
+
+    this_p.name = request_body["name"]
+    this_p.description = request_body["description"]
+    this_p.distance = request_body["distance"]
+
+    db.session.commit()
+    return make_response(f"Planet '#{this_p.id}', '{this_p.name}' successfully updated")
+    
+
+
