@@ -27,6 +27,8 @@ def handle_all_planets():
 
 @planet_bp.route("/<planet_id>", methods=["GET", "PUT", "DELETE"])
 def handle_planet(planet_id):
+    if not planet_id.isnumeric():
+        return f"Planet #{planet_id} Invalid id", 400
     planet = Planet.query.get(planet_id)
     if not planet:
         return f"Planet #{planet_id} No planet found", 404
