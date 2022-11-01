@@ -1,4 +1,3 @@
-# from time import monotonic_ns
 from app import db
 from app.models.planet import Planet
 from flask import Blueprint, jsonify, make_response, request, abort
@@ -18,7 +17,7 @@ def handle_planets():
 
         return make_response(f"Planet {planet_1.name} successfully created", 201)
    
-    if request.method == "GET":
+    elif request.method == "GET":
         response_body = []
         planets= Planet.query.all()
         for planet in planets:
@@ -45,41 +44,34 @@ def validate_planet(planet_id):
     return planet
 
 
-@planet_bp.route("/<planet_id>", methods=["GET"])
-def read_one_planet(planet_id):
+@planet_bp.route("/<planet_id>", methods=["GET", "PUT", "DELETE"])
+def handle_one_planet(planet_id):
     planet = validate_planet(planet_id)
-    # planet = Planet.query.get(planet_id)
+    if request.method == "GET":
+        return {
+            "id": planet.id,
+            "name": planet.name,
+            "description": planet.description,
+            "moons": planet.moons    
+        }
 
-    return {
-        "id": planet.id,
-        "name": planet.name,
-        "description": planet.description,
-        "moons": planet.moons    
-    }
+    elif request.method == "PUT":
+        request_body = request.get_json()
 
-@planet_bp.route("/<planet_id>", methods=["PUT"])
-def update_planet(planet_id):
-    planet = validate_planet(planet_id)
+    #updating the attributes
+        planet.name = request_body["name"]
+        planet.description = request_body["description"]
+        planet.moons = request_body["moons"]
 
-    request_body = request.get_json()
+    # commit changes to our db
+        db.session.commit()
 
-#updating the attributes
-    planet.name = request_body["name"]
-    planet.description = request_body["description"]
-    planet.moons = request_body["moons"]
+        return make_response(f"Planet #{planet_id} is updated.")
 
-# commit changes to our db
-    db.session.commit()
+    elif request.method == "DELETE":
+        db.session.delete(planet)
+        db.session.commit()
 
-    return make_response(f"Planet #{planet_id} is updated.")
-
-@planet_bp.route("/<planet_id>", methods=["DELETE"])
-def delete_planet(planet_id):
-    planet = validate_planet(planet_id)
-
-    db.session.delete(planet)
-    db.session.commit()
-
-    return make_response(f"Planet #{planet_id} is deleted.")
+        return make_response(f"Planet #{planet_id} is deleted.")
 
 
