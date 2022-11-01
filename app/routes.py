@@ -56,7 +56,6 @@ def create_planet():
 @planets_bp.route("", methods=["GET"])
 def get_all_planets():
     all_planets = Planet.query.all()
-    # results_list = [{"name": planet.name, "description": planet.description, "moon count": planet.moon_count} for planet in all_planets]
     results_list = []
     for planet in all_planets:
         results_list.append({
@@ -78,7 +77,7 @@ def update_planet(planet_id):
     planet.moon_count = request_body["moon_count"]
 
     db.session.commit()
-    return make_response("Planet {planet.id} successfully updated")
+    return make_response(f"Planet {planet.id} successfully updated")
 
 @planets_bp.route("/<planet_id>", methods=["GET"])
 def get_one_planet(planet_id):
@@ -96,4 +95,4 @@ def delete_planet(planet_id):
     db.session.delete(planet)
     db.session.commit()
 
-    return make_response("Planet {planet_id} successfully deleted")
+    return make_response(f"Book #{planet.id} successfully deleted")
