@@ -16,6 +16,14 @@ def create_planet():
     db.session.commit()
     return make_response(f'Planet: {new_planet.name} succesfully created'), 201
 
+@bp.route('', methods=["GET"])
+def read_all_planets():
+    planets_databases = []
+    planets = Planet.query.all()
+    for planet in planets:
+        planets_databases.append(planet.to_dict())
+    return jsonify(planets_databases)
+
 
 
 
