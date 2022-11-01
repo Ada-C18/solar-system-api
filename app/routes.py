@@ -18,8 +18,8 @@ def validate_planet(planet_id):
     return planet
 
 
-@planets_bp.route("", methods=["POST"])
-def create_planet():
+@planets_bp.route("", methods=["POST"])        
+def add_planet():
     request_body = request.get_json()
     new_planet = Planet(name=request_body["name"],
                     surface_area=request_body["surface_area"], 
@@ -30,7 +30,7 @@ def create_planet():
     db.session.add(new_planet)
     db.session.commit()
 
-    return make_response(f"Planet {new_planet.name} successfully created", 201)
+    return make_response(f"Planet {new_planet.name} successfully added", 201)
 
 
 @planets_bp.route("", methods=["GET"])
@@ -53,6 +53,7 @@ def read_all_planets():
         ))
 
     return jsonify(planets_response)
+
 
 @planets_bp.route("/<planet_id>", methods=["GET"])
 def read_one_book(planet_id):
