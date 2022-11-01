@@ -4,6 +4,19 @@ from app import db
 
 planets_bp = Blueprint("planets_bp", __name__, url_prefix = "/planets")
 
+# HELPER FUNCTION
+def validate_planet_id(id):
+    try:
+        planet_id = int(id)
+    except:
+        abort(make_response({"message":f"Planet {id} is invalid"}, 400))
+    
+    planet = Planet.query.get(planet_id)
+    if not planet:
+        abort(make_response({"message":f"Planet {id} is not found"}, 404))
+
+    return planet
+
 # CREATE RESOURCE
 @planets_bp.route("", methods = ["POST"])
 def create_planet():
@@ -34,6 +47,50 @@ def get_all_planets():
         })
 
     return jsonify(results_list), 200
+
+
+# GET ALL RESOURCES
+@planets_bp.route("/<planet_id>", methods = ["GET"])
+def get_one_planet(planet_id):
+    planet = validate_planet_id(planet_id)
+
+    return (
+        {"id": planet.id,
+        "name": planet.name,
+        "color": planet.color,
+        "description": planet.description
+        }
+    )
+
+
+# UPDATE RESOURCE
+@planets_bp.route("/<planet_id>", methods = ["PUT"])
+def update_planet(planet_id):
+    planet = validate_planet_id(planet_id)
+
+    request_body = request.get_json()
+
+    planet.name = request_body["name"]
+    planet.color = request_body["color"]
+    planet.description = request_body["description"]
+
+    db.session.commit()
+
+    return make_response(f"planet {planet_id} successfully updated")
+
+
+# DELETE RESOURCE
+@planets_bp.route("/<planet_id>", methods = ["DELETE"])
+def delete_planet(planet_id):
+    planet = validate_planet_id(planet_id)
+
+    db.session.delete(planet)
+    db.session.commit()
+
+    return make_response(f"planet #{planet_id} successfully deleted")
+
+
+
 
 
 
@@ -74,17 +131,7 @@ def get_all_planets():
 #     return jsonify(planets_response)
 
 
-# def validate_planet_id(id):
-#     try:
-#         planet_id = int(id)
-#     except:
-#         abort(make_response({"message":f"Planet {id} is invalid"}, 400))
-    
-#     for planet in planets:
-#         if planet.id == planet_id:
-#             return planet
-        
-#     abort(make_response({"message":f"Planet {id} is not found"}, 404))
+
 
 # @planets_bp.route("/<id>", methods = ["GET"])
 # def get_one_planet(id):
