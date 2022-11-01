@@ -6,7 +6,7 @@ planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planets")
 
 #Create a new Planet
 @planets_bp.route("", methods=["POST"])
-def handle_planets():
+def create_planet():
     request_body = request.get_json()
     new_planet = Planet(name=request_body["name"],
                     description=request_body["description"],
@@ -16,7 +16,23 @@ def handle_planets():
     db.session.add(new_planet)
     db.session.commit()
 
-    return make_response(f"Book {new_planet.name} successfully created", 201)
+    return make_response(f"Planet {new_planet.name} successfully created", 201)
+
+@planets_bp.route("", methods=["GET"])
+def read_all_planets():
+    planets_response = []
+    planets = Planet.query.all()
+    for planet in planets:
+        planets_response.append(
+            {
+                "id": planet.id,
+                "name": planet.name,
+                "description": planet.description,
+                "revolution_period": planet.revolution_period
+            }
+        )
+    return jsonify(planets_response)
+
 # class Planet:
 #     def __init__(self, id, name, description, revolution_period):
 #        self.id = id
@@ -35,46 +51,3 @@ def handle_planets():
 #     Planet(8, "Neptune", "gaseous", "164.79 years"),
 #     Planet(9, "Pluto", "icy, rocky", "248.59 years")
 # ]
-
-
-
-# @planets_bp.route("", methods=["GET"])
-# def get_all_planets():
-#     planet_response = []
-#     for planet in PLANETS:
-#         planet_response.append({
-#             "id" : planet.id,
-#             "name" : planet.name,
-#             "description" : planet.description,
-#             "revolution_period" : planet.revolution_period 
-#         })
-
-#     return jsonify(planet_response)
-
-# ------------------ Refactoring get_all_planets with vars and list comprehension --------------------
-@planets_bp.route("", methods=["GET"])
-    
-def get_all_planets():
-    planet_response = [vars(planet) for planet in PLANETS]
-    return jsonify(planet_response)
-
-#GET one planet
-
-def validate_planet(id):
-    try:
-        planet_id = int(id)
-    except ValueError:
-        return {
-            'message': 'Invalid planet id'
-        },400
-    for planet in PLANETS:
-        if planet.id == planet_id:
-            return vars(planet)
-    abort(make_response(jsonify(description = 'Planet not found'),404))
-    # print(type(planet_response))
-    # print(type(jsonify(planet_response)))
-
-@planets_bp.route('/<id>',methods=['GET'])
-def get_one_planet(id):
-    planet = validate_planet(id)
-    return planet
