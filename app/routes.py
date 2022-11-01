@@ -76,3 +76,17 @@ def read_one_planet(planet_id):
         "description": planet.description,
         "moons": planet.moons,
     }
+
+@planets_bp.route("/<planet_id>", methods=["PUT"])
+def update_planet(planet_id):
+    planet = validate_planet(planet_id)
+    
+    request_body = request.get_json()
+    
+    planet.name = request_body["name"]
+    planet.description = request_body["description"]
+    planet.moons = request_body["moons"]
+    
+    db.session.commit()
+    
+    return make_response(f"Planet #{planet.id} successfully updated")
