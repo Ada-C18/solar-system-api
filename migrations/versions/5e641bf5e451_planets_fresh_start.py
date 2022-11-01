@@ -1,8 +1,8 @@
-"""test book model
+"""planets fresh start
 
-Revision ID: 965e4202f4cf
+Revision ID: 5e641bf5e451
 Revises: 
-Create Date: 2022-10-31 09:46:16.388846
+Create Date: 2022-11-01 10:42:01.574844
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '965e4202f4cf'
+revision = '5e641bf5e451'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -21,8 +21,10 @@ def upgrade():
     op.create_table('planet',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('name', sa.String(), nullable=True),
-    sa.Column('description', sa.String(), nullable=True),
-    sa.Column('moon', sa.Integer(), nullable=True),
+    sa.Column('surface_area', sa.BigInteger(), nullable=True),
+    sa.Column('moons', sa.Integer(), nullable=True),
+    sa.Column('distance_from_sun', sa.BigInteger(), nullable=True),
+    sa.Column('namesake', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
