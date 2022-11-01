@@ -17,6 +17,19 @@ from app.models.planet import Planet
 
 planet_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
+def validate_planet(id):
+    try:
+        id = int(id)
+    except:
+        abort(make_response({"message": f"planet '{id}' is invalid"}, 400))
+
+    planet = Planet.query.get(id)
+
+    if not planet:
+        abort(make_response({"message": f"Planet {id} not found"}, 404))
+
+    return planet
+
 @planet_bp.route("", methods=["GET", "POST"])
 def handle_planets():
     if request.method == "POST":
@@ -37,9 +50,32 @@ def handle_planets():
                                     "flag": planet.flag})
         return jsonify(planets_response)
 
+@planet_bp.route("/<id>", methods=["GET"])
+def get_one_planet(id):
+    validate_planet(id)
+    planet = Planet.query.get(id)
+    return {"id": planet.id, 
+            "name": planet.name, 
+            "description": planet.description,
+            "flag": planet.flag}
 
+@planet_bp.route("/<id>", methods=["PUT"])
+def update_planet(id):
+    planet = validate_planet(id)
+    request_body = request.get_json()
+    planet.name = request_body["name"]
+    planet.description = request_body["description"]
+    planet.flag = request_body["flag"]
+    
+    db.session.commit()
+    return make_response(f"Planet #{id} successfully updated!", 200)
 
-
+@planet_bp.route("/<id>", methods=["DELETE"])
+def delete_planet(id):
+    planet = validate_planet(id)
+    db.session.delete(planet)
+    db.session.commit()
+    return make_response(f"Planet #{id} successfully deleted!", 200)
 
 
 # @planet_bp.route("", methods=["GET"])
@@ -64,12 +100,3 @@ def handle_planets():
 #         flag = planet.flag,
 #     ))
 
-# def validate_planet(id):
-#     try:
-#         planet_id = int(id)
-#     except:
-#         abort(make_response({"message": f"planet {id} is invalid"}, 400))
-#     for planet in planets:
-#         if planet.id == planet_id:
-#             return planet
-#     abort(make_response({"message": f"{planet_id} not found"}, 404))
