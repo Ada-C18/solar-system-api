@@ -21,11 +21,13 @@ def validate_planet(planet_id):
         planet_id = int(planet_id)
     except:
         abort(make_response({"message": f"Invalid planet id: '{planet_id}'"}, 400))
-    planet = Planet.query.get(planet_id)
-    if planet:
-        return planet
 
-    abort(make_response({"message": f'planet id {planet_id} not found'}, 404))
+    planet = Planet.query.get(planet_id)
+
+    if not planet:
+        abort(make_response({"message": f'planet id {planet_id} not found'}, 404))
+
+    return planet
 
 @planets_bp.route("", methods=["GET"])
 def read_all_planets():
@@ -69,3 +71,12 @@ def update_planet(planet_id):
     db.session.commit()
 
     return make_response(f"Planet #{planet.id} successfully updated")
+
+@planets_bp.route("/<planet_id>", methods=["DELETE"])
+def delete_planet(planet_id):
+    planet = validate_planet(planet_id)
+
+    db.session.delete(planet)
+    db.session.commit()
+
+    return make_response(f"Planet #{planet_id} successfully deleted")
