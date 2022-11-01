@@ -1,7 +1,6 @@
-from flask import Blueprint,jsonify,abort,make_response, request
+from flask import Blueprint,jsonify,abort,make_response,request
 from app import db
 from app.models.planet import Planet
-
 
 
 # class Planets:
@@ -19,9 +18,8 @@ from app.models.planet import Planet
 
 planets_bp = Blueprint('planets_bp', __name__, url_prefix='/planets')
 
-@planets_bp.route("", methods=['GET','POST'])
+@planets_bp.route('', methods=['GET','POST'])
 def handle_planet():
-
     if request.method == "GET":
         planets = Planet.query.all()
         planets_response = []
@@ -31,7 +29,7 @@ def handle_planet():
                 "name": planet.name,
                 "color": planet.color,
                 "description": planet.description
-                })
+            })
         return jsonify(planets_response)
     elif request.method == "POST":
         request_body = request.get_json()
@@ -39,12 +37,47 @@ def handle_planet():
                         color=request_body["color"],
                         description=request_body["description"])
     
-    db.session.add(new_planet)
-    db.session.commit()
+        db.session.add(new_planet)
+        db.session.commit()
 
-    return make_response(f"Planet {new_planet.name} successfully created", 201)
 
-# @planets_bp.route('', methods=['GET'])
+        return make_response(f"Planet {new_planet.name} successfully created", 201)
+
+
+@planets_bp.route("/<id>", methods=['GET','PUT','DELETE'])
+
+def handle_1_planet(id):
+    planets = Planet.query.get(id)
+
+    
+        if request.method == "GET":
+            return{
+                "id": planet.id,
+                "name": planet.name,
+                "color": planet.color,
+                "description": planet.description
+            }
+        elif request.method == "PUT":
+            request_body = request.get_json()
+            
+            planet.name = request_body["name"]
+            planet.color = request_body["color"]
+            planet.description = request_body["description"]
+
+            
+            db.session.commit()
+            return make_response(f"planet color {planet.color} succesfully updated",200)
+
+        elif request.method == "DELETE":
+            db.session.delete(planet)
+            db.session.commit()
+
+            return make_response(f"planet color {planet.color} succesfully deleted", 200)
+
+            
+
+
+
 # def get_all_planets():
 #     planet_response = [vars(planet) for planet in Planets_list]
 
@@ -52,10 +85,6 @@ def handle_planet():
 
 # @planets_bp.route('/<id>', methods=['GET'])
 # def get_one_planet(id):
-#     # planet_id = int(id)
-#     # for planet in Planets_list:
-#     #     if planet.id == planet_id:
-#     #         return vars(planet)
 #     planet_id = validate_planet(id)
 #     return planet_id
 

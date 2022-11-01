@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+import sqlalchemy 
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -15,8 +16,9 @@ def create_app(test_config=None):
     migrate.init_app(app, db)
 
     from app.models.planet import Planet
-    # dot notation can mean they're in different levels
-    from .planets import planets_bp   #(.routes)?
+    
+    from .planets import planets_bp
     app.register_blueprint(planets_bp)
+
 
     return app
