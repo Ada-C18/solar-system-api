@@ -10,7 +10,7 @@ bp = Blueprint("planets", __name__, url_prefix="/planets")
 @bp.route("", methods=["POST"])
 def create_planet():
     request_body = request.get_json()
-    new_planet = Planet(id=request_body["id"], 
+    new_planet = Planet( 
         name=request_body["name"],
         description=request_body["description"])
         # miles_from_sun=request_body["miles"])
