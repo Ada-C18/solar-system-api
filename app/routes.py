@@ -1,4 +1,6 @@
-from flask import Blueprint, jsonify, abort, make_response
+from app import db
+from app.models.planet import Planet
+from flask import Blueprint, jsonify, abort, make_response, request 
 
 
 
@@ -36,3 +38,23 @@ def validate_planet(planet_id):
 def handle_planet(planet_id):
     result_planet = validate_planet(planet_id)
     return result_planet
+
+
+@bp.route("", methods=["POST"])
+def create_planet():
+    request_body = request.get_json()
+    new_planet = Planet(id=request_body["id"],
+                        name=request_body["name"],
+                        description=request_body["description"],
+                        distance=request_body["distance"])
+    db.session.add(new_planet)
+    db.session.commit()
+
+    return make_response(f"Plaent {new_planet.name} successfully created", 201)
+
+@bp.route("", methods=["GET"])
+def read_all_planets():
+    planets = Planet.query.all()
+    planets_response = [planet.to_dict() for planet in planets]
+    
+    return jsonify(planets_response)
