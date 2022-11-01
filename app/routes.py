@@ -1,6 +1,6 @@
 from app import db
 from app.models.planet import Planet
-from flask import Blueprint, jsonify, abort, make_response, request
+from flask import Blueprint, jsonify, make_response, request, abort
 
 # class Planet:
 #     def __init__(self, id, name, description, size):
@@ -20,12 +20,12 @@ def validate_planet(planet_id):
     try:
         planet_id = int(planet_id)
     except:
-        abort(make_response({"message": f"Invalid planet id: '{planet_id}'"}, 400))
+        abort(make_response({"message": f"Invalid planet id: {planet_id}"}, 400))
 
     planet = Planet.query.get(planet_id)
 
     if not planet:
-        abort(make_response({"message": f'planet id {planet_id} not found'}, 404))
+        abort(make_response({"message": f"planet id {planet_id} not found"}, 404))
 
     return planet
 
@@ -56,6 +56,17 @@ def create_planet():
     db.session.commit()
 
     return make_response(f"Planet {new_planet.name} created", 201)
+
+@planets_bp.route("/<planet_id>", methods=["GET"])
+def read_one_planet(planet_id):
+    planet = validate_planet(planet_id)
+
+    return {
+        "id": planet.id,
+        "name": planet.name,
+        "description": planet.description,
+        "size": planet.size
+    }
     
 
 @planets_bp.route("/<planet_id>", methods=["PUT"])
