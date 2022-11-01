@@ -1,50 +1,45 @@
+from app import db
+from app.models.planet import Planet
 from flask import Blueprint
+from flask import request, make_response
 
-
-class Planet:
-    def __init__(self, id, name, description, mass):
-        self.id = id
-        self.name = name
-        self.description = description
-        self.mass = mass
-    
-    def planet_dict(self):
-        return self.id, {
-            "id": self.id,
-            "name": self.name,
-            "description": self.description,
-            "mass": self.mass
-        }
-
-
-planets = [
-    #"Sol",
-    Planet(1, "Mercury", "just a little guy", "small"),
-    Planet(2, "Venus", "what a babe", "hot"),
-    Planet(3, "Earth", "nice planet", "normal"),
-    Planet(4, "Mars", "rude", "short king"),
-    Planet(5, "Jupiter", "large and in charge", "mASSIVE"),
-    Planet(6, "Saturn", "put a ring on it", "big enough"),
-    Planet(7, "Uranus", "unacceptable in public", "normal i hope"),
-    Planet(8, "Neptune", "frigid", "cant tell"),
-]
 
 planet_bp = Blueprint("planet", __name__, url_prefix="/planets")
 
 
-@planet_bp.route("", methods=["GET"])
+@planet_bp.route("/", methods=["GET", "POST"])
 def handle_all_planets():
-    all_planets = { p.id: p.planet_dict() for p in planets}
-    return all_planets, 200
+    if request.method == "GET":
+        planets = Planet.query.all()
+        all_planets = {p.id: p.planet_dict() for p in planets}
+        return all_planets, 200
+    elif request.method == "POST":
+        request_body = request.get_json()
+        new_planet = Planet(
+            name=request_body["name"],
+            description=request_body["description"],
+            mass=request_body["mass"],
+        )
+        db.session.add(new_planet)
+        db.session.commit()
+        return make_response(f"Planet {new_planet.name} is now in orbit", 201)
 
 
-@planet_bp.route("/<planet_id>", methods=["GET"])
+@planet_bp.route("/<planet_id>", methods=["GET", "PUT", "DELETE"])
 def handle_planet(planet_id):
-    try:
-        planet = planets[int(planet_id)-1]
-    except ValueError:
-        return {"error": "Invalid planet id"}, 400
-    except IndexError:
-        return {"error": "No planet by that id"}, 404
-    #return f"Planet {planet.id}, {planet.name}, {planet.description}, {planet.mass}", 200
-    return planet.planet_dict(), 200
+    planet = Planet.query.get(planet_id)
+    if not planet:
+        return f"Planet #{planet_id} No planet found", 404
+    elif request.method == "GET":
+        return planet.planet_dict()
+    elif request.method == "PUT":
+        form_data = request.get_json()
+        planet.name = form_data["name"]
+        planet.description = form_data["description"]
+        planet.mass = form_data["mass"]
+        db.session.commit()
+        return f"Planet #{planet_id} successfully updated"
+    elif request.method == "DELETE":
+        db.session.delete(planet)
+        db.session.commit()
+        return f"Planet #{planet_id} successfully deleted"
