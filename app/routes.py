@@ -52,6 +52,7 @@ from app.models.planet import Planet
 
     
 bp = Blueprint("planets", __name__, url_prefix="/planets")
+
 @bp.route("", methods=["POST"])
 def create_planet():
     request_body = request.get_json()
@@ -61,6 +62,48 @@ def create_planet():
     db.session.commit()
 
     return make_response(f"Planet {new_planet.name} successfully created", 201)
+
+@bp.route("", methods=["GET"])
+def read_all_planets():
+    all_planets = []
+    planets = Planet.query.all()
+    for planet in planets:
+        all_planets.append({
+            "id": planet.id,
+            "name": planet.name,
+            "description": planet.description,
+            "color": planet.color
+        })
+    return jsonify(all_planets)
+
+def validate_planet(planet_id):
+    try:
+      planet_id = int(planet_id)
+    except:
+      abort(make_response({"message":f"planet {planet_id} invalid"}, 400))
+
+    planet = Planet.query.get(planet_id)
+
+    if not planet:
+        abort(make_response({"message":f"planet {planet_id} not found"}, 404))
+
+    return planet
+    
+
+@bp.route("/<planet_id>", methods=["GET"])
+def read_one_planet(planet_id):
+    # planet = Planet.query.get(planet_id) removed this because it querys from validate planet
+    planet = validate_planet(planet_id)
+    
+    return {
+            "id": planet.id,
+            "name": planet.name,
+            "description": planet.description,
+            "color": planet.color
+        }
+
+
+    
 
 
 
