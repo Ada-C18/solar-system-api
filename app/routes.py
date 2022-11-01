@@ -45,17 +45,24 @@ def get_one_planet():
 
 @planets_bp.route("", methods=["GET"])
 def read_all_planets():
-    planets_response = []
-    planets = Planet.query.all()
-    for planet in planets:
-        planets_response.append(dict(
-            id=planet.id,
-            name=planet.name,
-            surface_area=planet.surface_area,
-            moons=planet.moons,
-            distance_from_sun=planet.distance_from_sun,
-            namesake=planet.namesake
-        ))
+    name_query = request.args.get("name")
+    moon_query = request.args.get("moons")
+    if name_query:
+        planets = Planet.query.filter_by(planet=name_query)
+    if moon_query:
+        planets = Planet.query.filter_by(planet=moon_query)
+    else:
+        planets_response = []
+        planets = Planet.query.all()
+        for planet in planets:
+            planets_response.append(dict(
+                id=planet.id,
+                name=planet.name,
+                surface_area=planet.surface_area,
+                moons=planet.moons,
+                distance_from_sun=planet.distance_from_sun,
+                namesake=planet.namesake
+            ))
 
     return jsonify(planets_response)
 
@@ -74,7 +81,7 @@ def add_planet():
 
     return make_response(f"Planet {new_planet.name} successfully added", 201)
 
-@planets_bp.route("/id", methods=["PUT"])
+@planets_bp.route("<id>", methods=["PUT"])
 def update_planet(id):
     planet = validate_planet(id)
 
@@ -87,7 +94,7 @@ def update_planet(id):
 
     return make_response(f"Planet {planet.name} successfully updated")
 
-@planets_bp.route("/id", methods=["DELETE"])
+@planets_bp.route("<id>", methods=["DELETE"])
 def delete_planet(id):
     planet = validate_planet(id)
 
@@ -95,3 +102,4 @@ def delete_planet(id):
     db.session.commit()
 
     return make_response(f"Planet {planet.name} successfully deleted")
+
