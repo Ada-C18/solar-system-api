@@ -40,10 +40,10 @@ def validate_planet(planet_id):
 #     abort(make_response({"message": f"{planet_id} is not found"}, 404))
 
 
-# @bp.route("/<planet_id>", methods=["GET"])
-# def handle_planet(planet_id):
-#     result_planet = validate_planet(planet_id)
-#     return result_planet
+@bp.route("/<planet_id>", methods=["GET"])
+def handle_planet(planet_id):
+    result_planet = validate_planet(planet_id)
+    return result_planet.to_dict()
 
 
 @bp.route("", methods=["POST"])
