@@ -50,3 +50,12 @@ def update_planet(planet_id):
     return make_response(f"Planet #{planet.id} successfully updated")
 
 # insert DELETE method below
+@solar_system_bp.route("/<planet_id>", methods=["DELETE"])
+def delete_planet(planet_id):
+    planet = verify_planet(planet_id)
+
+    db.session.delete()
+    db.session.commit()
+
+    return make_response(f"Planet #{planet.id} successfully deleted")
+    
