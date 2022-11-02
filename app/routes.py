@@ -27,11 +27,7 @@ def create_planet():
         or "moons" not in request_body):
             return make_response(f"Invalid Request", 400)
         
-        new_planet = Planet(
-            name=request_body["name"],
-            description=request_body["description"],
-            moons=request_body["moons"],
-        )
+        new_planet = Planet.from_dict(request_body)
 
         db.session.add(new_planet)
         db.session.commit()
