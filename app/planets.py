@@ -47,32 +47,32 @@ def handle_planet():
 @planets_bp.route("/<id>", methods=['GET','PUT','DELETE'])
 
 def handle_1_planet(id):
-    planets = Planet.query.get(id)
+    planet = Planet.query.get(id)
 
     
-        if request.method == "GET":
-            return{
-                "id": planet.id,
-                "name": planet.name,
-                "color": planet.color,
-                "description": planet.description
-            }
-        elif request.method == "PUT":
-            request_body = request.get_json()
-            
-            planet.name = request_body["name"]
-            planet.color = request_body["color"]
-            planet.description = request_body["description"]
+    if request.method == "GET":
+        return{
+            "id": planet.id,
+            "name": planet.name,
+            "color": planet.color,
+            "description": planet.description
+        }
+    elif request.method == "PUT":
+        request_body = request.get_json()
+        
+        planet.name = request_body["name"]
+        planet.color = request_body["color"]
+        planet.description = request_body["description"]
 
-            
-            db.session.commit()
-            return make_response(f"planet color {planet.color} succesfully updated",200)
+        
+        db.session.commit()
+        return make_response(f"planet color {planet.color} succesfully updated",200)
 
-        elif request.method == "DELETE":
-            db.session.delete(planet)
-            db.session.commit()
+    elif request.method == "DELETE":
+        db.session.delete(planet)
+        db.session.commit()
 
-            return make_response(f"planet color {planet.color} succesfully deleted", 200)
+        return make_response(f"planet color {planet.color} succesfully deleted", 200)
 
             
 
