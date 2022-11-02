@@ -34,9 +34,24 @@ from app.models.planet import Planet
 
 #     abort(make_response({"message":f"planet {planet_id} not found"}, 404))
 
+#for handling errors:
+
+def validate_planet(planet_id):
+    try:
+        planet_id = int(planet_id)
+    except:
+        abort(make_response({"message":f"planet {planet_id} invalid"}, 400))
+
+    planet = Planet.query.get(planet_id)
+
+    if not planet:
+        abort(make_response({"message":f"planet {planet_id} not found"}, 404))
+
+    return planet
+
+
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-#creating new planet
 @planets_bp.route("", methods=["POST"])
 def create_new_planet():
     request_body = request.get_json(force=True)
@@ -57,10 +72,22 @@ def read_all_planets():
             {
                 "id": planet.id,
                 "name": planet.name,
-                "description": planet.description
+                "description": planet.description,
+                "moons": planet.moons
             }
         )
     return jsonify(planets_response)
+
+@planets_bp.route("/<planet_id>", methods=["GET"])
+def read_one_planet(planet_id):
+    planet = validate_planet(planet_id)
+    return {
+            "id": planet.id,
+            "name": planet.name,
+            "description": planet.description,
+            "moons": planet.moons,
+        }
+
 
 # @planets_bp.route("", methods=["GET"])
 # def show_all_planets():
