@@ -2,23 +2,6 @@ from app import db
 from models.planet import Planet 
 from flask import Blueprint, jsonify, abort, request, make_response
 
-# class Planet():
-#     def __init__(self, id, name):#removed description and moon_count for now
-#         self.id = id
-#         self.name = name
-#         # self.description = description
-#         # self.moon_count = moon_count
-
-# PLANETS = [
-#     Planet(1, "Mercury"),
-#     Planet(2, "Venus"),
-#     Planet(3, "Mars"),
-#     Planet(4, "Earth"),
-#     Planet(5, "Jupiter"),
-#     Planet(6, "Saturn"),
-#     Planet(7, "Uranus"),
-#     Planet(8, "Neptune")
-# ]
 # HELPER FUNCTIONS #
 
 def validate_planet(planet_id): 
@@ -64,16 +47,8 @@ def get_all_planets():
         all_planets = Planet.query.filter_by(moon_count=moon_count_query)
     else:
         all_planets = Planet.query.all()
-        
-    results_list = []
-    for planet in all_planets:
-        results_list.append({
-            "id": planet.id,
-            "name": planet.name,
-            "description": planet.description,
-            "moon_count": planet.moon_count
-        })
-    return jsonify(results_list), 200
+
+    return jsonify([planet.to_dict() for planet in all_planets]), 200
 
 @planets_bp.route("/<planet_id>", methods=["PUT"])
 def update_planet(planet_id):
@@ -91,11 +66,7 @@ def update_planet(planet_id):
 @planets_bp.route("/<planet_id>", methods=["GET"])
 def get_one_planet(planet_id):
     planet = validate_planet(planet_id)
-    return {"id": planet.id,
-            "name": planet.name,
-            "description": planet.description, 
-            "moon_count": planet.moon_count
-    }
+    return planet.to_dict()
 
 @planets_bp.route("/<planet_id>", methods=["DELETE"])
 def delete_planet(planet_id):
