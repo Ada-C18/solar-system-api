@@ -4,28 +4,24 @@ from flask import Blueprint, jsonify, abort, make_response, request
 
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-def validate_planet(planet_id):
+def validate_id(class_obj,id):
     try:
-        planet_id = int(planet_id)
+        id = int(id)
     except:
-        abort(make_response({"message":f"book {planet_id} invalid"}, 400))
+        abort(make_response({"message":f"{class_obj} {id} invalid"}, 400))
 
-    planet = Planet.query.get(planet_id)
+    query_result = Planet.query.get(id)
 
-    if not planet:
-        abort(make_response({"message":f"planet {planet_id} not found"}, 404))
+    if not query_result:
+        abort(make_response({"message":f"{class_obj} {id} not found"}, 404))
 
-    return planet
+    return query_result
     
 
 @planets_bp.route("", methods=["POST"])        
 def add_planet():
     request_body = request.get_json()
-    new_planet = Planet(name=request_body["name"],
-                    surface_area=request_body["surface_area"], 
-                    moons=request_body["moons"],
-                    distance_from_sun=request_body["distance_from_sun"],
-                    namesake=request_body["namesake"])
+    new_planet = Planet.create_from_json(request_body)
 
     db.session.add(new_planet)
     db.session.commit()
@@ -44,35 +40,20 @@ def read_all_planets():
     else:
         planets = Planet.query.all()
 
-    planets_response = []
-    for planet in planets:
-        planets_response.append(dict(
-            id=planet.id,
-            name=planet.name,
-            surface_area=planet.surface_area,
-            moons=planet.moons,
-            distance_from_sun=planet.distance_from_sun,
-            namesake=planet.namesake
-        ))
-
-    return jsonify(planets_response)
+    planets_response = jsonify([planet.to_dict() for planet in planets])
+   
+    return planets_response
 
 
 @planets_bp.route("/<planet_id>", methods=["GET"])
 def read_one_planet(planet_id):
-    planet = validate_planet(planet_id)
-    return {
-            "name" : planet.name,
-            "surface_area": planet.surface_area,
-            "moons": planet.moons,
-            "distance_from_sun": planet.distance_from_sun,
-            "namesake": planet.namesake
-        }
+    planet = validate_id(Planet, id)
+    return planet.to_dict()
 
 
 @planets_bp.route("/<planet_id>", methods=["PUT"])
 def update_planet(planet_id):
-    planet = validate_planet(planet_id)
+    planet = validate_id(Planet, id)
 
     request_body = request.get_json()
 
@@ -89,7 +70,7 @@ def update_planet(planet_id):
 
 @planets_bp.route("/<planet_id>", methods=["DELETE"])
 def delete_one_planet(planet_id):
-    planet = validate_planet(planet_id)
+    planet = validate_id(Planet, id)
 
     db.session.delete(planet)
     db.session.commit()
