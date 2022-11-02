@@ -6,21 +6,6 @@ from flask import Blueprint, jsonify, abort, make_response, request
 
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-#validate input for request
-#def validate_planet(planet_id):
-#     #if string cannot cast to integer, return "bad request"
-#     try:
-#         planet_id= int(planet_id)
-#     except:
-#         abort(make_response({"message":f"planet {planet_id} invalid"}, 400))
-
-#     #if planet.id not found, return 404
-#     planet = Planet.query.get(planet_id)
-#     if not planet:
-#         abort(make_response({"message":f"planet {planet_id} not found"}, 404))
-
-#     return planet
-
 ######################### NEW VALIDATE FUNCTION ############################
 def validate_model(cls, model_id):
     try:
