@@ -19,14 +19,21 @@ def create_planet():
 @bp.route('', methods=["GET"])
 def read_all_planets():
     
-    name_query = request.args.get("name")
+    name_query = request.args.get('name')
+    radius_query = request.args.get('radius')
+    limit_query = request.args.get('limit')
     planet_query = Planet.query
     if name_query:
         planet_query = planet_query.filter_by(name=name_query)
 
+    if radius_query:
+        planet_query = planet_query.filter_by(radius=radius_query)
+    
+    if limit_query:
+        planet_query = planet_query.limit(limit_query)
 
     planets_databases = []
-    planets = Planet.query.all()
+    planets = planet_query.all()
     for planet in planets:
         planets_databases.append(planet.to_dict())
     return jsonify(planets_databases)
