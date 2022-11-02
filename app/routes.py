@@ -18,6 +18,13 @@ def create_planet():
 
 @bp.route('', methods=["GET"])
 def read_all_planets():
+    
+    name_query = request.args.get("name")
+    planet_query = Planet.query
+    if name_query:
+        planet_query = planet_query.filter_by(name=name_query)
+
+
     planets_databases = []
     planets = Planet.query.all()
     for planet in planets:
