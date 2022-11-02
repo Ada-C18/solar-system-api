@@ -18,7 +18,7 @@ class Planet (db.Model):
         })
     @classmethod
     def from_json(cls, req_body):
-        return Planet(
+        return cls(
             name = req_body["name"],
             color = req_body["color"],
             description = req_body["description"])
@@ -29,6 +29,6 @@ class Planet (db.Model):
             self.color = req_body["color"]
             self.description = req_body["description"]
         except KeyError as error:
-            return (make_response({'message': "Missing Key", "error": error}))
+            abort(make_response({'message': f"Missing attribute: {error}"}))
 
     
