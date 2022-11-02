@@ -43,10 +43,10 @@ def read_all_planets():
         planet_query = planet_query.filter_by(description=description_query)
     
     if color_query:
-        color_query = planet_query.filter_by(color=color_query)
+        planet_query = planet_query.filter_by(color=color_query)
 
     if limit_query:
-        limit_query = planet_query.limit(limit_query)
+        planet_query = planet_query.limit(limit_query)
 
     planets = planet_query.all()
 
