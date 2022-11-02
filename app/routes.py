@@ -9,9 +9,7 @@ bp = Blueprint('planets', __name__, url_prefix='/planets')
 @bp.route('', methods=['POST'])
 def create_planet():
     request_body = request.get_json()
-    new_planet = Planet(name=request_body['name'],
-            description = request_body['description'],
-            radius = request_body['radius'])
+    new_planet = Planet.from_dict(request_body)
     db.session.add(new_planet)
     db.session.commit()
     return make_response(f'Planet: {new_planet.name} succesfully created'), 201
@@ -32,31 +30,29 @@ def read_all_planets():
     if limit_query:
         planet_query = planet_query.limit(limit_query)
 
-    planets_databases = []
     planets = planet_query.all()
-    for planet in planets:
-        planets_databases.append(planet.to_dict())
+    planets_databases = [planet.to_dict() for planet in planets]
     return jsonify(planets_databases)
 
-def validate_planet(id):
+def validate_model(cls, model_id):
     try:
-        planet_id = int(id)
+        model_id = int(model_id)
     except:
-        abort(make_response({"message": f"{id} is invalid"}, 400))
-    planet = Planet.query.get(id)
-    if not planet:
-        abort(make_response({"message": f"{id} not found"}, 404))
-    return planet
+        abort(make_response({"message": f"{model_id} is invalid"}, 400))
+    model = cls.query.get(model_id)
+    if not model:
+        abort(make_response({"message": f"{model_id} not found"}, 404))
+    return model
 
 
 @bp.route('/<id>', methods=['GET'])
 def read_one_planet(id):
-    planet = validate_planet(id)
+    planet = validate_model(Planet, id)
     return jsonify(planet.to_dict())
 
 @bp.route('/<id>', methods=['PUT'])
 def update_planet(id):
-    planet = validate_planet(id)
+    planet = validate_model(Planet, id)
     request_body = request.get_json()
     planet.name = request_body['name']
     planet.description = request_body['description']
@@ -68,7 +64,7 @@ def update_planet(id):
 
 @bp.route('/<id>', methods=['DELETE'])
 def delete_planet(id):
-    planet = validate_planet(id)
+    planet = validate_model(Planet, id)
     db.session.delete(planet)
     db.session.commit()
     return make_response(f'planet {planet.name}: sucessfully deleted', 200)
