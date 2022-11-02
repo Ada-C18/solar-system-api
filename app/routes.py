@@ -45,12 +45,13 @@ def read_all_planets():
     planets_response = []
     planets = Planet.query.all()
     for planet in planets:
-        planets_response.append({
-            "id": planet.id,
-            "name": planet.name,
-            "description": planet.description,
-            "moons": planet.moons
-    })
+    #     planets_response.append({
+    #         "id": planet.id,
+    #         "name": planet.name,
+    #         "description": planet.description,
+    #         "moons": planet.moons
+    # })
+        planets_response.append(planet.to_dict())
     return jsonify(planets_response)
 
 def validate_planet(planet_id):
@@ -69,13 +70,13 @@ def validate_planet(planet_id):
 @planets_bp.route("/<planet_id>", methods=["GET"])
 def read_one_planet(planet_id):
     planet = validate_planet(planet_id)
-
-    return {
-        "id": planet.id,
-        "name": planet.name,
-        "description": planet.description,
-        "moons": planet.moons,
-    }
+    return planet.to_dict()
+    # return {
+    #     "id": planet.id,
+    #     "name": planet.name,
+    #     "description": planet.description,
+    #     "moons": planet.moons,
+    # }
 
 @planets_bp.route("/<planet_id>", methods=["PUT"])
 def update_planet(planet_id):
