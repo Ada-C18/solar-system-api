@@ -7,3 +7,11 @@ class Planet(db.Model): # defining the planet model
     name = db.Column(db.String) # attribute title which will map to a db column
     description = db.Column(db.String)
     moons = db.Column(db.Integer)
+
+    def to_dict(self):
+        return {
+                "name": self.name,
+                "description": self.description,
+                "moons": self.moons,
+                "id": self.id,
+                }
