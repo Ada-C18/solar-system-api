@@ -8,6 +8,9 @@ class Planet(db.Model):
     distance =  db.Column(db.Integer, nullable=False)
 
     def to_dict(self):
+        """
+        Helper: Returns all database fields as a dict. 
+        """
         return dict(
             id=self.id,
             name=self.name,
