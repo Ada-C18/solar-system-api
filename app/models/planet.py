@@ -1,6 +1,5 @@
-from os import abort
 from app import db
-from flask import make_response
+from flask import make_response, abort
 
 
 class Planet (db.Model):
@@ -18,7 +17,7 @@ class Planet (db.Model):
         })
     @classmethod
     def from_json(cls, req_body):
-        return Planet(
+        return cls(
             name = req_body["name"],
             color = req_body["color"],
             description = req_body["description"])
@@ -29,6 +28,7 @@ class Planet (db.Model):
             self.color = req_body["color"]
             self.description = req_body["description"]
         except KeyError as error:
-            abort (make_response({'message': "Missing Key", "error": error}))
-
+            abort(make_response({'message': f"Missing attribute: {error}"}), 400)
+            
+            
     
