@@ -28,16 +28,27 @@ planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
 @planets_bp.route("", methods=["GET"])
 def read_planets():
+    planet_query = Planet.query
+    name_query = request.args.get("name")
+    
+    if name_query:
+        planet_query = planet_query.filter(Planet.name.ilike(f"%{name_query}%"))
+        
+    moon_query = request.args.get("num_moons")
+    if moon_query:
+        planet_query = planet_query.filter_by(moons=moon_query)
     planets_response = []
-    planets = Planet.query.all()
-
+    planets = Planet.query.all()    
     for planet in planets:
-            planets_response.append({
-                "id": planet.id,
-                "name": planet.name,
-                "description": planet.description,
-                "number of moons": planet.num_moons
-            })
+        planets_response.append({
+            "id": planet.id,
+            "name": planet.name,
+            "description": planet.description,
+            "number of moons": planet.num_moons
+        })
+    
+    if not planets_response:
+        return make_response(jsonify(f"There are no planets named {name_query} planet"))
     return jsonify(planets_response)
 
 
@@ -45,8 +56,8 @@ def read_planets():
 def create_planet():
     request_body = request.get_json()
     new_planet = Planet(name=request_body["name"],
-                    description=request_body["description"],
-                    num_moons=request_body["num_moons"])
+                description=request_body["description"],
+                num_moons=request_body["num_moons"])
 
     db.session.add(new_planet)
     db.session.commit()
