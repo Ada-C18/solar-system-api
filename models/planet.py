@@ -14,3 +14,11 @@ class Planet(db.Model):
         planet_dict["moon_count"] = self.moon_count
 
         return planet_dict
+
+    @classmethod
+    def from_dict(cls, req_body):
+        return cls(
+            name=req_body["name"],
+            description= req_body["description"],
+            moon_count= req_body["moon_count"]
+        )
