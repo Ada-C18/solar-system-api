@@ -25,8 +25,29 @@ def read_one_planet(planet_id):
 
 @bp.route("", methods=["GET"])
 def read_all_planets():
-    planets = Planet.query.all()
+    name_query = request.args.get("name")
+    description_query = request.args.get("description")
+    moons_query = request.args.get("moons")
+    limit_query = request.args.get("limit")
+
+    planet_query = Planet.query
+
+    if name_query:
+        planet_query = planet_query.filter_by(name=name_query)
+
+    if description_query:
+        planet_query = planet_query.filter_by(description=description_query)
+
+    if moons_query:
+        planet_query = planet_query.filter_by(moons=moons_query)
+
+    if limit_query:
+        planet_query = planet_query.limit(limit_query)
+
+    planets = planet_query.all()
+
     planet_response = [planet.to_dict() for planet in planets]
+    
     return jsonify(planet_response)
 
 @bp.route("", methods=["POST"])
