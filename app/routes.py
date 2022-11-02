@@ -8,10 +8,7 @@ planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 @planets_bp.route("", methods=["POST"])
 def add_planet():
     request_body = request.get_json()
-    new_planet = Planet(name=request_body["name"],
-                    description=request_body["description"],
-                    diameter=request_body["diameter"]
-                    )
+    new_planet = Planet.from_dict(request_body)
 
     db.session.add(new_planet)
     db.session.commit()
@@ -20,84 +17,59 @@ def add_planet():
 
 @planets_bp.route("", methods=["GET"])
 def read_all_planets():
-    planets_response = []
-    planets = Planet.query.all()
-    for planet in planets:
-        planets_response.append(
-            {
-                "id": planet.id,
-                "name": planet.name,
-                "description": planet.description,
-                "diameter": planet.diameter
-            }
-        )
+    name_query = request.args.get("name")
+    description_query = request.args.get("description")
+    diameter_query = request.args.get("diameter")
+    if name_query: 
+        planets = Planet.query.filter_by(name=name_query)
+    elif description_query:
+        planets = Planet.query.filter_by(description=description_query)
+    elif diameter_query:
+        planets = Planet.query.filter_by(diameter=diameter_query)
+    else: 
+        planets = Planet.query.all()
+
+    planets_response = [planet.to_dict() for planet in planets]
     return jsonify(planets_response) 
 
-def validate_planet(planet_id):
+def validate_model(cls, model_id):
     try: 
-        planet_id = int(planet_id)
+        model_id = int(model_id)
     except:
-        abort(make_response({"message": f"planet {planet_id} invalid"}, 400)) 
+        abort(make_response({"message": f"{cls.__name__} {model_id} invalid"}, 400)) 
 
-    planet = Planet.query.get(planet_id)
+    model = cls.query.get(model_id)
     
-    if not planet:
-        abort(make_response({"message": f"planet {planet_id} not found"}, 404)) 
+    if not model:
+        abort(make_response({"message": f"{cls.__name__} {model_id} not found"}, 404)) 
 
-    return planet
+    return model
 
 @planets_bp.route("/<planet_id>", methods = ["GET"])
 def read_one_planet(planet_id):
-    planet = validate_planet(planet_id)
-    
-    return {
-        "id": planet.id,
-        "name": planet.name,
-        "description": planet.description,
-        "diameter": planet.diameter
-    }
+    planet = validate_model(Planet,planet_id)
+    return planet.to_dict() 
 
 @planets_bp.route("/<planet_id>", methods=["PUT"])
 def update_planet(planet_id):
-    planet = validate_planet(planet_id)
+    planet = validate_model(Planet,planet_id)
 
     request_body = request.get_json()
 
-    planet.name = request_body["name"]
-    planet.description = request_body["description"]
-    planet.diameter = request_body["diameter"]
-
-
+    planet.update(request_body) 
     db.session.commit()
 
     return make_response(f"Planet #{planet.id} successfully updated")
 
 @planets_bp.route("/<planet_id>", methods=["DELETE"])
 def delete_planet(planet_id):
-    planet = validate_planet(planet_id)
+    planet = validate_model(Planet,planet_id)
 
     db.session.delete(planet)
     db.session.commit()
 
     return make_response(f"Planet #{planet.id} successfully deleted")
 
-# class Planets(): 
-#     def __init__(self, id, name, description, diameter): 
-#         self.id = id
-#         self.name = name 
-#         self.description = description 
-#         self.diameter = diameter 
-
-# PLANETS = [
-#     Planets(1, "Mercury", "closest planet to the sun", "3032 miles"), 
-#     Planets(2, "Venus", "hottest planet", "7521 miles"), 
-#     Planets(3, "Earth", "round and trashy", "7917 miles"),
-#     Planets(4, "Mars", "reddish hue", "4212 miles"), 
-#     Planets(5, "Jupiter", "largest planet", "86881 miles"), 
-#     Planets(6, "Saturn", "surrounded by rings", "72367 miles"), 
-#     Planets(7, "Uranus", "coldest planet", "31518 miles"), 
-#     Planets(8, "Neptune", "most windy planet", "30599 miles"), 
-# ]
 
 
 
