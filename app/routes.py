@@ -7,20 +7,20 @@ solar_system_bp = Blueprint(
     "solar_system_bp", __name__, url_prefix="/solar-system"
     )
 
-def verify_planet(planet_id):
+def verify_model(cls,model_id):
     try:
-        planet_id = int(planet_id)
+        model_id = int(model_id)
     except:
-        abort(make_response({"message":f"planet {planet_id} invalid"}, 400))
+        abort(make_response({"message":f"{cls.__name__} {model_id} invalid"}, 400))
     
-    planet = Planet.query.get(planet_id)
+    model = cls.query.get(model_id)
     
-    if not planet:
+    if not model:
         abort(make_response(
-        {"message":f"planet {planet_id} not found"}, 404
+        {"message":f"{cls.__name__} {model_id} not found"}, 404
         ))
     
-    return planet
+    return model
 
 @solar_system_bp.route("", methods=["GET"])
 def read_all_planets():
@@ -32,12 +32,12 @@ def read_all_planets():
 
 @solar_system_bp.route("/<planet_id>", methods=["GET"])
 def read_one_planet(planet_id):
-    planet = verify_planet(planet_id)
+    planet = verify_model(planet_id)
     return jsonify(planet.make_a_dict())
 
 @solar_system_bp.route("/<planet_id>", methods=["PUT"])
 def update_planet(planet_id):
-    planet = verify_planet(planet_id)
+    planet = verify_model(planet_id)
 
     request_body = request.get_json()
 
@@ -49,12 +49,11 @@ def update_planet(planet_id):
 
     return make_response(f"Planet #{planet.id} successfully updated")
 
-# insert DELETE method below
 @solar_system_bp.route("/<planet_id>", methods=["DELETE"])
 def delete_planet(planet_id):
-    planet = verify_planet(planet_id)
+    planet = verify_model(planet_id)
 
-    db.session.delete()
+    db.session.delete(planet)
     db.session.commit()
 
     return make_response(f"Planet #{planet.id} successfully deleted")

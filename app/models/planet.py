@@ -14,6 +14,14 @@ class Planet(db.Model):
             "description": self.description
         }
 
+    @classmethod
+    def from_dict(cls, planet_data):
+        new_planet = Planet(name=planet_data['name'], 
+                            distance_from_sun=planet_data['distance_from_sun'],
+                            description=planet_data['description'])
+
+        return new_planet
+
 # solar_system = [
 #     Planet(1, "Mercury", 35000000, "smallest planet"),
 #     Planet(2, "Venus", 67000000, "hottest planet"),
