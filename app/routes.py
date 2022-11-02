@@ -36,16 +36,20 @@ def create_planet():
 @planets_bp.route("", methods = ["GET"])
 def get_all_planets():
     results_list = []
-    all_planets = Planet.query.all()
 
-    for planet in all_planets:
-        results_list.append(
-            {"id": planet.id,
-            "name": planet.name,
-            "color": planet.color,
-            "description": planet.description
-        })
+    color_param= request.args.get("color")
+    description_param= request.args.get("description")
+    
+    if color_param:
+        planets = Planet.query.filter_by(color=color_param)
+    elif description_param:
+        planets = Planet.query.filter_by(description=description_param)
+    else:
+        planets = Planet.query.all()
 
+    for planet in planets:
+        results_list.append(planet.to_dict())
+    
     return jsonify(results_list), 200
 
 
@@ -54,13 +58,7 @@ def get_all_planets():
 def get_one_planet(planet_id):
     planet = validate_planet_id(planet_id)
 
-    return (
-        {"id": planet.id,
-        "name": planet.name,
-        "color": planet.color,
-        "description": planet.description
-        }
-    )
+    return jsonify(planet.to_dict())
 
 
 # UPDATE RESOURCE
