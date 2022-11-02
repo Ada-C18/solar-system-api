@@ -30,11 +30,7 @@ def handle_planets():
     elif request.method == "GET":
         planets = Planet.query.all()
         planets_response = []
-        for planet in planets:
-            planets_response.append({"id": planet.id, 
-                                    "name": planet.name, 
-                                    "description": planet.description,
-                                    "flag": planet.flag})
+        planets_response.append([planet.to_dict() for planet in planets])
         return jsonify(planets_response)
 
 
