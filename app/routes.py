@@ -55,7 +55,16 @@ def create_planet():
 
 @planets_bp.route("", methods=["GET"])
 def get_all_planets():
-    all_planets = Planet.query.all()
+    name_query = request.args.get("name")
+    moon_count_query = request.args.get("moon_count")
+
+    if name_query:
+        all_planets = Planet.query.filter_by(name=name_query)
+    elif moon_count_query:
+        all_planets = Planet.query.filter_by(moon_count=moon_count_query)
+    else:
+        all_planets = Planet.query.all()
+        
     results_list = []
     for planet in all_planets:
         results_list.append({
