@@ -22,3 +22,8 @@ class Planet(db.Model):
             description= req_body["description"],
             moon_count= req_body["moon_count"]
         )
+
+    def update(self, req_body):
+        self.name = req_body["name"]
+        self.description = req_body["description"]
+        self.moon_count = req_body["moon_count"]

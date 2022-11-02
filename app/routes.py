@@ -52,13 +52,10 @@ def update_planet(planet_id):
     planet = validate_model(Planet, planet_id)
     request_body = request.get_json()
 
-
-    planet.name = request_body["name"]
-    planet.description = request_body["description"]
-    planet.moon_count = request_body["moon_count"]
+    planet = planet.update(request_body)
 
     db.session.commit()
-    return make_response(f"Planet {planet.id} successfully updated")
+    return make_response(f"Planet {planet} successfully updated")
 
 @planets_bp.route("/<planet_id>", methods=["GET"])
 def get_one_planet(planet_id):
