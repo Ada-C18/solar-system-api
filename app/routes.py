@@ -7,15 +7,15 @@ from flask import Blueprint, jsonify, abort, make_response, request
 bp = Blueprint("planets", __name__, url_prefix="/planet")
 
 
-def validate_planet(cls, model_id):
+def validate_object_by_id(cls, model_id):
     """
-    Helper function to check if planet_id is in 
-    database.
+    Helper function to check if a record is is in 
+    database using the model class and model id. 
 
-    Returns status message to client if planet id isn't int or 
-    planet id not in database.
+    Returns status message to client if passed id isn't int or 
+    id not in database.
 
-    Returns planet to calling function if planet is found. 
+    Returns database model object to calling function if record is found. 
     """
 
     try:
@@ -42,7 +42,7 @@ def handle_planet(planet_id):
     Method: GET
     """
 
-    result_planet = validate_planet(planet_id)
+    result_planet = validate_object_by_id(Planet,planet_id)
     return result_planet.to_dict()
 
 
@@ -58,10 +58,7 @@ def create_planet():
     """
 
     request_body = request.get_json()
-    new_planet = Planet(# id=request_body["id"],
-                        name=request_body["name"],
-                        description=request_body["description"],
-                        distance=request_body["distance"])
+    new_planet = Planet.from_dict(request_body)
     db.session.add(new_planet)
     db.session.commit()
 
@@ -94,7 +91,7 @@ def update_a_planet(planet_id):
     Method: PUT
     """
 
-    this_p = validate_planet(planet_id)
+    this_p = validate_object_by_id(Planet,planet_id)
 
     request_body = request.get_json()
 
@@ -116,7 +113,7 @@ def delete_a_planet(planet_id):
     Method: DELETE
     """
 
-    planet = validate_planet(planet_id)
+    planet = validate_object_by_id(Planet, planet_id)
 
     db.session.delete(planet)
     db.session.commit()
