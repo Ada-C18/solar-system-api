@@ -56,11 +56,20 @@ def create_planet():
 
 @planets_bp.route("", methods=["GET"])
 def get_all_planets():
-    planets = Planet.query.all()
-    planets_response = []
+    name_query = request.args.get("name")
+    description_query = request.args.get("description")
+    color_query = request.args.get("color")
 
-    for planet in planets:
-        planets_response.append(planet_dict(planet))
+    if name_query:
+        planets = Planet.query.filter_by(name=name_query)
+    elif description_query:
+        planets = Planet.query.filter_by(description=description_query)
+    elif color_query:
+        planets = Planet.query.filter_by(color=color_query)
+    else:
+        planets = Planet.query.all()
+    
+    planets_response = [planet_dict(planet) for planet in planets]
 
     return jsonify(planets_response)
 
