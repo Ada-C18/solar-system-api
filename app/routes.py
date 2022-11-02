@@ -5,27 +5,25 @@ from app import db
 planets_bp = Blueprint("planets_bp", __name__, url_prefix = "/planets")
 
 # HELPER FUNCTION
-def validate_planet_id(id):
+def validate_id(class_obj, id):
     try:
-        planet_id = int(id)
+        object_id = int(id)
     except:
-        abort(make_response({"message":f"Planet {id} is invalid"}, 400))
+        abort(make_response({"message":f"{class_obj} {id} is invalid"}, 400))
     
-    planet = Planet.query.get(planet_id)
-    if not planet:
-        abort(make_response({"message":f"Planet {id} is not found"}, 404))
+    query_result = class_obj.query.get(object_id)
+    if not query_result:
+        abort(make_response({"message":f"{class_obj} {id} is not found"}, 404))
 
-    return planet
+    return query_result
 
 # CREATE RESOURCE
 @planets_bp.route("", methods = ["POST"])
 def create_planet():
     request_body = request.get_json()
-    new_planet = Planet(
-        name = request_body['name'],
-        color = request_body['color'],
-        description = request_body['description'] 
-        )
+    
+    new_planet = Planet.from_json(request_body)
+        
     db.session.add(new_planet)
     db.session.commit()
 
@@ -56,7 +54,7 @@ def get_all_planets():
 # GET ALL RESOURCES
 @planets_bp.route("/<planet_id>", methods = ["GET"])
 def get_one_planet(planet_id):
-    planet = validate_planet_id(planet_id)
+    planet = validate_id(Planet, planet_id)
 
     return jsonify(planet.to_dict())
 
@@ -64,7 +62,7 @@ def get_one_planet(planet_id):
 # UPDATE RESOURCE
 @planets_bp.route("/<planet_id>", methods = ["PUT"])
 def update_planet(planet_id):
-    planet = validate_planet_id(planet_id)
+    planet = validate_id(Planet, planet_id)
 
     request_body = request.get_json()
 
@@ -80,7 +78,7 @@ def update_planet(planet_id):
 # DELETE RESOURCE
 @planets_bp.route("/<planet_id>", methods = ["DELETE"])
 def delete_planet(planet_id):
-    planet = validate_planet_id(planet_id)
+    planet = validate_id(Planet, planet_id)
 
     db.session.delete(planet)
     db.session.commit()
