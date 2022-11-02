@@ -12,7 +12,10 @@ def validate_planet(planet_id):
     Helper function to check if planet_id is in 
     database.
 
-    Returns status message to client. 
+    Returns status message to client if planet id isn't int or 
+    planet id not in database.
+
+    Returns planet to calling function if planet is found. 
     """
 
     try:
