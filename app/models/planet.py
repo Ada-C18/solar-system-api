@@ -22,12 +22,12 @@ class Planet(db.Model):
                         diameter=planet_data["diameter"])
         return new_planet
 
-    # def update(self, req_body):
-    #     try:
-    #         self.name = req_body["name"]
-    #         self.description = req_body["description"]
-    #         self.diameter = req_body["diameter"]
-    #     except LookupError:
-    #         print("Missing key:")
+    def update(self, req_body):
+        try:
+            self.name = req_body["name"]
+            self.description = req_body["description"]
+            self.diameter = req_body["diameter"]
+        except KeyError as error:
+            abort(make_response({"message": f"Missing attribute: {error}"}, 400))
     
 
