@@ -19,41 +19,34 @@ def handle_planets():
    
     elif request.method == "GET":
         response_body = []
-        planets= Planet.query.all()
+        moons_param = request.args.get("moons")
+        if moons_param:
+            planets = Planet.query.filter_by(moons = moons_param)
+        else:
+            planets= Planet.query.all()
         for planet in planets:
-            response_body.append({
-                "name": planet.name,
-                "description": planet.description,
-                "moons": planet.moons,
-                "id": planet.id,
-            })
-            
+            response_body.append(planet.to_dict())
         return jsonify(response_body), 200
         
 
-def validate_planet(planet_id):
+def validate_id(id, cls):
     try:
-        planet_id = int(planet_id)
+        id = int(id)
     except:
-        abort(make_response ({"Message": f"Planet {planet_id} invalid."}, 400))
+        abort(make_response ({"Message": f"{cls.__name__} {id} invalid."}, 400))
     
     # to access a planet with planet_id in our db, we use
-    planet = Planet.query.get(planet_id)
-    if not planet:
-        abort(make_response({"Message": f"Planet {planet_id} not found."}, 404))
-    return planet
+    obj = cls.query.get(id)
+    if not obj:
+        abort(make_response({"Message": f"{cls.__name__} {id} not found."}, 404))
+    return obj
 
 
 @planet_bp.route("/<planet_id>", methods=["GET", "PUT", "DELETE"])
 def handle_one_planet(planet_id):
-    planet = validate_planet(planet_id)
+    planet = validate_id(planet_id, Planet)
     if request.method == "GET":
-        return {
-            "id": planet.id,
-            "name": planet.name,
-            "description": planet.description,
-            "moons": planet.moons    
-        }
+        return planet.to_dict()
 
     elif request.method == "PUT":
         request_body = request.get_json()
