@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, abort, make_response, request
-from .models.planet import Planet, to_dict
+from .models.planet import Planet
 from app import db
 
 # class Planet:
@@ -37,11 +37,7 @@ def validate_planet(planet_id):
 @planets_bp.route("", methods=["POST"])
 def create_planet():
     request_body = request.get_json()
-    new_planet = Planet(
-                        name = request_body["name"],
-                        description = request_body["description"],
-                        color = request_body["color"]
-                        )
+    new_planet = Planet.from_dict(request_body)
     
     db.session.add(new_planet)
     db.session.commit()
