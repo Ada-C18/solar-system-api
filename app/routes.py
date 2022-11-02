@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, abort, make_response, request
-from .models.planet import Planet
+from .models.planet import Planet, to_dict
 from app import db
 
 # class Planet:
@@ -31,13 +31,7 @@ def validate_planet(planet_id):
 
     return planet
 
-def planet_dict(planet):
-    return {
-        "id": planet.id, 
-        "name": planet.name, 
-        "description": planet.description,
-        "color": planet.color
-    }
+
 
 #---ROUTES---
 @planets_bp.route("", methods=["POST"])
@@ -69,7 +63,7 @@ def get_all_planets():
     else:
         planets = Planet.query.all()
     
-    planets_response = [planet_dict(planet) for planet in planets]
+    planets_response = [planet.to_dict() for planet in planets]
 
     return jsonify(planets_response)
 
@@ -77,7 +71,7 @@ def get_all_planets():
 def get_one_planet(planet_id):
     planet = validate_planet(planet_id)
     
-    return planet_dict(planet)
+    return planet.to_dict()
 
 @planets_bp.route("/<planet_id>", methods=["PUT"])
 def update_planet(planet_id):
