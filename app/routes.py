@@ -7,7 +7,7 @@ from flask import Blueprint, jsonify, abort, make_response, request
 bp = Blueprint("planets", __name__, url_prefix="/planet")
 
 
-def validate_planet(planet_id):
+def validate_planet(cls, model_id):
     """
     Helper function to check if planet_id is in 
     database.
@@ -19,16 +19,16 @@ def validate_planet(planet_id):
     """
 
     try:
-        planet_id = int(planet_id)
+        model_id = int(model_id)
     except:
-        abort(make_response({"message":f"planet {planet_id} invalid"}, 400))
+        abort(make_response({"message":f"{cls.__name__} {model_id} invalid"}, 400))
 
-    planet = Planet.query.get(planet_id)
+    model = cls.query.get(model_id)
 
-    if not planet:
-        abort(make_response({"message":f"planet {planet_id} not found"}, 404))
+    if not model:
+        abort(make_response({"message":f"{cls.__name__} {model_id} not found"}, 404))
 
-    return planet
+    return model
 
 
 @bp.route("/<planet_id>", methods=["GET"])
