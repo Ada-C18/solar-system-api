@@ -21,16 +21,15 @@ def validate_planet_id(planet_id):
 # MAIN FUNCTIONS HANDLING REQUESTS
 @planet_bp.route("", methods=["GET"])
 def get_planets():
-    planet = validate_planet_id(planet_id)
-    planet_response = []
-
+# planet = validate_planet_id(planet_id)
     name_query = request.args.get("name")
 
     if name_query is not None:
         planets = Planet.query.filter_by(name=name_query)
     else:
         planets = Planet.query.all()
-
+    
+    planet_response = []
     for planet in planets:
         planet_response.append({
             "id": planet.id,
@@ -44,7 +43,7 @@ def get_planets():
 
 @planet_bp.route("", methods=["POST"])
 def create_new_planet():
-    planet = validate_planet_id(planet_id)
+    planet = validate_planet_id(planet.id)
 
     request_body = request.get_json()
 
