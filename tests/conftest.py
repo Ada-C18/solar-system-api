@@ -38,3 +38,4 @@ def two_saved_planets(app):
     db.session.add_all([mars, jupiter])
 
     db.session.commit()
+

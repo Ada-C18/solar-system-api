@@ -1,26 +1,27 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from dotenv import dotenv_values
+from dotenv import load_dotenv
 import os
 
 
 db = SQLAlchemy() # db and migrate are variables that gives us access to db operations
 migrate = Migrate()
-config = dotenv_values(".env")
 
-
-print(config["SQLALCHEMY_DATABASE_URI"])
+load_dotenv()
 
 def create_app(test_config=None):
     app = Flask(__name__)
+    
     if not test_config:
-        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #hide a warning abt a feature that we wont be using
-        app.config['SQLALCHEMY_DATABASE_URI'] = config["SQLALCHEMY_DATABASE_URI"]
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+            "SQLALCHEMY_DATABASE_URI")
     else:
         app.config["TESTING"] = True
         app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-        app.config["SQLALCHEMY_DATABASE_URI"] = config["SQLALCHEMY_TEST_DATABASE_URI"]
+        app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
+            "SQLALCHEMY_TEST_DATABASE_URI")
 
     # connects db & migrate to flask app
     from app.models.planet import Planet

@@ -6,15 +6,6 @@ import pytest
 
 # 1. `POST` `/planets` with a JSON request body returns a `201`
 
-def test_get_all_planets_empty(client):
-    # Act
-    response = client.get("/planets")
-    response_body = response.get_json()
-
-    # Assert
-    assert response.status_code == 200
-    assert response_body == []
-
 def test_get_planet_by_id(client, two_saved_planets):
     response = client.get("/planets/1")
     response_body = response.get_json()
@@ -35,13 +26,18 @@ def test_get_planet_by_id_empty(client):
     # Assert
     assert response.status_code == 404
 
-def test_get_all_planets(client, two_saved_planets):
+
+def test_get_all_planets_with_no_records(client):
     # Act
     response = client.get("/planets")
     response_body = response.get_json()
 
     # Assert
     assert response.status_code == 200
+    assert response_body == []
+
+    
+def test_get_all_planets(client, two_saved_planets):
     assert response_body[0] == {
         "id": 1,
         "name": "Mars",
