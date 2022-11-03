@@ -6,7 +6,7 @@ solar_system_bp = Blueprint(
     "solar_system_bp", __name__, url_prefix="/solar-system"
     )
 
-def verify_model(cls,model_id):
+def verify_model(cls, model_id):
     try:
         model_id = int(model_id)
     except:
@@ -54,8 +54,8 @@ def read_all_planets():
 
 @solar_system_bp.route("/<planet_id>", methods=["GET"])
 def read_one_planet(planet_id):
-    planet = verify_model(planet_id)
-    return jsonify(planet.make_a_dict())
+    planet = verify_model(Planet, planet_id)
+    return jsonify(planet.make_a_dict()), 200
 
 @solar_system_bp.route("/<planet_id>", methods=["PUT"])
 def update_planet(planet_id):
