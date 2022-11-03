@@ -32,7 +32,7 @@ def two_saved_planets(app):
                       radius = 1516)
     planet_venus = Planet(name="Venus",
                          description="The second planet from the Sun and Earth's closest planetary neighbor",
-                         radius = 3760.4)
+                         radius = 3760)
 
     db.session.add_all([planet_mercury, planet_venus])
     db.session.commit()
