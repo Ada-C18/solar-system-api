@@ -7,6 +7,7 @@ import os
 
 db = SQLAlchemy() # db and migrate are variables that gives us access to db operations
 migrate = Migrate()
+
 load_dotenv()
 
 def create_app(test_config=None):
@@ -23,10 +24,11 @@ def create_app(test_config=None):
             "SQLALCHEMY_TEST_DATABASE_URI")
 
     # connects db & migrate to flask app
+    from app.models.planet import Planet
+
     db.init_app(app)
     migrate.init_app(app, db)
 
-    from app.models.planet import Planet
 
     from .routes import planet_bp
     app.register_blueprint(planet_bp)

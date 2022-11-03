@@ -39,7 +39,7 @@ def validate_id(id, cls):
 
 @planet_bp.route("/<planet_id>", methods=["GET", "PUT", "DELETE"])
 def handle_one_planet(planet_id):
-    planet = validate_id(planet_id, Planet)
+    planet = validate_id(planet_id, Planet) 
     if request.method == "GET":
         return planet.to_dict()
 
