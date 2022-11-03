@@ -20,8 +20,3 @@ class Planet(db.Model):
                     color = data_dict["color"],
                     description = data_dict["description"])
 
-
-# planets = [
-#     Planet(1,"Earth","big","blue/green"),
-#     Planet(2,"Mars","smaller","red"),
-#     Planet(3,"Venus","a little bigger","gold")]
