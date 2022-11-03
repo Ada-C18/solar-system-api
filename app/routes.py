@@ -75,7 +75,21 @@ def read_all_planets():
     Method: GET
     """
 
-    planets = Planet.query.all()
+    name_query = request.args.get("name")
+    description_query = request.args.get("description")
+    distance_query = request.args.get("distance")
+
+    planet_query = Planet.query
+    
+    if name_query:
+        planet_query = planet_query.filter_by(name=name_query)
+    if description_query:
+        planet_query = planet_query.filter_by(description=description_query)
+    if distance_query:
+        planet_query = planet_query.filter_by(distance=distance_query)
+    
+    planets = planet_query.all()
+
     planets_response = [planet.to_dict() for planet in planets]
     
     return jsonify(planets_response)
