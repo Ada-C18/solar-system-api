@@ -78,7 +78,7 @@ def read_all_planets():
     # create a list of columns to search by 
     columns = ["id", "name", "description", "distance"]
 
-    # filter request.arg for valid column names
+    # filter request.args for valid column names
     # query_dict = {k:v for (k,v) in request.args.items() if k in columns}
     query_dict = {}
     for key in columns:
