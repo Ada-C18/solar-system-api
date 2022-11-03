@@ -8,24 +8,19 @@ planet_bp = Blueprint("planet_bp", __name__, url_prefix="/planets")
 def handle_planets():
     if request.method == "POST":
         request_body = request.get_json()
-        planet_1 = Planet(
-            name = request_body["name"], 
-            description = request_body["description"],
-            moons = request_body["moons"])
+        planet_1 = Planet.from_dict(request_body)
         db.session.add(planet_1)
         db.session.commit()
-
+        
         return make_response(f"Planet {planet_1.name} successfully created", 201)
-   
-    elif request.method == "GET":
-        response_body = []
+        
+    elif request.method == "GET": 
         moons_param = request.args.get("moons")
         if moons_param:
             planets = Planet.query.filter_by(moons = moons_param)
         else:
             planets= Planet.query.all()
-        for planet in planets:
-            response_body.append(planet.to_dict())
+        response_body = [planet.to_dict() for planet in planets]
         return jsonify(response_body), 200
         
 
