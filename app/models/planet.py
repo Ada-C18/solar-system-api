@@ -6,6 +6,14 @@ class Planet(db.Model):
     description = db.Column(db.String, nullable=False)
     size = db.Column(db.Integer, nullable=False)
 
+    @classmethod
+    def from_dict(cls, data_dict):
+      return cls(
+        name=data_dict["name"],
+        size=data_dict["size"],
+        description=data_dict["description"]
+        )
+
     def to_dict(self):
           return dict(
             id=self.id, 

@@ -21,6 +21,13 @@ def test_get_one_planet_returns_planet(client, one_saved_planet):
     assert response_body["size"] == one_saved_planet.size
     assert response_body["description"] == one_saved_planet.description
 
+def test_get_one_nonexistant_planet_returns_error_message(client):
+    response = client.get("/planets/1")
+    response_body = response.get_json()
+
+    assert response.status_code == 404 
+    assert response_body["message"] == "Planet 1 not found"
+
 def test_create_planet_happy_path(client):
     # arrange
     EXPECTED_PLANET = {
