@@ -44,9 +44,11 @@ def test_planets_with_data_return_200_with_valid_data(client, multi_planets):
                                 'name': 'venus',
                                 'description': "doesn't have any moons, 2nd largest planet.", 
                                 'flag': False, 
-                                'id': 1}, 
+                                'id': 1
+                              }, 
                               {
-                                'name': 'Neptune', 'description': 'one of two ice giant planets.', 
+                                'name': 'Neptune', 
+                                'description': 'one of two ice giant planets.', 
                                 'flag': False, 
                                 'id': 2
                               }
