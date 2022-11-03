@@ -5,14 +5,6 @@ from flask.signals import request_finished
 from app.models.planet import Planet
 
 @pytest.fixture
-def empty_list():
-    return []
-
-def test_len_of_empty_list(empty_list):
-    assert isinstance(empty_list, list)
-    assert len(empty_list) == 0
-
-@pytest.fixture
 def app():
     app = create_app({"TESTING": True})
 
@@ -41,15 +33,15 @@ def one_planet(app):
     db.session.commit()
     return planet
 
-
 @pytest.fixture
 def multi_planets(app):
     planet_one = Planet(name="venus", 
-                    description="doesn't have any moons, 2nd largest planet.", 
-                    flag=False)
+                        description="doesn't have any moons, 2nd largest planet.", 
+                        flag=False)
     planet_two = Planet(name="Neptune", 
-                    description="one of two ice giant planets.", 
-                    flag=False)
+                        description="one of two ice giant planets.", 
+                        flag=False)
+                        
     planet_list = [planet_one, planet_two]
 
     db.session.add_all(planet_list)

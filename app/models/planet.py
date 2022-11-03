@@ -8,9 +8,11 @@ class Planet(db.Model):
 
     @classmethod
     def from_dict(cls,input_data):
-        return cls(name=input_data["name"],
+        return cls(
+                    name=input_data["name"],
                     description=input_data["description"],
-                    flag=input_data["flag"])
+                    flag=input_data["flag"]
+                )
 
     def to_dict(self):
         return dict(
