@@ -1,4 +1,3 @@
-from os import abort
 from app import db
 from app.models.planet import Planet
 from flask import Blueprint, jsonify, abort, make_response, request
@@ -14,7 +13,6 @@ def verify_model(cls,model_id):
         abort(make_response({"message":f"{cls.__name__} {model_id} invalid"}, 400))
     
     model = cls.query.get(model_id)
-    
     if not model:
         abort(make_response(
         {"message":f"{cls.__name__} {model_id} not found"}, 404
@@ -22,15 +20,37 @@ def verify_model(cls,model_id):
     
     return model
 
-# add POST planet here...?
+# add handle_planet here
+
+# add POST planet here
 
 @solar_system_bp.route("", methods=["GET"])
 def read_all_planets():
-    planets_response = []
-    planets = Planet.query.all()
-    for planet in planets:
-        planets_response.append(planet.make_a_dict())
+    name_query = request.args.get("name")
+    distance_from_sun_query = request.args.get("distance_from_sun")
+    limit_query = request.args.get("limit")
+
+    planet_query = Planet.query
+
+    if name_query:
+        planet_query = planet_query.filter_by(name=name_query)
+
+    if distance_from_sun_query:
+        planet_query = planet_query.filter_by(distance_from_sun=distance_from_sun_query)
+
+    if limit_query:
+        planet_query = planet_query.limit(limit_query)
+
+    planets = planet_query.all()
+
+    planets_response = [planet.to_dict() for planet in planets]
+
     return jsonify(planets_response)
+    # planets_response = []
+    # planets = Planet.query.all()
+    # for planet in planets:
+    #     planets_response.append(planet.make_a_dict())
+    # return jsonify(planets_response)
 
 @solar_system_bp.route("/<planet_id>", methods=["GET"])
 def read_one_planet(planet_id):
