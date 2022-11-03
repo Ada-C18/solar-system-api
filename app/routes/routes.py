@@ -20,9 +20,10 @@ def verify_model(cls, model_id):
     
     return model
 
-# add handle_planet here
-
 # add POST planet here
+@solar_system_bp.route("", methods=["POST"])
+def create_planet():
+    pass
 
 @solar_system_bp.route("", methods=["GET"])
 def read_all_planets():
@@ -46,11 +47,6 @@ def read_all_planets():
     planets_response = [planet.to_dict() for planet in planets]
 
     return jsonify(planets_response)
-    # planets_response = []
-    # planets = Planet.query.all()
-    # for planet in planets:
-    #     planets_response.append(planet.make_a_dict())
-    # return jsonify(planets_response)
 
 @solar_system_bp.route("/<planet_id>", methods=["GET"])
 def read_one_planet(planet_id):
