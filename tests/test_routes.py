@@ -46,17 +46,7 @@ def test_get_all_planets(client, two_saved_planets):
     }]
 
 def test_create_one_planet(client):
-    # response = client.post("/planets", json = {
-    #     "name": "Giraffe Planet",
-    #     "description": "No short necks here",
-    #     "color": "Yellow and Brown"
-    # })
-    # response_body = response.get_json()
-
-    # assert response.status_code == 201
-    # assert response_body == "Planet Giraffe Planet successfully"
-
-        # arrange
+    # arrange
     EXPECTED_PLANET = {
         "name": "Giraffe Planet",
         "description": "No short necks here",
@@ -71,5 +61,5 @@ def test_create_one_planet(client):
     assert response.status_code == 201
     assert response_body == f"Planet {EXPECTED_PLANET['name']} successfully created"
     assert actual_planet.name == EXPECTED_PLANET["name"]
+    assert actual_planet.description == EXPECTED_PLANET["description"]
     assert actual_planet.color == EXPECTED_PLANET["color"]
-    assert actual_planet.personality == EXPECTED_PLANET["personality"]
