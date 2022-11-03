@@ -20,10 +20,15 @@ def verify_model(cls, model_id):
     
     return model
 
-# add POST planet here
 @solar_system_bp.route("", methods=["POST"])
 def create_planet():
-    pass
+    request_body = request.get_json()
+    new_planet = Planet.from_dict(request_body)
+
+    db.session.add(new_planet)
+    db.session.commit
+
+    return make_response(f"Planet {new_planet.name} successfully created", 201)
 
 @solar_system_bp.route("", methods=["GET"])
 def read_all_planets():
