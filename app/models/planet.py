@@ -6,6 +6,13 @@ class Planet(db.Model):
     description = db.Column(db.String, nullable=False)
     rings = db.Column(db.Boolean, nullable=False)
 
+    # have planet construct itself from passed in dict
+    @classmethod
+    def from_dict(cls, data_dict):
+        return cls(name=data_dict["name"],
+            description=data_dict["description"],
+            rings=data_dict["rings"])
+
     def to_dict(self):
         return dict(
             id = self.id,

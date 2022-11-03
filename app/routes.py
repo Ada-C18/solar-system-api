@@ -17,27 +17,28 @@ def validate_planet(planet_id):
 
     return planet
 
-@bp.route("", methods=["GET", "POST"])
+def validate_planet_dict(request_body):
+    if not (request_body["name"] or request_body["description"] or request_body["rings"]):
+        abort(make_response({'message': 'request body invalid; cannot create planet'}, 400))
+
+@bp.route("", methods=["GET"])
 def handle_planets():
-    if request.method == "GET":
-        planets = Planet.query.all()
-        planets_response = []
-        for planet in planets:
-            planets_response.append(planet.to_dict())
-        return jsonify(planets_response)
-    elif request.method == "POST":
-        request_body = request.get_json()
-        new_planet = Planet(
-            # id=request_body["id"],
-            name=request_body["name"], 
-            description=request_body["description"],
-            rings=request_body["rings"]
-        )
+    planets = Planet.query.all()
+    planets_response = []
+    for planet in planets:
+        planets_response.append(planet.to_dict())
+    return jsonify(planets_response)
 
-        db.session.add(new_planet)
-        db.session.commit()
+@bp.route("", methods=["POST"])
+def create_planet():
+    request_body = request.get_json()
+    validate_planet_dict(request_body)
+    new_planet = Planet.from_dict(request_body)
 
-        return make_response(f"Planet {new_planet.name} successfully created", 201)
+    db.session.add(new_planet)
+    db.session.commit()
+
+    return make_response(f"Planet {new_planet.name} successfully created", 201)
 
 
 @bp.route("/<planet_id>", methods=["GET"])
@@ -50,7 +51,7 @@ def handle_one_planet(planet_id):
 def update_planet(planet_id):
     planet = validate_planet(planet_id)
     request_body = request.get_json()
-
+    validate_planet_dict(request_body)
     planet.name = request_body["name"]
     planet.description = request_body["description"]
     planet.rings = request_body["rings"]
