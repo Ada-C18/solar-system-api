@@ -37,7 +37,7 @@ def validate_planet(planet_id):
 @planets_bp.route("", methods=["POST"])
 def create_planet():
     request_body = request.get_json()
-    new_planet = Planet.from_dict(request_body)
+    new_planet = Planet.new_instance_from_dict(request_body)
     
     db.session.add(new_planet)
     db.session.commit()
@@ -59,7 +59,7 @@ def get_all_planets():
     else:
         planets = Planet.query.all()
     
-    planets_response = [planet.to_dict() for planet in planets]
+    planets_response = [planet.create_dict() for planet in planets]
 
     return jsonify(planets_response)
 
@@ -67,7 +67,7 @@ def get_all_planets():
 def get_one_planet(planet_id):
     planet = validate_planet(planet_id)
     
-    return planet.to_dict()
+    return planet.create_dict()
 
 @planets_bp.route("/<planet_id>", methods=["PUT"])
 def update_planet(planet_id):

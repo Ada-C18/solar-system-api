@@ -7,7 +7,7 @@ class Planet(db.Model):
     description = db.Column(db.String)
     color = db.Column(db.String)
 
-    def to_dict(self):
+    def create_dict(self):
         planet_as_dict = {}
         planet_as_dict["id"] = self.id  
         planet_as_dict["name"] = self.name
@@ -23,7 +23,7 @@ class Planet(db.Model):
 
 
     @classmethod
-    def from_dict(cls, req_body):
+    def new_instance_from_dict(cls, req_body):
         new_dict = cls(
                         name = req_body["name"],
                         description = req_body["description"],
