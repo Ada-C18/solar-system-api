@@ -26,7 +26,7 @@ def test_get_one_planet_no_data(client):
     response_body = response.get_json()
 
     assert response.status_code == 404
-    assert response_body == {'message': 'planet 1 not found'}
+    assert response_body == {'message': 'Planet 1 not found'}
 
 def test_get_planets(client, two_saved_planets):
     response = client.get("/planets/1")
