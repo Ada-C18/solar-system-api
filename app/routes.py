@@ -25,17 +25,17 @@ def handle_all_planets():
         )
         db.session.add(new_planet)
         db.session.commit()
-        return make_response(f"Planet {new_planet.name} is now in orbit", 201)
+        return {"success": f"Planet {new_planet.name} is now in orbit"}, 201
 
 
 @planet_bp.route("/<planet_id>", methods=["GET", "PUT", "DELETE"])
 def handle_planet(planet_id):
     if not planet_id.isnumeric():
-        return f"Planet #{planet_id} Invalid id", 400
+        return {"error": f"Planet #{planet_id} Invalid id"}, 400
 
     planet = Planet.query.get(planet_id)
     if not planet:
-        return f"Planet #{planet_id} No planet found", 404
+        return {"error": f"Planet #{planet_id} No planet found"}, 404
 
     elif request.method == "GET":
         return planet.planet_dict()
@@ -45,9 +45,9 @@ def handle_planet(planet_id):
         planet.description = form_data["description"]
         planet.mass = form_data["mass"]
         db.session.commit()
-        return f"Planet #{planet_id} successfully updated"
+        return {"success": f"Planet #{planet_id} successfully updated"}, 200
     elif request.method == "DELETE":
         db.session.delete(planet)
         db.session.commit()
-        return f"Planet #{planet_id} successfully deleted"
+        return {"success": f"Planet #{planet_id} successfully deleted"}, 200
 
