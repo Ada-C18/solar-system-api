@@ -33,9 +33,8 @@ def read_all_planets():
     if description_query:
         planet_query = Planet.query.filter_by(description=description_query)
 
-    
-
     planets = planet_query.all()
+
     planets_response = [planet.to_dict() for planet in planets]
 
     return jsonify(planets_response)
