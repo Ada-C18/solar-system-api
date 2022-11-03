@@ -57,12 +57,14 @@ def test_update_planet(client, two_saved_planets):
     assert response.status_code == 200
 
 def test_update_planet_invalid_id(client, two_saved_planets):
-    #  act
-    response = client.put("/planets/lala", json={
+    # arrange
+    updated_planet = {
         "name": "Zaelas Home",
         "color": "Cinnamon spice and everything nice",
         "description":"a baby planet"
-    })
+    }
+    #  act
+    response = client.put("/planets/lala", json=updated_planet)
     response_body = response.get_json()
 
     # assert
@@ -70,13 +72,14 @@ def test_update_planet_invalid_id(client, two_saved_planets):
     assert response.status_code == 400
 
 def test_update_planet_extra_keys(client, two_saved_planets):
-    #  act
-    response = client.put("/planets/1", json={
+    # arrange
+    updated_planet = {
         "name": "Zaelas Home",
         "color": "Cinnamon spice and everything nice",
-        "description":"a baby planet",
-        "language": "baby talk"
-    })
+        "description":"a baby planet"
+    }
+    #  act
+    response = client.put("/planets/1", json=updated_planet)
     response_body = response.get_json()
 
     # assert
@@ -84,13 +87,14 @@ def test_update_planet_extra_keys(client, two_saved_planets):
     assert response.status_code == 200
     
 def test_update_planet_not_in_database(client, two_saved_planets):
-    #  act
-    response = client.put("/planets/3", json={
+    # arrange
+    updated_planet = {
         "name": "Zaelas Home",
         "color": "Cinnamon spice and everything nice",
-        "description":"a baby planet",
-        "language": "baby talk"
-    })
+        "description":"a baby planet"
+    }
+    #  act
+    response = client.put("/planets/3", json=updated_planet)
     response_body = response.get_json()
 
     # assert
@@ -105,6 +109,7 @@ def test_delete_planet(client, two_saved_planets):
     assert response.status_code == 200
 
 def test_delete_planet_not_in_database(client, two_saved_planets):
+    
     #  act
     response = client.delete("/planets/3", json={
         "name": "Zaelas Home",
