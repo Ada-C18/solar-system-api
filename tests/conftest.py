@@ -34,3 +34,15 @@ def one_saved_planet(app):
 
     db.session.add(kangaroo_planet)
     db.session.commit()
+
+@pytest.fixture
+def two_saved_planets(app):
+    cat_planet = Planet(name="Cat Planet",
+    description="Funny",
+    color="Gray")
+    dog_planet = Planet(name="Dog Planet",
+    description="Big",
+    color="Brown")
+
+    db.session.add_all([cat_planet, dog_planet])
+    db.session.commit()
