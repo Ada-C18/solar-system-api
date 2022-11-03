@@ -21,5 +21,5 @@ Talk through each section with your partner. Add notes on what you discussed and
 *Other co-working agreements that were not captured in the above sections.*
 
 ## Signatures
-______________ _______________
-Date: _________
+______Hoku McAngus________ _______________
+Date: ___11/2/22______
