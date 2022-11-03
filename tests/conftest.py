@@ -26,10 +26,10 @@ def client(app):
     return app.test_client()
 
 @pytest.fixture
-def two_saved_books(app):
+def two_saved_planets(app):
     # Arrange
     first_planet = Planet(name="Mercury",
-                        desciption="Covered with craters",
+                        description="Covered with craters",
                         miles_from_sun="40 million")
     second_planet = Planet(name="Venus",
                         description="Considered Earth's twin",
