@@ -13,7 +13,7 @@ def handle_planets():
                             flag=request_body["flag"])
         db.session.add(new_planet)
         db.session.commit()
-        return make_response("yay!", 201)
+        return make_response(f"planet {new_planet.name} successfully created!", 201)
     elif request.method == "GET":
         planets = Planet.query.all()
         planets_response = [planet.to_dict() for planet in planets]
