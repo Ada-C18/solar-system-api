@@ -9,10 +9,6 @@ planet_bp = Blueprint("planets", __name__, url_prefix = "/planets")
 def handle_planets():
     request_body = request.get_json()
 
-    planet_response = []
-
-    name_query = request.args.get("name")
-
     if request.method == "GET":
         name_query = request.args.get("name")
         if name_query:
