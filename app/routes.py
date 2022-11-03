@@ -62,6 +62,7 @@ def get_one_planet(planet_id):
             "is_dwarf": planet.is_dwarf
             }
 
+
 @planet_bp.route("/<planet_id>", methods = ["PUT"])
 def update_planet(planet_id):
     planet = validate_planet_id(planet_id)
