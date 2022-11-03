@@ -75,18 +75,15 @@ def read_all_planets():
     Method: GET
     """
 
-    name_query = request.args.get("name")
-    description_query = request.args.get("description")
-    distance_query = request.args.get("distance")
+    # create a list of columns to search by 
+    columns = ["id", "name", "description", "distance"]
+
+    # filter request.arg for valid column names
+    query_dict = {k:v for (k,v) in request.args.items() if k in columns}
 
     planet_query = Planet.query
-    
-    if name_query:
-        planet_query = planet_query.filter_by(name=name_query)
-    if description_query:
-        planet_query = planet_query.filter_by(description=description_query)
-    if distance_query:
-        planet_query = planet_query.filter_by(distance=distance_query)
+
+    planet_query = planet_query.filter_by(**query_dict)
     
     planets = planet_query.all()
 
