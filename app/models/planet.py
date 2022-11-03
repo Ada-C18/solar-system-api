@@ -1,6 +1,5 @@
-from os import abort
 from app import db
-from flask import make_response
+from flask import make_response, abort
 
 
 class Planet (db.Model):
