@@ -1,41 +1,40 @@
-from app.models.cat import Cat
 
-def test_get_all_cats_with_no_records(client):
+def test_get_all_planets_with_no_records(client):
     # Act
-    response = client.get("/cats")
+    response = client.get("/planets")
     response_body = response.get_json()
 
     # Assert
     assert response.status_code == 200 
     assert response_body == []
 
-def test_get_one_cat_returns_cat(client, one_saved_cat):
+def test_get_one_planet_returns_planet(client, one_saved_planet):
     # act
-    response = client.get("/cats/1")
+    response = client.get("/planets/1")
     response_body = response.get_json()
 
     # assert 
     assert response.status_code == 200 
-    assert response_body["id"] == one_saved_cat.id
-    assert response_body["name"] == one_saved_cat.name
-    assert response_body["color"] == one_saved_cat.color
-    assert response_body["personality"] == one_saved_cat.personality
+    assert response_body["id"] == one_saved_planet.id
+    assert response_body["name"] == one_saved_planet.name
+    assert response_body["size"] == one_saved_planet.size
+    assert response_body["description"] == one_saved_planet.description
 
-def test_create_cat_happy_path(client):
+def test_create_planet_happy_path(client):
     # arrange
-    EXPECTED_CAT = {
-        "name": "Mittens",
-        "color": "gray with white socks",
-        "personality": "wise"
+    EXPECTED_PLANET = {
+        'name':'Earth',
+        'size':4, 
+        'description':'nice'
     }
 
-    response = client.post("/cats", json=EXPECTED_CAT)
+    response = client.post("/planets", json=EXPECTED_PLANET)
     response_body = response.get_data(as_text=True)
-    actual_cat = Cat.query.get(1)
+    actual_planet = Planet.query.get(1)
 
     # assert
     assert response.status_code == 201
-    assert response_body == f"Cat {EXPECTED_CAT['name']} successfully created"
-    assert actual_cat.name == EXPECTED_CAT["name"]
-    assert actual_cat.color == EXPECTED_CAT["color"]
-    assert actual_cat.personality == EXPECTED_CAT["personality"]
+    assert response_body == f"Planet {EXPECTED_PLANET['name']} was successfully created"
+    assert actual_planet.name == EXPECTED_PLANET["name"]
+    assert actual_planet.size == EXPECTED_PLANET["size"]
+    assert actual_planet.description == EXPECTED_PLANET["description"]
