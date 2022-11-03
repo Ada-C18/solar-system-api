@@ -52,6 +52,6 @@ def multi_planets(app):
                     flag=False)
     planet_list = [planet_one, planet_two]
 
-    db.session.add(planet_one, planet_two)
+    db.session.add_all(planet_list)
     db.session.commit()
-    return planet_list          
+ 
