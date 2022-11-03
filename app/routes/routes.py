@@ -59,8 +59,7 @@ def read_one_planet(planet_id):
 
 @solar_system_bp.route("/<planet_id>", methods=["PUT"])
 def update_planet(planet_id):
-    planet = verify_model(planet_id)
-
+    planet = verify_model(Planet, planet_id)
     request_body = request.get_json()
 
     planet.name = request_body["name"]
@@ -68,8 +67,7 @@ def update_planet(planet_id):
     planet.description = request_body["description"]
 
     db.session.commit()
-
-    return make_response(f"Planet #{planet.id} successfully updated")
+    return make_response(f"Planet #{planet.id} successfully updated"), 200
 
 @solar_system_bp.route("/<planet_id>", methods=["DELETE"])
 def delete_planet(planet_id):
