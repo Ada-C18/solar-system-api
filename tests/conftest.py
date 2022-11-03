@@ -32,4 +32,22 @@ def one_saved_planet(app):
     
     db.session.add(fake_planet)
     db.session.commit()
+    # db.session.refresh(fake_planet, ["id"])
+    return fake_planet
+
+@pytest.fixture
+def two_saved_planets(app):
+    # Arrange
+    fake_planet = Planet(name="Big Fake",
+                    description="very fake",
+                    color="invisible")
+
+    fake_planet2 = Planet(name="Small Fake",
+                    description="not as fake",
+                    color="polka dots")
+    
+    db.session.add_all([fake_planet, fake_planet2])
+    db.session.commit()
+    # db.session.refresh(fake_planet, ["id"])
+    # return fake_planet
 
