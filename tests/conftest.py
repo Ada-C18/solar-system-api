@@ -46,4 +46,3 @@ def multi_planets(app):
 
     db.session.add_all(planet_list)
     db.session.commit()
- 

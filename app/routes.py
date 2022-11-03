@@ -20,6 +20,8 @@ def handle_planets():
         planets_response = [planet.to_dict() for planet in planets]
         return jsonify(planets_response)
 
+# Would we add a query param here? ^ 
+
 @planet_bp.route("/<id>", methods=["GET"])
 def get_planet(id):
     validate_model(Planet, id)
