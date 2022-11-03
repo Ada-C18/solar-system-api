@@ -28,6 +28,6 @@ class Planet(db.Model):
             self.description = req_body["description"]
             self.diameter = req_body["diameter"]
         except KeyError as error:
-            abort(make_response({"message": f"Missing attribute: {error}"}, 400))
+            abort(make_response({"message": f"Missing attribute: {error}"},400))
     
 
