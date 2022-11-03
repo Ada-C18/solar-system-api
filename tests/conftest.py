@@ -23,3 +23,17 @@ def app():
 @pytest.fixture
 def client(app):
     return app.test_client()
+
+# planets = [
+#     Planet(1, "Mercury", "solid", 0),
+#     Planet(2, "Venus", "bright and volcanic", 0),
+#     Planet(3, "Earth", "half and half", 1)
+# ]
+
+@pytest.fixture
+def two_saved_planets(app):
+    mercury = Planet(name="Mercury", description="solid", moons=0)
+    venus = Planet(name="Venus", description="bright and volcanic", moons=0)
+
+    db.session.add_all([mercury, venus])
+    db.session.commit()
