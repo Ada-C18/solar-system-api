@@ -79,7 +79,12 @@ def read_all_planets():
     columns = ["id", "name", "description", "distance"]
 
     # filter request.arg for valid column names
-    query_dict = {k:v for (k,v) in request.args.items() if k in columns}
+    # query_dict = {k:v for (k,v) in request.args.items() if k in columns}
+    query_dict = {}
+    for key in columns:
+        value = request.args.get(key)
+        if value:
+            query_dict[key] = value
 
     planet_query = Planet.query
 
