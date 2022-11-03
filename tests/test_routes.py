@@ -15,7 +15,7 @@ def test_get_one_planet_missing_record(client, two_saved_planets):
 
     # Assert
     assert response.status_code == 404
-    assert response_body == {"message":"planet 5 not found"}
+    assert response_body == {"message":"Planet 5 not found"}
 
 def test_get_one_planet(client, two_saved_planets):
     # Act
@@ -35,13 +35,13 @@ def test_create_one_planet(client):
     # Act
     response = client.post("/planets", json={
         "name": "New Planet",
-        "description": "The Best!"
-        "size": "medium"
+        "description": "The Best!",
+        "size": "Medium"
     })
     response_body = response.get_json()
 
     # Assert
     assert response.status_code == 201
-    assert response_body == "Planet successfully created"
+    assert response_body == "Planet New Planet successfully created"
 
 
