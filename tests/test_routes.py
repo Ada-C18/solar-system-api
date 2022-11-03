@@ -27,12 +27,14 @@ def test_read_one_planet(client, two_saved_planets):
         "color": "purple"
     }
 def test_create_planet(client):
-    # Act
-    response = client.post("/planets", json={
+    # Arrange
+    new_planet = {
         "name": "Colorful Planet",
         "description": "The Best!",
         "color": "rainbow"
-    })
+    }
+    # Act
+    response = client.post("/planets", json=new_planet)
     response_body = response.get_json()
 
     # Assert
@@ -40,12 +42,14 @@ def test_create_planet(client):
     assert response_body == "Planet Colorful Planet successfully created"
 
 def test_update_planet(client, two_saved_planets):
-    #  act
-    response = client.put("/planets/1", json={
+    # arrange
+    updated_planet = {
         "name": "Zaelas Home",
         "color": "Cinnamon spice and everything nice",
         "description":"a baby planet"
-    })
+    }
+    #  act
+    response = client.put("/planets/1", json=updated_planet)
     response_body = response.get_json()
 
     # assert
