@@ -29,6 +29,7 @@ class Planet (db.Model):
             self.color = req_body["color"]
             self.description = req_body["description"]
         except KeyError as error:
-            abort(make_response({'message': f"Missing attribute: {error}"}))
+            raise error
+            
 
     

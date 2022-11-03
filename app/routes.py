@@ -66,7 +66,10 @@ def update_planet(planet_id):
 
     request_body = request.get_json()
 
-    planet.update(request_body)
+    try:
+        planet.update(request_body)
+    except KeyError as error:
+        return make_response({'message': f"Missing attribute: {error}"}, 400)
 
     db.session.commit()
 
