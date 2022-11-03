@@ -1,3 +1,4 @@
+from app.models.planet import Planet
 
 def test_get_all_planets_with_no_records(client):
     # Act
