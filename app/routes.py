@@ -18,7 +18,7 @@ def create_planet():
                         moons=request_body["moons"])
     db.session.add(new_planet)
     db.session.commit()
-    return make_response(f"Planet {new_planet.name} has been created successfully", 201)
+    return make_response(jsonify(f"Planet {new_planet.name} has been created successfully"), 201)
 
 @planets_bp.route("", methods=["GET"])
 def read_all_planets():
@@ -54,7 +54,7 @@ def planet_update(planet_id):
     planet.moons = request_body["moons"]
 
     db.session.commit()
-    return make_response(f"Planet {planet.name} has been updated successfully", 200)
+    return make_response(jsonify(f"Planet {planet.name} has been updated successfully"), 200)
 
 @planets_bp.route("/<planet_id>", methods=["DELETE"])
 def planet_delete(planet_id):
@@ -63,17 +63,17 @@ def planet_delete(planet_id):
     db.session.delete(planet)
     db.session.commit()
 
-    return make_response(f"Planet {planet.name} has been deleted successfully", 200)
+    return make_response(jsonify(f"Planet {planet.name} has been deleted successfully"), 200)
 
 def validate_planet(planet_id):
     try:
         planet_id = int(planet_id)
     except:
-        abort(make_response({"message":f"planet {planet_id} invalid"}, 400))
+        abort(make_response(jsonify({"message":f"planet {planet_id} invalid"}), 400))
     
     planet = Planet.query.get(planet_id)
     
     if not planet:
-        abort(make_response({"message":f"planet {planet_id} not found"}, 404))
+        abort(make_response(jsonify({"message":f"planet {planet_id} not found"}), 404))
 
     return planet
