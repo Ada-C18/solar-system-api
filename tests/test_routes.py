@@ -38,6 +38,8 @@ def test_get_all_planets_with_no_records(client):
 
     
 def test_get_all_planets(client, two_saved_planets):
+    response = client.get("/planets")
+    response_body = response.get_json()
     assert response_body[0] == {
         "id": 1,
         "name": "Mars",
