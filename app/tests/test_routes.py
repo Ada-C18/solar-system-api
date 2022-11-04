@@ -44,14 +44,7 @@ def test_get_one_planet_by_id(client, saved_test_planets):
 
     #assert
     assert response.status_code == 200
-    assert response_body == {
-        'id': 1,
-        'color': "pink",
-        'is_dwarf': True, 
-        'livability': 3, 
-        'moons': 99, 
-        'name': "Pretend Planet X",
-    }
+    assert response_body == {'id': 1, 'color': "pink", 'is_dwarf': True, 'livability': 3, 'moons': 99, 'name': "Pretend Planet X"}
 
 def test_create_one_new_planet(client):
     # pass
