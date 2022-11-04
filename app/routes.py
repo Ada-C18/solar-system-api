@@ -18,11 +18,18 @@ def handle_planets():
     elif request.method == "GET":
         name_query = request.args.get("name")
         id_query = request.args.get("id")
+        
+        planet_query = Planet.query
+
+        if name_query:
+            planet_query = planet_query.filter_by(name=name_query)
+        if id_query:
+            planet_query = planet_query.filter_by(id=id_query)
+
         planets = Planet.query.all()
         planets_response = [planet.to_dict() for planet in planets]
         return jsonify(planets_response)
 
-# Would we add a query param here? ^ 
 
 @planet_bp.route("/<id>", methods=["GET"])
 def get_planet(id):
