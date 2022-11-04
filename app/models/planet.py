@@ -15,7 +15,7 @@ class Planet(db.Model):
             "surface_area": self.surface_area,
             "moons": self.moons,
             "distance_from_sun": self.distance_from_sun,
-            "namesake": self.namesake,
+            "namesake": self.namesake
         }
 
     @classmethod
@@ -25,5 +25,5 @@ class Planet(db.Model):
             surface_area=req_body["surface_area"],
             moons=req_body["moons"],
             distance_from_sun=req_body["distance_from_sun"],
-            namesake=req_body["namesake"],
+            namesake=req_body["namesake"]
         )

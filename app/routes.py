@@ -5,16 +5,16 @@ from flask import Blueprint, jsonify, abort, make_response, request
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
 
-def validate_id(class_obj, id):
+def validate_id(cls, planet_id):
     try:
-        id = int(id)
+        planet_id = int(planet_id)
     except:
-        abort(make_response({"message": f"{class_obj} {id} invalid"}, 400))
+        abort(make_response({"message": f"{cls} {planet_id} invalid"}, 400))
 
-    query_result = Planet.query.get(id)
+    query_result = Planet.query.get(planet_id)
 
     if not query_result:
-        abort(make_response({"message": f"{class_obj} {id} not found"}, 404))
+        abort(make_response({"message": f"{cls} {planet_id} not found"}, 404))
 
     return query_result
 
@@ -27,7 +27,7 @@ def add_planet():
     db.session.add(new_planet)
     db.session.commit()
 
-    return make_response(jsonify(f"Planet {new_planet.name} successfully added", 201))
+    return make_response(f"Planet {new_planet.name} successfully added", 201)
 
 
 @planets_bp.route("", methods=["GET"])
@@ -71,7 +71,7 @@ def update_planet(planet_id):
 
 @planets_bp.route("/<planet_id>", methods=["DELETE"])
 def delete_one_planet(planet_id):
-    planet = validate_id(Planet, id)
+    planet = validate_id(Planet, planet_id)
 
     db.session.delete(planet)
     db.session.commit()

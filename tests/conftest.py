@@ -35,7 +35,7 @@ def two_saved_planets(app):
         surface_area=123890491,
         moons=83,
         distance_from_sun=123123123123,
-        namesake="The Roman god of time",
+        namesake="The Roman god of time"
     )
     Mars = Planet(
         id=2,
@@ -43,7 +43,7 @@ def two_saved_planets(app):
         surface_area=1010101,
         moons=1,
         distance_from_sun=123123123123,
-        namesake="The Roman god of time",
+        namesake="The Roman god of time"
     )
 
     db.session.add_all([Saturn, Mars])
