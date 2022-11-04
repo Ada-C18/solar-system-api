@@ -5,9 +5,6 @@ from app.models.planet import Planet
 from flask.signals import request_finished
 
 @pytest.fixture
-
-
-
 def app():
     app = create_app({"TESTING": True})
 
@@ -35,4 +32,4 @@ def saved_test_planets(app):
     db.session.add_all([test_planet1, test_planet2])
     db.session.commit()
 
-    return [test_planet1, test_planet2]
+    # return [test_planet1, test_planet2]

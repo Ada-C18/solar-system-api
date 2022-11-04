@@ -18,3 +18,13 @@ class Planet(db.Model):
         planet_as_dict["is_dwarf"] = self.is_dwarf
 
         return planet_as_dict
+
+    @classmethod
+    def from_dict(cls, planet_data):
+        new_planet = Planet(name=planet_data["name"],
+            color=planet_data["color"],
+            moons=planet_data["moons"],
+            livability=planet_data["livability"],
+            is_dwarf=planet_data["is_dwarf"])
+        
+        return new_planet
