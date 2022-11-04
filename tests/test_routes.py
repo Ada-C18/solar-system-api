@@ -31,9 +31,9 @@ def test_get_all_planets_returns_empty_list_when_db_is_empty(client):
     assert response.status_code == 200
     assert response.get_json() == []
 
-def test_get_all_planets(client, three_planets):
+def test_get_all_planets(client):
     #act
-    # create_mock_data(client)
+    create_mock_data(client)
     response = client.get("/planets")
     response_body = response.get_json()
 
