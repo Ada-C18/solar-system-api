@@ -36,3 +36,4 @@ def two_saved_planets(app):
                         miles_from_sun="67 million")
     db.session.add_all([first_planet, second_planet])
     db.session.commit()
+

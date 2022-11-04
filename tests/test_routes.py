@@ -45,3 +45,24 @@ def test_create_one_planet(client):
     # Assert
     assert response.status_code == 201
     assert response_body == "Planet Earth successfully created"
+
+# `GET` `/planets` with valid test data (fixtures) returns a `200` with an array including
+def test_data_fixtures(client, two_saved_planet):
+    # Act
+    response = client.get("/planets/1")
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 200
+    assert response_body == [{
+        "id": 1,
+        "name": "Mercury",
+        "description": "Covered with craters",
+        "miles from sun": "40 million"
+    }, 
+    {
+        "id": 2,
+        "name":"Venus",
+        "description": "Considered Earth's twin",
+        "miles_from_sun": "67 million"
+    }]
