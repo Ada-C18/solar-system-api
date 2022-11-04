@@ -16,6 +16,8 @@ def handle_planets():
         return make_response(f"planet {new_planet.name} successfully created!", 201)
     
     elif request.method == "GET":
+        name_query = request.args.get("name")
+        id_query = request.args.get("id")
         planets = Planet.query.all()
         planets_response = [planet.to_dict() for planet in planets]
         return jsonify(planets_response)
