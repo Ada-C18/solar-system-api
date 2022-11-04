@@ -28,12 +28,9 @@ def client(app):
 @pytest.fixture
 def two_saved_planets(app):
     # Arrange
-    first_planet = Planet(name="Mercury",
-                        description="Covered with craters",
-                        miles_from_sun="40 million")
-    second_planet = Planet(name="Venus",
-                        description="Considered Earth's twin",
-                        miles_from_sun="67 million")
+    first_planet = Planet(name="Mercury", description="Covered with craters", miles_from_sun="40 million")
+    second_planet = Planet(name="Venus", description="Considered Earth's twin", miles_from_sun="67 million")
+    
     db.session.add_all([first_planet, second_planet])
     db.session.commit()
 
