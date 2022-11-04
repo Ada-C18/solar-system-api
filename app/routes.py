@@ -17,16 +17,16 @@ def handle_planets():
     
     elif request.method == "GET":
         name_query = request.args.get("name")
-        id_query = request.args.get("id")
+        flag_query = request.args.get("flag")
         
         planet_query = Planet.query
 
         if name_query:
             planet_query = planet_query.filter_by(name=name_query)
-        if id_query:
-            planet_query = planet_query.filter_by(id=id_query)
+        if flag_query:
+            planet_query = planet_query.filter_by(flag=flag_query)
 
-        planets = Planet.query.all()
+        planets = planet_query.all()
         planets_response = [planet.to_dict() for planet in planets]
         return jsonify(planets_response)
 
