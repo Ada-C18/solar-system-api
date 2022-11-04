@@ -1,5 +1,7 @@
+from werkzeug.exceptions import HTTPException
 from app.routes import validate_model
 from models.planet import Planet
+import pytest
 
 def test_get_all_planets(client, two_saved_planets):
     response = client.get("/planets")
@@ -119,3 +121,11 @@ def test_validate_model(two_saved_planets):
     assert result_planet.name == "Giant 2"
     assert result_planet.description == "Even bigger than the first!"
     assert result_planet.moon_count == 130
+
+def test_validate_model_missing_record(two_saved_planets):
+    with pytest.raises(HTTPException):
+        result_planet = validate_model(Planet, "6")
+
+def test_validate_model_invalid_id(two_saved_planets):
+    with pytest.raises(HTTPException):
+        result_planet = validate_model(Planet, "cat")

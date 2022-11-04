@@ -55,7 +55,7 @@ def update_planet(planet_id):
     planet = planet.update(request_body)
 
     db.session.commit()
-    return make_response(jsonify(f"Planet {planet} successfully updated"))
+    return make_response(jsonify(f"Planet #{planet.id} successfully updated"))
 
 @planets_bp.route("/<planet_id>", methods=["GET"])
 def get_one_planet(planet_id):
