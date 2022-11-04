@@ -36,27 +36,38 @@ from app.models.planet import Planet
 
 #for handling errors:
 
-def validate_planet(planet_id):
+# def validate_planet(planet_id):
+#     try:
+#         planet_id = int(planet_id)
+#     except:
+#         abort(make_response({"message":f"planet {planet_id} invalid"}, 400))
+
+#     planet = Planet.query.get(planet_id)
+
+#     if not planet:
+#         abort(make_response({"message":f"planet {planet_id} not found"}, 404))
+
+#     return planet
+
+def validate_model(cls, model_id):
     try:
-        planet_id = int(planet_id)
+        model_id = int(model_id)
     except:
-        abort(make_response({"message":f"planet {planet_id} invalid"}, 400))
+        abort(make_response({"message":f"{cls.__name__} {model_id} invalid"}, 400))
 
-    planet = Planet.query.get(planet_id)
+    model = cls.query.get(model_id)
 
-    if not planet:
-        abort(make_response({"message":f"planet {planet_id} not found"}, 404))
+    if not model:
+        abort(make_response({"message":f"{cls.__name__} {model_id} not found"}, 404))
 
-    return planet
-
+    return model
 
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
 @planets_bp.route("", methods=["POST"])
 def create_new_planet():
     request_body = request.get_json(force=True)
-    new_planet = Planet(name=request_body["name"],
-                    description=request_body["description"], moons=request_body["moons"])
+    new_planet = Planet.from_dict(request_body)
 
     db.session.add(new_planet)
     db.session.commit()
@@ -79,7 +90,7 @@ def read_all_planets():
 
 @planets_bp.route("/<planet_id>", methods=["GET"])
 def read_one_planet(planet_id):
-    planet = validate_planet(planet_id)
+    planet = validate_model(Planet, planet_id)
     return planet.to_dict()
 
 
