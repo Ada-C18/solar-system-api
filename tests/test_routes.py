@@ -12,8 +12,13 @@ def test_get_all_planets_with_no_records(client):
 
 # `GET` `/planets/1` returns a response body that matches our fixture
 def test_get_one_planet(client):
-    raise Exception
-    # pass
+    # Act
+    response = client.get("/planets/1")
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 404
+    assert response_body == []
 
 
 # `GET` `/planets/1` with no data in test database (no fixture) returns a `404`
