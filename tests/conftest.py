@@ -23,9 +23,11 @@ def app():
 def client(app):
     return app.test_client()
 
-# @pytest.fixture
-# def one_saved_planet(app):
-#     planet = Planet(name="Adie", distance_from_sun=10, description="determined and possibly girlbossing too close to the sun")
-#     db.session.add(planet)
-#     db.session.commit()
-#     return planet
+@pytest.fixture
+def one_saved_planet(app):
+    planet = Planet(name="Adie", 
+            distance_from_sun=10, 
+            description="determined and possibly girlbossing too close to the sun")
+    db.session.add(planet)
+    db.session.commit()
+    return planet
