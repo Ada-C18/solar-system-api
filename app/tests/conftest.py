@@ -28,8 +28,11 @@ def client(app):
 
 @pytest.fixture
 def saved_test_planets(app):
+
     test_planet1 = Planet(color= "pink", is_dwarf= True, livability= 3, moons= 99, name= "Pretend Planet X")
     test_planet2 = Planet(color= "purple", is_dwarf= False, livability= 7.4, moons= 1, name= "Planet Pretend Z")
 
     db.session.add_all([test_planet1, test_planet2])
     db.session.commit()
+
+    return [test_planet1, test_planet2]
