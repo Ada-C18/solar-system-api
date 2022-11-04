@@ -2,6 +2,7 @@ import pytest
 from app import create_app
 from app import db
 from flask.signals import request_finished
+from models.planet import Planet
 
 
 @pytest.fixture
@@ -23,3 +24,19 @@ def app():
 @pytest.fixture
 def client(app):
     return app.test_client()
+
+@pytest.fixture
+def two_saved_planets(app):
+    #arrange
+    Giant_2 = Planet(name ="Giant 2", 
+                description="Even bigger than the first!",
+                moon_count="130")
+    Neptune = Planet(name ="Neptune", 
+                description="it may exist, it may not",
+                moon_count="0")
+
+    db.session.add_all([Giant_2, Neptune])
+    # Alternatively, we could do
+    # db.session.add(Giant_2)
+    # db.session.add(Neptune)
+    db.session.commit()
