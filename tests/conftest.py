@@ -33,3 +33,4 @@ def one_planet(app):
     db.session.commit()
     db.session.refresh(planet, ["id"])
     return planet
+
