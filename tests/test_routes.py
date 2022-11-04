@@ -1,13 +1,8 @@
-def test_get_one_planet(client):
-    response = client.get("/books/1")
+def test_get_all_planets_with_no_records(client):
+    # Act
+    response = client.get("/planets")
     response_body = response.get_json()
 
+    # Assert
     assert response.status_code == 200
-    assert response_body == {
-        "name" : "",
-        "surface_area": "",
-        "moons": "",
-        "distance_from_sun": "",
-        "namesake": ""      
-        }
-    
+    assert response_body == []
