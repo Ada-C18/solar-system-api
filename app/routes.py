@@ -17,17 +17,21 @@ def handle_planets():
         else:
             planets = Planet.query.all()
 
-        # planet_response = []
         for planet in planets:
-            planet_response.append({
-                "id": planet.id,
-                "name": planet.name,
-                "color": planet.color,
-                "livability": planet.livability,
-                "moons": planet.moons,
-                "is_dwarf": planet.is_dwarf
-            })
+            planet_response.append(planet.to_dict())
+        
         return jsonify(planet_response)
+
+        # ========REPLACED DICT BELOW IN HELPER FUNCTION IN PLANET.PY =========
+                # {
+        #         "id": planet.id,
+        #         "name": planet.name,
+        #         "color": planet.color,
+        #         "livability": planet.livability,
+        #         "moons": planet.moons,
+        #         "is_dwarf": planet.is_dwarf
+        #     })
+        
     
     elif request.method == "POST": 
         new_planet = Planet(
@@ -58,14 +62,16 @@ def validate_planet_id(planet_id):
 @planet_bp.route("/<planet_id>", methods = ["GET"])
 def get_one_planet(planet_id):
     planet = validate_planet_id(planet_id)
-    return {
-            "id": planet.id,
-            "name": planet.name,
-            "color": planet.color,
-            "livability": planet.livability,
-            "moons": planet.moons,
-            "is_dwarf": planet.is_dwarf
-            }
+    return planet.to_dict()
+    # =========== ALSO REPLACED WITH TO_DICT========
+    # return {
+    #         "id": planet.id,
+    #         "name": planet.name,
+    #         "color": planet.color,
+    #         "livability": planet.livability,
+    #         "moons": planet.moons,
+    #         "is_dwarf": planet.is_dwarf
+    #         }
 
 @planet_bp.route("/<planet_id>", methods = ["PUT"])
 def update_planet(planet_id):
