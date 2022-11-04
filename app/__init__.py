@@ -8,8 +8,8 @@ db = SQLAlchemy()
 migrate = Migrate()
 load_dotenv()
 
-def create_app(test_config=None):#test_config=None
-    app = Flask(__name__) # __name__ stores the name of the module we're in
+def create_app(test_config=None):
+    app = Flask(__name__) 
 
     if not test_config:
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -23,7 +23,6 @@ def create_app(test_config=None):#test_config=None
     db.init_app(app)
     migrate.init_app(app, db)
 
-    # Import models here
     from app.routes.routes import planets_bp
     app.register_blueprint(planets_bp)
 

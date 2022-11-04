@@ -6,7 +6,6 @@ from flask import Blueprint, jsonify, abort, make_response, request
 
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-######################### NEW VALIDATE FUNCTION ############################
 def validate_model(cls, model_id):
     try:
         model_id = int(model_id)
@@ -23,18 +22,16 @@ def validate_model(cls, model_id):
 
 @planets_bp.route("", methods=["POST"])
 def handle_planets():  
-    request_body = request.get_json() #converts request body into json object
+    request_body = request.get_json() 
     new_planet = Planet.from_json(Planet, request_body)
     db.session.add(new_planet)
     db.session.commit()
 
-    #return make_response(f"Planet {new_planet.name} successfully created", 201)
     return make_response(jsonify(f"Planet {new_planet.name} successfully created"), 201)
 
 @planets_bp.route("", methods=["GET"])
 def read_all_planets():
 
-    #this code replaces the previous query
     name_query = request.args.get("name")
     description_query = request.args.get("description")
     moons_query = request.args.get("moons")

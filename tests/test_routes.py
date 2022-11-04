@@ -12,7 +12,6 @@ def test_get_one_planet(client, two_saved_planets):
     # Act
     response = client.get("/planets/1")
     response_body = response.get_json()
-    #response_body = response.get_data(as_text=True)
 
     # Assert
     assert response.status_code == 200
