@@ -34,3 +34,4 @@ def two_saved_planets(app):
 
     db.session.add_all([red_planet, blue_planet])
     db.session.commit()
+
