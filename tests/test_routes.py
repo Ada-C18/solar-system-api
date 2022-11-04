@@ -23,3 +23,23 @@ def test_get_one_planet(client, two_saved_planets):
         "distance_from_sun": 123123123123,
         "namesake": "The Roman god of time",
     }
+
+
+def test_create_one_planet(client):
+    # Act
+    response = client.post(
+        "/planets",
+        json={
+            "id": 9,
+            "name": "Pluto",
+            "surface_area": 123890491,
+            "moons": 0,
+            "distance_from_sun": 123123123123,
+            "namesake": "The Roman god of the underworld",
+        },
+    )
+    response_body = response.get_data(as_text=True)
+
+    # Assert
+    assert response.status_code == 201
+    assert response_body == "Planet successfully created"
