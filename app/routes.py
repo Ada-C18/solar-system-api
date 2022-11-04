@@ -65,28 +65,22 @@ def create_new_planet():
 
 @planets_bp.route("", methods=["GET"])
 def read_all_planets():
+
+    name_query = request.args.get("name")
+    if name_query:
+        planets = Planet.query.filter_by(name=name_query)
+    else:
+        planets = Planet.query.all()
     planets_response = []
-    planets = Planet.query.all()
+    
     for planet in planets:
-        planets_response.append(
-            {
-                "id": planet.id,
-                "name": planet.name,
-                "description": planet.description,
-                "moons": planet.moons
-            }
-        )
+        planets_response.append(planet.to_dict())
     return jsonify(planets_response)
 
 @planets_bp.route("/<planet_id>", methods=["GET"])
 def read_one_planet(planet_id):
     planet = validate_planet(planet_id)
-    return {
-            "id": planet.id,
-            "name": planet.name,
-            "description": planet.description,
-            "moons": planet.moons,
-        }
+    return planet.to_dict()
 
 
 # @planets_bp.route("", methods=["GET"])
