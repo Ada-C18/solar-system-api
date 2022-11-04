@@ -28,3 +28,16 @@ def get_all_planets():
             "description": planet.description
         })
     return jsonify(planets)
+
+@planets_bp.route('/<planet_id>', methods=['GET'])
+def get_planet(planet_id):
+    planet_id = int(planet_id)
+    planets = []
+    for planet in PLANETS:
+        planets.append({
+            "id": planet.id,
+            "planet": planet.name,
+            "description": planet.description
+        })
+    return jsonify(planets[planet_id - 1])
+
