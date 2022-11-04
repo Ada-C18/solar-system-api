@@ -51,9 +51,6 @@ def read_planets():
             "number of moons": planet.num_moons
         })
     
-    if not planets_response:
-        return make_response(jsonify(f"There are no planets named {name_query} planet"))
-    
     return jsonify(planets_response)
 
 

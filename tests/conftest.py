@@ -30,11 +30,13 @@ def client(app):
 def two_saved_planets(app):
 
     mercury = Planet(
+        id=1,
         name="Mercury",
         description="distance_from_sun: 36.04 million mi",
         num_moons=0)
 
     venus = Planet(
+        id=2,
         name="Venus",
         description="distance_from_sun: 67.24 million mi",
         num_moons=0)
