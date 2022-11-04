@@ -31,7 +31,7 @@ def create_planet():
     new_planet = Planet.from_dict(request_body)
     db.session.add(new_planet)
     db.session.commit()
-    return make_response(f" Planet {new_planet.name} sucessfully created", 201)
+    return make_response(jsonify(f"Planet {new_planet.name} successfully created"), 201)
 
 @planets_bp.route("", methods=["GET"])
 def get_all_planets():
