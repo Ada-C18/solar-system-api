@@ -24,6 +24,25 @@ def test_get_all_planets_no_records(client):
     assert response.status_code == 200
     assert response_body == []
 
+def test_get_all_planets_with_name_query_matching_one(client, two_saved_planets):
+    data = {'name': "Neptune"}
+    response = client.get("/planets", query_string = data)
+    response_body = response.get_json()
+
+    assert response.status_code == 200
+    assert len(response_body) == 1
+    assert response_body[0] == {
+        "id": 2,
+        "name": "Neptune",
+        "description": "it may exist, it may not",
+        "moon_count": 0
+    }
+
+def test_get_all_planets_with_name_query_matching_none(client, two_saved_planets):
+    data = {'name': "This is such a fake name"}
+    response = client.get("/planets", query_string = data)
+    response_body = response.get_json()    
+
 def test_get_all_planets_with_moon_count_query_matching_one(client, two_saved_planets):
     data = {'moon_count': 0}
     response = client.get("/planets", query_string = data)
