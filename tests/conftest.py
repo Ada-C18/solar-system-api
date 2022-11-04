@@ -27,7 +27,9 @@ def client(app):
 @pytest.fixture
 def two_saved_planets(app):
     # Arrange
-    red_planet = Planet(name="Mars", description="Too hot", moons = 2)
+    red_planet = Planet(name="Mars", 
+    description="Too hot", 
+    moons = 2)
     blue_planet = Planet(name="Earth",description="Home Sweet Home", moons = 1)
 
     db.session.add_all([red_planet, blue_planet])

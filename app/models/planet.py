@@ -12,6 +12,7 @@ class Planet(db.Model):
         planet_as_dict["id"] = self.id
         planet_as_dict["name"] = self.name
         planet_as_dict["description"] = self.description
+        planet_as_dict["moons"]=self.moons
 
         return planet_as_dict
     

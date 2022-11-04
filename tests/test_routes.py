@@ -19,5 +19,5 @@ def test_get_one_planet(client, two_saved_planets):
         'id': 1,
         'name': 'Mars',
         'description': 'Too hot',
-        #'moons': 2
+        'moons': 2
     }
