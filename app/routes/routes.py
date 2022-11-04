@@ -26,10 +26,10 @@ def create_planet():
     new_planet = Planet.from_dict(request_body)
 
     db.session.add(new_planet)
-    db.session.commit
+    db.session.commit()
 
     return make_response(f"Planet {new_planet.name} successfully created", 201)
-
+()
 @solar_system_bp.route("", methods=["GET"])
 def read_all_planets():
     name_query = request.args.get("name")
@@ -49,7 +49,7 @@ def read_all_planets():
 
     planets = planet_query.all()
 
-    planets_response = [planet.to_dict() for planet in planets]
+    planets_response = [planet.make_a_dict() for planet in planets]
 
     return jsonify(planets_response)
 
