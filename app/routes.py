@@ -5,19 +5,18 @@ from flask import Blueprint, jsonify, abort, make_response, request
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
 
-def validate_id(class_obj, id):
+def validate_id(cls, planet_id):
     try:
-        id = int(id)
+        planet_id = int(planet_id)
     except:
-        abort(make_response({"message": f"{class_obj} {id} invalid"}, 400))
-
-    query_result = Planet.query.get(id)
+        abort(make_response({"message": f"{cls} {planet_id} invalid"}, 400))
+        
+    query_result = Planet.query.get(planet_id)
 
     if not query_result:
-        abort(make_response({"message": f"{class_obj} {id} not found"}, 404))
+        abort(make_response({"message": f"{cls} {planet_id} not found"}, 404))
 
     return query_result
-
 
 @planets_bp.route("", methods=["POST"])
 def add_planet():
@@ -36,20 +35,21 @@ def read_all_planets():
     moon_query = request.args.get("moons")
     if name_query:
         planets = Planet.query.filter_by(name=name_query)
-    if moon_query:
+    elif moon_query:
         planets = Planet.query.filter_by(moon=moon_query)
     else:
         planets = Planet.query.all()
 
     planets_response = jsonify([planet.to_dict() for planet in planets])
 
-    return planets_response
+    return planets_response, 200
 
 
 @planets_bp.route("/<planet_id>", methods=["GET"])
 def read_one_planet(planet_id):
     planet = validate_id(Planet, planet_id)
-    return planet.to_dict()
+
+    return jsonify(planet.to_dict()), 200
 
 
 @planets_bp.route("/<planet_id>", methods=["PUT"])
@@ -66,7 +66,7 @@ def update_planet(planet_id):
 
     db.session.commit()
 
-    return make_response(f"Planet #{planet.id} successfully updated")
+    return make_response(jsonify(f"Planet #{planet.id} successfully updated"))
 
 
 @planets_bp.route("/<planet_id>", methods=["DELETE"])
@@ -76,4 +76,5 @@ def delete_one_planet(planet_id):
     db.session.delete(planet)
     db.session.commit()
 
-    return make_response(f"Planet #{planet.id} successfully deleted")
+    return make_response(jsonify(f"Planet #{planet.id} successfully deleted"))
+
