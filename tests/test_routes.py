@@ -1,3 +1,6 @@
+from app.routes import validate_model
+from models.planet import Planet
+
 def test_get_all_planets(client, two_saved_planets):
     response = client.get("/planets")
     response_body = response.get_json()
@@ -101,3 +104,18 @@ def test_create_planet(client):
 
     assert response.status_code == 201
     assert response_body == "Planet Earth successfully created"
+
+def test_delete_planet(client, two_saved_planets):
+    response = client.delete("/planets/1")
+    response_body = response.get_json()
+
+    assert response.status_code == 200
+    assert response_body == "Planet #1 successfully deleted"
+
+def test_validate_model(two_saved_planets):
+    result_planet = validate_model(Planet, 1)
+    
+    assert result_planet.id == 1
+    assert result_planet.name == "Giant 2"
+    assert result_planet.description == "Even bigger than the first!"
+    assert result_planet.moon_count == 130
