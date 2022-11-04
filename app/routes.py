@@ -49,8 +49,7 @@ def create_new_planet():
 def update_planet(model_id):
     planet = validate_model(Planet, model_id)
     request_body = request.get_json()
-    planet = Planet.from_dict(request_body) # NEED TO FIX THIS LINE
-    
+
     planet.name = request_body["name"],
     planet.color = request_body["color"],
     planet.moons = request_body["moons"],
@@ -68,4 +67,3 @@ def delete_planet(model_id):
     db.session.commit()
 
     return make_response(f"Planet #{model_id} successfully deleted.")
-    
