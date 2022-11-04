@@ -21,6 +21,15 @@ def test_get_one_planet_returns_planet(client, one_saved_planet):
     assert response_body["distance_from_sun"] == one_saved_planet.distance_from_sun
     assert response_body["description"] == one_saved_planet.description
 
+def test_get_one_planet_returns_404(client):
+    # act
+    response = client.get("/solar-system/1")
+    response_body = response.get_json()
+
+    # assert
+    assert response.status_code == 404
+    assert response_body == {'message': 'Planet 1 not found'}
+
 def test_create_planet_happy_path(client):
     # arrange
     EXPECTED_PLANET = {
@@ -40,3 +49,9 @@ def test_create_planet_happy_path(client):
     assert actual_planet.name == EXPECTED_PLANET["name"]
     assert actual_planet.distance_from_sun == EXPECTED_PLANET["distance_from_sun"]
     assert actual_planet.description == EXPECTED_PLANET["description"]
+
+# could include: 
+# query test, 
+# update_planet test, 
+# delete_planet test, 
+# and verify_model returning 400
