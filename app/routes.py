@@ -4,21 +4,22 @@ from flask import Blueprint, jsonify, abort, make_response, request
 
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-def validate_id(class_obj,id):
+
+def validate_id(class_obj, id):
     try:
         id = int(id)
     except:
-        abort(make_response({"message":f"{class_obj} {id} invalid"}, 400))
+        abort(make_response({"message": f"{class_obj} {id} invalid"}, 400))
 
     query_result = Planet.query.get(id)
 
     if not query_result:
-        abort(make_response({"message":f"{class_obj} {id} not found"}, 404))
+        abort(make_response({"message": f"{class_obj} {id} not found"}, 404))
 
     return query_result
-    
 
-@planets_bp.route("", methods=["POST"])        
+
+@planets_bp.route("", methods=["POST"])
 def add_planet():
     request_body = request.get_json()
     new_planet = Planet.create_from_json(request_body)
@@ -35,25 +36,25 @@ def read_all_planets():
     moon_query = request.args.get("moons")
     if name_query:
         planets = Planet.query.filter_by(name=name_query)
-    if moon_query:
+    elif moon_query:
         planets = Planet.query.filter_by(moon=moon_query)
     else:
         planets = Planet.query.all()
 
     planets_response = jsonify([planet.to_dict() for planet in planets])
-   
-    return planets_response
+
+    return planets_response, 200
 
 
 @planets_bp.route("/<planet_id>", methods=["GET"])
 def read_one_planet(planet_id):
-    planet = validate_id(Planet, id)
-    return planet.to_dict()
+    planet = validate_id(Planet, planet_id)
+    return jsonify(planet.to_dict()), 200
 
 
 @planets_bp.route("/<planet_id>", methods=["PUT"])
 def update_planet(planet_id):
-    planet = validate_id(Planet, id)
+    planet = validate_id(Planet, planet_id)
 
     request_body = request.get_json()
 

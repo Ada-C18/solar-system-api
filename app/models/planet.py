@@ -10,11 +10,11 @@ class Planet(db.Model):
 
     def to_dict(self):
         return{
-                "name" : self.name,
-                "surface_area": self.surface_area,
-                "moons": self.moons,
-                "distance_from_sun": self.distance_from_sun,
-                "namesake": self.namesake      
+            "name" : self.name,
+            "surface_area": self.surface_area,
+            "moons": self.moons,
+            "distance_from_sun": self.distance_from_sun,
+            "namesake": self.namesake      
         }
 
     @classmethod

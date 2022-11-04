@@ -6,13 +6,13 @@ import os
 
 db = SQLAlchemy()
 migrate = Migrate()
+load_dotenv()
 
 def create_app(test_config=None):
     app = Flask(__name__)
 
     if not test_config:
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-        #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:postgres@localhost:5432/solar_system'
         app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("SQLALCHEMY_DATABASE_URI")
 
     else:
@@ -20,7 +20,7 @@ def create_app(test_config=None):
         app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
         app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
             "SQLALCHEMY_TEST_DATABASE_URI")
-            
+
     db.init_app(app)
     migrate.init_app(app, db)
 
