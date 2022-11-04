@@ -5,28 +5,11 @@ from flask.signals import request_finished
 from app.models.planet import Planet
 
 @pytest.fixture
-def two_saved_planets(app):
-    # Arrange
-    ocean_planet = Planet(name="Ocean Planet",
-                description="watr 4evr",
-                diameter=12000)
-    mountain_planet = Planet(name="Mountain Planet",
-                description="i luv 2 climb rocks",
-                diameter=1500000)
-
-    db.session.add_all([ocean_planet, mountain_planet])
-    # Alternatively, we could do
-    # db.session.add(ocean_book)
-    # db.session.add(mountain_book)
-    db.session.commit()
-
-
-@pytest.fixture
 def app():
     app = create_app({"TESTING": True})
 
     @request_finished.connect_via(app)
-    def expire_session(sender, response, **extra):
+    def expire_session(send, response, **extra):
         db.session.remove()
 
     with app.app_context():
@@ -41,3 +24,16 @@ def app():
 def client(app):
     return app.test_client()
 
+@pytest.fixture
+def one_planet(app):
+    # Arrange
+    ocean_planet = Planet(name="Mercury", description="watr 4evr",
+                        diameter="39999")
+    
+
+    db.session.add(ocean_planet)
+    # Alternatively, we could do
+    # db.session.add(ocean_planet)
+    # db.session.add(mountain_book)
+    db.session.commit()
+    return ocean_planet
