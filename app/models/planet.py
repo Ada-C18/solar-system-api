@@ -16,7 +16,6 @@ class Planet(db.Model):
         planet_as_dict["livability"] = self.livability
         planet_as_dict["moons"] = self.moons
         planet_as_dict["is_dwarf"] = self.is_dwarf
-
         return planet_as_dict
 
     @classmethod
@@ -26,5 +25,4 @@ class Planet(db.Model):
             moons=planet_data["moons"],
             livability=planet_data["livability"],
             is_dwarf=planet_data["is_dwarf"])
-        
         return new_planet

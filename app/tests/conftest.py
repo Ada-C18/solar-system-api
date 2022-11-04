@@ -31,5 +31,3 @@ def saved_test_planets(app):
 
     db.session.add_all([test_planet1, test_planet2])
     db.session.commit()
-
-    # return [test_planet1, test_planet2]

@@ -4,7 +4,6 @@ from flask import Blueprint, jsonify, abort, make_response, request
 
 planet_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-# HELPER FUNCTION #============
 def validate_model(cls, model_id):
     try:
         model_id = int(model_id)
@@ -17,7 +16,6 @@ def validate_model(cls, model_id):
         abort(make_response({"message":f"the planet {cls.__name__} {model_id} doesn't exist."}, 404))
     return planet
 
-# MAIN FUNCTIONS #============
 @planet_bp.route("/<model_id>", methods = ["GET"])
 def get_one_planet(model_id):
     planet = validate_model(Planet, model_id)
@@ -41,14 +39,6 @@ def get_all_planets():
 def create_new_planet():
     request_body = request.get_json()
     new_planet = Planet.from_dict(request_body)
-    
-    #REFACTOR USING A CLS?========
-    # new_planet = Planet(
-    #     name = request_body["name"],
-    #     color = request_body["color"],
-    #     moons = request_body["moons"],
-    #     livability = request_body["livability"],
-    #     is_dwarf = request_body["is_dwarf"])
 
     db.session.add(new_planet)
     db.session.commit()
