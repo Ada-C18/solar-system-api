@@ -59,13 +59,13 @@ def update_planet(model_id):
 
     db.session.commit()
 
-    return make_response(f"Planet #{planet.id} successfully updated.")
+    return make_response(f"Planet #{model_id} successfully updated.")
 
 @planet_bp.route("/<model_id>", methods = ["DELETE"])
 def delete_planet(model_id):
     planet = validate_model(Planet, model_id)
-
     db.session.delete(planet)
     db.session.commit()
 
-    return make_response(f"Planet #{planet.id} successfully deleted.")
+    return make_response(f"Planet #{model_id} successfully deleted.")
+    
