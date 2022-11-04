@@ -43,7 +43,12 @@ def test_create_planet_can_create_planet_in_empty_db(client):
     assert actual_planet.description == EXPECTED_PLANET["description"]
     assert actual_planet.diameter == EXPECTED_PLANET["diameter"]
     
-    
+def test_no_data_in_test_database(client):
+    #Act
+    response=client.get("/planets/1") 
+    response_body=response.get_json() 
+    #Assert 
+    assert response.status_code==404 
    
     
     
