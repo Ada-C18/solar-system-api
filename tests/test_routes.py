@@ -35,23 +35,26 @@ def test_get_one_planet_not_in_db(client):
     assert response_body == {"message":"Planet 3 not found"}
 
 #3. GET /books with valid test data (fixtures) returns a 200 with an array including appropriate test data
-# def test_get_all_planets_with_two_planets_db(client, two_saved_planets):
-#     # Act
-#     response = client.get("/planets")
-#     response_body = response.get_json()
+def test_get_all_planets_with_two_planets_db(client, two_saved_planets):
+    # Act
+    response = client.get("/planets")
+    response_body = response.get_json()
 
-#     # Assert
-#     assert response.status_code == 200
-#     assert response_body == {
-#             'id': 1,
-#             'name': 'Mars',
-#             'description': 'Too hot',
-#             'moons': 2}
-#         {
-#             'id': 2,
-#             'name' : 'Earth',
-#             'description' : 'Home Sweet Home', 
-#             'moons' = 1}
+    # Assert
+    assert response.status_code == 200
+    assert len(response_body) == 2
+    assert response_body[0] == {
+            'id': 1,
+            'name': 'Mars',
+            'description': 'Too hot',
+            'moons': 2}
+        
+    assert response_body[1] == {
+            'id': 2,
+            'name' : 'Earth',
+            'description' : 'Home Sweet Home', 
+            'moons': 1}
+
 
 # 4.POST /books with a JSON request body returns a 201
 def test_create_one_book(client):
