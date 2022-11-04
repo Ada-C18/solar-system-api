@@ -24,9 +24,12 @@ def create_app(test_config=None):
     migrate.init_app(app, db)
 
 
-    from .routes import bp
-    app.register_blueprint(bp)
+    from .routes import planet
+    from .routes import fictional_caretaker
+    app.register_blueprint(planet.bp)
+    app.register_blueprint(fictional_caretaker.bp)
 
     from app.models.planet import Planet
+    from app.models.fictional_caretaker import Caretaker
 
     return app
