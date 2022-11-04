@@ -24,12 +24,3 @@ def app():
 @pytest.fixture
 def client(app):
     return app.test_client()
-
-@pytest.fixture
-def two_saved_planets(app):
-    mercury_planet = Planet(name="Mercury", description="Smallest planet in our solar system", moon_count=0)
-
-    venus_planet = Planet(name="Venus", description="Hottest planet in our solar system", moon_count=0)
-
-    db.session.add_all([mercury_planet, venus_planet])
-    db.session.commit()
