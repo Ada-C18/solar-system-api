@@ -52,7 +52,7 @@ def update_planet(planet_id):
     planet = validate_model(Planet, planet_id)
     request_body = request.get_json()
 
-    planet = planet.update(request_body)
+    planet.update(request_body)
 
     db.session.commit()
     return make_response(jsonify(f"Planet #{planet.id} successfully updated"))
