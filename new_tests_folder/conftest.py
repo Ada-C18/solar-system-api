@@ -34,9 +34,10 @@ def two_saved_planets(app):
         description="distance_from_sun: 36.04 million mi",
         num_moons=0)
 
-    venus = Planet(name="Venus",
+    venus = Planet(
+        name="Venus",
         description="distance_from_sun: 67.24 million mi",
         num_moons=0)
+
     db.session.add_all([mercury, venus])
-    
     db.session.commit()
