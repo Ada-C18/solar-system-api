@@ -10,14 +10,13 @@ def validate_id(cls, planet_id):
         planet_id = int(planet_id)
     except:
         abort(make_response({"message": f"{cls} {planet_id} invalid"}, 400))
-
+        
     query_result = Planet.query.get(planet_id)
 
     if not query_result:
         abort(make_response({"message": f"{cls} {planet_id} not found"}, 404))
 
     return query_result
-
 
 @planets_bp.route("", methods=["POST"])
 def add_planet():
@@ -49,6 +48,7 @@ def read_all_planets():
 @planets_bp.route("/<planet_id>", methods=["GET"])
 def read_one_planet(planet_id):
     planet = validate_id(Planet, planet_id)
+
     return jsonify(planet.to_dict()), 200
 
 
@@ -77,3 +77,4 @@ def delete_one_planet(planet_id):
     db.session.commit()
 
     return make_response(jsonify(f"Planet #{planet.id} successfully deleted"))
+
