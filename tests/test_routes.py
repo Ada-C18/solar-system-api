@@ -28,3 +28,23 @@ def test_get_all_planets(client, two_saved_planets):
 
     assert response_body == [mercury, venus]
     assert response.status_code == 200
+    
+    
+def test_get_one_planet(client, two_saved_planets):
+    # Act
+    response = client.get("/planets/2")
+    response_body = response.get_json()
+
+    venus = {
+        "id": 2,
+        "name": "Venus",
+        "description": "distance_from_sun: 67.24 million mi",
+        "number of moons": 0
+    }
+
+
+    # Assert
+    assert response.status_code == 200
+
+    assert response_body == venus
+
