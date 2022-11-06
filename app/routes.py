@@ -25,11 +25,11 @@ def read_all_planets():
     description_query = request.args.get("description")
     planet_query = Planet.query
     if name_query:
-        planet_query = Planet.query.filter_by(name=name_query)
+        planet_query = planet_query.filter_by(name=name_query)
     if moons_query:
-        planet_query = Planet.query.filter_by(moons=moons_query)
+        planet_query = planet_query.filter_by(moons=moons_query)
     if description_query:
-        planet_query = Planet.query.filter_by(description=description_query)
+        planet_query = planet_query.filter_by(description=description_query)
 
     planets = planet_query.all()
 
