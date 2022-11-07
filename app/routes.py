@@ -19,7 +19,9 @@ def validate_planet(planet_id):
 
 def validate_planet_dict(request_body):
     request_body = dict(request_body)
-    if not request_body.get("name", False) or not request_body.get("description", False) or not request_body.get("rings", False):
+    if not (request_body.get("name", False) and request_body.get("description", False)):
+        abort(make_response({'message': 'request body invalid; cannot create planet'}, 400))
+    if request_body.get("rings", 1) == 1:
         abort(make_response({'message': 'request body invalid; cannot create planet'}, 400))
 
 @bp.route("", methods=["GET"])
