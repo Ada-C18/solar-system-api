@@ -54,25 +54,19 @@ def update_planet(planet_id):
 
     db.session.commit()
 
-    return make_response(f"Planet {planet.name} has been updated in the Planets database.", 200)
+#     return make_response(f"Planet {new_planet.name} has been updated in the Planets database.", 200)
 
 
 
-# # ## REFACTOR TO DELETE ENTRY BASED ON ID!
-# # @planets_bp.route("/<planet_id>", methods=["DELETE"])
-# # def handle_planet(planet_id):
-# #     planets = Planet.query.all()
-# #     planet_id = int(planet_id)
-# #     planet_response = []
+## REFACTOR TO DELETE ENTRY BASED ON ID!
+@planets_bp.route("/<planet_id>", methods=["DELETE"])
+def delete_planet(planet_id):
+    planet = Planet.query.get(planet_id)
 
-# #     for planet in planets:
-# #         planet_response.append({
-# #             "id": planet.id,
-# #             "name": planet.name,
-# #             "description": planet.description
-#             })
+    db.session.delete(planet)
+    db.session.commit()
 
-#     return jsonify(planet_response[planet_id - 1])
+    return make_response(f"Planet {planet.name} has been deleted from the Planets database.", 200)
 
 
 ''' Create a helper functions for:
