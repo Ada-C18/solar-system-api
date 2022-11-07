@@ -29,11 +29,11 @@ def client(app):
 def two_saved_planets(app):
     # Arrange
     mars = Planet(name = "Mars",
-                      description="no watr 4evr",
-                      moons = 0)
+                description="no watr 4evr",
+                moons = 0)
     jupiter = Planet(name="Jupiter",
-                         description="i luv storms",
-                         moons = 1)
+                    description="i luv storms",
+                    moons = 1)
 
     db.session.add_all([mars, jupiter])
 
