@@ -43,17 +43,17 @@ def handle_planet(planet_id):
     }
 
 
-# ## REFACTOR TO CHANGE ALL DATA BASED ON ID!
-# @planets_bp.route("/<planet_id>", methods=["PUT"])
-# def update_planet(planet_id):
-#     request_body = request.get_json()
+@planets_bp.route("/<planet_id>", methods=["PUT"])
+def update_planet(planet_id):
+    planet = Planet.query.get(planet_id)
+    request_body = request.get_json()
 
-#     planet.name = request_body["name"]
-#     planet.description = request_body["description"]
+    planet.name = request_body["name"]
+    planet.description = request_body["description"]
 
-#     db.session.commit()
+    db.session.commit()
 
-#     return make_response(f"Planet {new_planet.name} has been updated in the Planets database.", 200)
+    return make_response(f"Planet {planet.name} has been updated in the Planets database.", 200)
 
 
 
