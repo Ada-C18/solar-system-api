@@ -21,20 +21,19 @@ planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
 @planets_bp.route("", methods=["POST"])
 def create_planet():
-    if request.method == "POST":
-        request_body = request.get_json()
-        if ("name" not in request_body or "description" not in request_body
-        or "moons" not in request_body):
-            return make_response(f"Invalid Request", 400)
-        
-        new_planet = Planet.from_dict(request_body)
+    request_body = request.get_json()
+    if ("name" not in request_body or "description" not in request_body
+    or "moons" not in request_body):
+        return make_response(f"Invalid Request", 400)
+    
+    new_planet = Planet.from_dict(request_body)
 
-        db.session.add(new_planet)
-        db.session.commit()
+    db.session.add(new_planet)
+    db.session.commit()
 
-        return make_response(
-            f"Planet {new_planet.name} successfully created", 201
-        )
+    return make_response(
+        f"Planet {new_planet.name} successfully created", 201
+    )
 
 @planets_bp.route("", methods=["GET"])
 def read_all_planets():
