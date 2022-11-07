@@ -35,7 +35,7 @@ def all_planets():
 
 @planets_bp.route("/<planet_id>", methods=["GET"])
 def handle_planet(planet_id):
-    planet = Planet.query.get(planet_id)
+    planet = validate_planet(planet_id)
 
     return {
         "id": planet.id,
@@ -57,7 +57,7 @@ def update_planet(planet_id):
 
 @planets_bp.route("/<planet_id>", methods=["DELETE"])
 def delete_planet(planet_id):
-    planet = Planet.query.get(planet_id)
+    planet = validate_planet(planet_id)
 
     db.session.delete(planet)
     db.session.commit()
