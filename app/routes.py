@@ -31,7 +31,6 @@ def all_planets():
 
     return jsonify(planets_response)
 
-
 @planets_bp.route("/<planet_id>", methods=["GET"])
 def handle_planet(planet_id):
     planet = Planet.query.get(planet_id)
@@ -56,8 +55,6 @@ def update_planet(planet_id):
     return make_response(f"Planet {planet.name} has been updated in the Planets database.", 200)
 
 
-
-## REFACTOR TO DELETE ENTRY BASED ON ID!
 @planets_bp.route("/<planet_id>", methods=["DELETE"])
 def delete_planet(planet_id):
     planet = Planet.query.get(planet_id)
