@@ -22,12 +22,7 @@ def read_planets():
     planets = planet_query.all()  
 
     for planet in planets:
-        planets_response.append({
-            "id": planet.id,
-            "name": planet.name,
-            "description": planet.description,
-            "number of moons": planet.num_moons
-        })
+        planets_response.append(planet.to_dict())
     
     return jsonify(planets_response)
 
@@ -49,12 +44,7 @@ def create_planet():
 def get_one_planet(planet_id):
     planet = validate_planet(planet_id)
     
-    return {
-            "id": planet.id,
-            "name": planet.name,
-            "description": planet.description,
-            "number of moons": planet.num_moons
-            }
+    return planet.to_dict()
 
 
 def validate_planet(planet_id):

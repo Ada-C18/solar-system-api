@@ -17,14 +17,14 @@ def test_get_all_planets(client, two_saved_planets):
         "id": 1,
         "name": "Mercury",
         "description": "distance_from_sun: 36.04 million mi",
-        "number of moons": 0
+        "num_moons": 0
     }
 
     venus = {
         "id": 2,
         "name": "Venus",
         "description": "distance_from_sun: 67.24 million mi",
-        "number of moons": 0
+        "num_moons": 0
     }
 
     assert response_body == [mercury, venus]
@@ -40,7 +40,7 @@ def test_get_one_planet(client, two_saved_planets):
         "id": 2,
         "name": "Venus",
         "description": "distance_from_sun: 67.24 million mi",
-        "number of moons": 0
+        "num_moons": 0
     }
 
     # Assert
@@ -85,13 +85,13 @@ def test_get_all_planets_with_two_records(client, two_saved_planets):
         "id": 1,
         "name": "Mercury",
         "description": "distance_from_sun: 36.04 million mi",
-        "number of moons": 0
+        "num_moons": 0
     }
     assert response_body[1] == {
         "id": 2,
         "name": "Venus",
         "description": "distance_from_sun: 67.24 million mi",
-        "number of moons": 0
+        "num_moons": 0
     }
 
 
@@ -115,7 +115,7 @@ def test_get_all_planets_with_name_query_matching_one(client, two_saved_planets)
         "id": 1,
         "name": "Mercury",
         "description": "distance_from_sun: 36.04 million mi",
-        "number of moons": 0
+        "num_moons": 0
     }
 
 
