@@ -58,13 +58,15 @@ def test_get_one_planet_not_in_db(client):
 
 
 def test_post_planet_returns_201(client):
-    response = client.post("/planets", json={"name": "Pluto",
-                                             "description": "distance_from_sun: 3.70 billion mi",
-                                             "num_moons": 5})
+    response = client.post("/planets", json=
+                            {"name": "Pluto",
+                            "description": "distance_from_sun: 3.70 billion mi",
+                            "num_moons": 5})
+                            
     response_body = response.get_json()
 
     assert response.status_code == 201
-    #assert response_body == 'Planet Pluto successfully created'
+    assert response_body == 'Planet Pluto successfully created'
 
     new_planet = Planet.query.get(1)
     assert new_planet
