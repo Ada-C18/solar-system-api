@@ -19,19 +19,17 @@ def validate_planet(planet_id):
         abort(make_response({"message": f"planet {planet_id} not found"}, 404))
     return planet
 
-
 @planets_bp.route("", methods=["POST"])
 def create_planet():
     request_body = request.get_json()
-    new_planet = Planet(
-        name=request_body["name"],
+    new_planet = Planet(name=request_body["name"],
         description=request_body["description"],
         color=request_body["color"])
 
     db.session.add(new_planet)
     db.session.commit()
 
-    return make_response(f"Planet {new_planet.name} successfully created", 201)
+    return make_response(jsonify(f"Planet {new_planet.name} successfully created"), 201)
 
 
 @planets_bp.route("", methods=["GET"])
