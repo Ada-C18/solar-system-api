@@ -30,3 +30,19 @@ def all_planets():
         })
 
     return jsonify(planets_response)
+
+
+@planets_bp.route("/<planet_id>", methods=["GET"])
+def handle_planet(planet_id):
+    planets = Planet.query.all()
+    planet_id = int(planet_id)
+    planet_response = []
+
+    for planet in planets:
+        planet_response.append({
+            "id": planet.id,
+            "name": planet.name,
+            "description": planet.description
+            })
+
+    return jsonify(planet_response[planet_id - 1])
