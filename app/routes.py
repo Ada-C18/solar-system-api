@@ -34,15 +34,47 @@ def all_planets():
 
 @planets_bp.route("/<planet_id>", methods=["GET"])
 def handle_planet(planet_id):
-    planets = Planet.query.all()
-    planet_id = int(planet_id)
-    planet_response = []
+    planet = Planet.query.get(planet_id)
 
-    for planet in planets:
-        planet_response.append({
-            "id": planet.id,
-            "name": planet.name,
-            "description": planet.description
-            })
+    return {
+        "id": planet.id,
+        "name": planet.name,
+        "description": planet.description
+    }
 
-    return jsonify(planet_response[planet_id - 1])
+
+# ## REFACTOR TO CHANGE ALL DATA BASED ON ID!
+# @planets_bp.route("/<planet_id>", methods=["PUT"])
+# def update_planet(planet_id):
+#     request_body = request.get_json()
+
+#     planet.name = request_body["name"]
+#     planet.description = request_body["description"]
+
+#     db.session.commit()
+
+#     return make_response(f"Planet {new_planet.name} has been updated in the Planets database.", 200)
+
+
+
+# ## REFACTOR TO DELETE ENTRY BASED ON ID!
+# @planets_bp.route("/<planet_id>", methods=["DELETE"])
+# def handle_planet(planet_id):
+#     planets = Planet.query.all()
+#     planet_id = int(planet_id)
+#     planet_response = []
+
+#     for planet in planets:
+#         planet_response.append({
+#             "id": planet.id,
+#             "name": planet.name,
+#             "description": planet.description
+#             })
+
+#     return jsonify(planet_response[planet_id - 1])
+
+
+''' Create a helper functions for:
+        - 404 non-existing planet
+        - 400 invalid planet id data type 
+    & integrate functions to HTTP requests in routes '''
