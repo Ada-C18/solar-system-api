@@ -54,6 +54,10 @@ def update_planet(planet_id):
 
     db.session.commit()
 
+    return make_response(f"Planet {planet.name} has been updated in the Planets database.", 201)
+
+
+
 
 @planets_bp.route("/<planet_id>", methods=["DELETE"])
 def delete_planet(planet_id):

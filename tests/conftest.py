@@ -27,6 +27,12 @@ def client(app):
 
 
 @pytest.fixture
+def empty_database(app):
+    db.drop_all()
+    db.session.commit()
+
+
+@pytest.fixture
 def one_planet_in_database(app):
     mercury = Planet(name="Mercury",
         description="Tiny. Close to the Sun.")
