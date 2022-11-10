@@ -2,19 +2,6 @@ from flask import Blueprint, jsonify, abort, make_response, request
 from .models.planet import Planet
 from app import db
 
-# class Planet:
-#     def __init__(self, id, name, description, color):
-#         self.id = id
-#         self.name = name
-#         self.description = description
-#         self.color = color
-
-# # PLANETS = [
-#             Planet(1, "Pluto", "no longer a planet", "light blue"),
-#             Planet(2, "Mercury", "smallest planet out of the 8", "dark gray"),
-#             Planet(3, "Mars", "closest resemblance to Earth", "red")
-#         ]
-
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
 #---HELPER FUNCTIONS---
@@ -30,7 +17,6 @@ def validate_planet(planet_id):
         abort(make_response({"message": f"Planet {planet_id} not found"}, 404))
 
     return planet
-
 
 
 #---ROUTES---
