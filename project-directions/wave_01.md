@@ -1,6 +1,6 @@
 # Wave 01: Setup and Read
 
-## Flask Setup
+## Flask Setup *HI THERE
 Perform following setup steps for the Solar System API repo to get started on this Flask project:
 
 1. Create a virtual environment and activate it
