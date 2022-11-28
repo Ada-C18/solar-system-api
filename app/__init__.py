@@ -1,5 +1,4 @@
 import os
-from symbol import import_stmt
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate

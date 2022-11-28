@@ -3,26 +3,13 @@ from app import db
 from app.models.planet import Planet
 
 
-# class Planets:
-#     def __init__(self, id, name, color, description):
-#         self.id = id
-#         self.name = name
-#         self.color = color
-#         self.description = description
-
-# Planets_list = [
-#     Planets(1, 'Dink', 'Green', 'Fluffy'), 
-#     Planets(2, 'Blorp', 'Purple', 'Stinky'),
-#     Planets(3, 'Florpus', 'Red', 'Shy')
-#     ]
 
 planets_bp = Blueprint('planets_bp', __name__, url_prefix='/planets')
 
 @planets_bp.route('', methods=['GET'])
 def handle_planet():
     planet_query = Planet.query
-    # if request.method == "GET":
-        # planet_query = Planet.query
+
 
     description_query = request.args.get("description")
     if description_query:
@@ -51,21 +38,10 @@ def handle_planet():
             "color": planet.color,
             "description": planet.description
         })
-    if not planets_response:
-        return make_response(jsonify(f"There are no {planet_query} planets"))
-    return jsonify(planets_response)
 
-    # elif request.method == "POST":
-    #     request_body = request.get_json()
-    #     new_planet = Planet(name=request_body["name"],
-    #                     color=request_body["color"],
-    #                     description=request_body["description"])
-
-    #     db.session.add(new_planet)
-    #     db.session.commit()
-
-
-    #     return make_response(f"Planet {new_planet.name} successfully created", 201)
+        if not planets_response:
+            return make_response(jsonify(f"There are no {planet_query} planets"))
+        return jsonify(planets_response)
 
 
 @planets_bp.route("/<id>", methods=['GET','PUT','DELETE'])
@@ -102,27 +78,3 @@ def handle_1_planet(id):
 
 
 
-# def get_all_planets():
-#     planet_response = [vars(planet) for planet in Planets_list]
-
-#     return jsonify(planet_response)
-
-# @planets_bp.route('/<id>', methods=['GET'])
-# def get_one_planet(id):
-#     planet_id = validate_planet(id)
-#     return planet_id
-
-# def validate_planet(id):
-#     try:
-#         planet_id = int(id)
-#     except ValueError:
-#         return {
-#             "message": 'invalid id'
-#         }, 400
-
-#     for planet in Planets_list:
-#         if planet.id == planet_id:
-#             return vars(planet)
-
-    
-#     abort(make_response(jsonify(description ="Resource not found"),404))
