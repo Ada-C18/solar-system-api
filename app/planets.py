@@ -3,6 +3,9 @@ from app import db
 from app.models.planet import Planet
 
 
+if title_query:
+        title_query = title_query.filter_by(title=title_query)
+
 
 planets_bp = Blueprint('planets_bp', __name__, url_prefix='/planets')
 
@@ -12,6 +15,7 @@ def handle_planet():
 
 
     description_query = request.args.get("description")
+    
     if description_query:
         planet_query = planet_query.filter_by(description=description_query)
     else:
@@ -33,6 +37,19 @@ def handle_planet():
     planets_response = []
     for planet in planets:
         planets_response.append({
+            "id": planet.id,
+            "name": planet.name,
+            "color": planet.color,
+            "description": planet.description
+        })
+
+        if not planets_response:
+            return make_response(jsonify(f"There are no {planet_query} planets"))
+        return jsonify(planets_response)
+
+    board_response = []
+    for board in boards:
+        board_response.append({
             "id": planet.id,
             "name": planet.name,
             "color": planet.color,
@@ -76,5 +93,15 @@ def handle_1_planet(id):
 
             
 
+@board_bp.route(/title, methods=["GET"])
+# GET /task/id
+def handle_task(title):
+    # Query our db to grab the task that has the id we want:
+    
+    task = Task.query.get(title)
 
+    if task.goal_id is not None:
+        return{"task": task.to_dict_in_goal()}
+    else:
+        return {"task": task.to_dict()}
 
